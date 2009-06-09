@@ -24,17 +24,24 @@ import java.util.Enumeration;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.zip.CRC32;
 
+import org.apache.commons.io.CopyUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.jmock.Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
 
 /**
- * Echos an object string to the output screen.
+ * Unpacks native dependencies
  * 
  * @goal copy
+ * @phase package
  * @requiresProject true
  * @requiresDependencyResolution
  */
@@ -51,9 +58,14 @@ public class CopyNativesMojo extends AbstractMojo
 
 	/**
 	 * 
-	 * @parameter expression="${nativesTargetDir}" default-value="${basedir}/target/natives"
+	 * @parameter expression="${nativesTargetDir}" default-value="${project.build.directory}/natives"
 	 */
 	private File nativesTargetDir;
+
+	/**
+	 * @component
+	 */
+	private IJarUnpacker jarUnpacker;
 
 	public void execute() throws MojoExecutionException, MojoFailureException
 	{
@@ -68,54 +80,32 @@ public class CopyNativesMojo extends AbstractMojo
 				if (classifier != null && classifier.startsWith("natives-"))
 				{
 					getLog().info(String.format("G:%s - A:%s - C:%s", artifact.getGroupId(), artifact.getArtifactId(), artifact.getClassifier()));
-					copyJarContent(artifact.getFile(), nativesTargetDir);
+					jarUnpacker.copyJarContent(artifact.getFile(), nativesTargetDir);
 				}
 
 			}
 		}
 		catch (Exception e)
 		{
-			throw new MojoFailureException("Unable to copy natives",e);
+			throw new MojoFailureException("Unable to copy natives", e);
 		}
 	}
 
-	private void copyJarContent(File jarPath, File targetDir) throws IOException
+	
+
+	public void setMavenProject(MavenProject mavenProject)
 	{
-		getLog().info("Copying natives from " + jarPath.getName());
-		JarFile jar = new JarFile(jarPath);
+		this.project = mavenProject;
+	}
 
-		Enumeration<JarEntry> entries = jar.entries();
-		while (entries.hasMoreElements())
-		{
-			JarEntry file = entries.nextElement();
-			getLog().info("Copying native - " + file.getName());
-			File f = new File(targetDir, file.getName());
-			if (file.isDirectory())
-			{ // if its a directory, create it
-				f.mkdir();
-				continue;
-			}
+	public void setNativesTargetDir(File nativesTargetDir2)
+	{
+		this.nativesTargetDir = nativesTargetDir2;
+	}
 
-			InputStream is = null;
-			FileOutputStream fos = null;
-			try
-			{
-				is = jar.getInputStream(file); // get the input stream
-				fos = new FileOutputStream(f);
-				while (is.available() > 0)
-				{ // write contents of 'is' to 'fos'
-					fos.write(is.read());
-				}
-			}
-			finally
-			{
-				if (fos != null)
-					fos.close();
-				if (is != null)
-					is.close();
-			}
-		}
-
+	public void setJarUnpacker(IJarUnpacker jarUnpacker)
+	{
+		this.jarUnpacker = jarUnpacker;
 	}
 
 }
