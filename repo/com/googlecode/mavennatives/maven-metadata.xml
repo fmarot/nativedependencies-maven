@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <plugins>
+    <plugin>
+      <name>maven-nativedependencies-plugin Maven Mojo</name>
+      <prefix>nativedependencies</prefix>
+      <artifactId>maven-nativedependencies-plugin</artifactId>
+    </plugin>
+  </plugins>
+</metadata>
