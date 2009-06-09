@@ -5,8 +5,43 @@
 	<packaging>maven-plugin</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>maven-nativedependencies-plugin Maven Mojo</name>
-	<url>http://maven.apache.org</url>
+	<url>http://code.google.com/p/mavennatives/</url>
+
+	<issueManagement>
+		<system>googlecode</system>
+		<url>http://code.google.com/p/mavennatives/issues/list</url>
+	</issueManagement>
+
+	<licenses>
+		<license>
+			<name>Apache License 2</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</url>
+		<connection>scm:svn:http://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</connection>
+		<developerConnection>scm:svn:https://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</developerConnection>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>mavennativesrepo</id>
+			<url>svn:https://mavennatives.googlecode.com/svn/repo</url>
+		</repository>
+	</distributionManagement>
+
 	<build>
+		<extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.8</version>
+            </extension>
+        </extensions>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -24,6 +59,26 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-component-metadata</artifactId>
+				<version>1.0-beta-3.0.5</version>
+				<executions>
+					<execution>
+						<id>process-classes</id>
+						<goals>
+							<goal>generate-metadata</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>process-test-classes</id>
+						<goals>
+							<goal>generate-test-metadata</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 
@@ -63,10 +118,33 @@
 			<version>1.0</version>
 		</dependency>
 		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.6</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-junit4</artifactId>
+			<version>2.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-legacy</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-component-annotations</artifactId>
+			<version>1.0-beta-3.0.5</version>
+		</dependency>
+
 	</dependencies>
 </project>
