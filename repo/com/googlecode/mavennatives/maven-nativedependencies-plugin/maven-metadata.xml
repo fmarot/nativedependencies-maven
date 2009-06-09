@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.googlecode.mavennatives</groupId>
+  <artifactId>maven-nativedependencies-plugin</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <versioning>
+    <latest>0.0.1-SNAPSHOT</latest>
+    <versions>
+      <version>0.0.1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20090609024525</lastUpdated>
+  </versioning>
+</metadata>
