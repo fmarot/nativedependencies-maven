@@ -7,7 +7,10 @@ import org.apache.maven.execution.DefaultMavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.project.MavenProject;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -33,13 +36,23 @@ public class NativesConfigurator extends AbstractProjectConfigurator
 
 		if (configExtractor.isMavenNativesProject(mavenProject))
 		{
-			String nativesPath = configExtractor.getNativesPath(mavenProject);
-			embedder.getLogger().info("MavenNatives - Setting nativesPath: " + nativesPath);
+			IPath relpath = request.getProject().getProjectRelativePath();
+			
+			
+			
+			String relativeNativesPath = configExtractor.getNativesPath(mavenProject);
+			
+			
+			
+			IPath nativesPath = request.getProject().getFullPath().makeRelative().append(relativeNativesPath);
+			
+			
+			embedder.getLogger().info("MavenNatives - Setting nativesPath: " + nativesPath.toString());
 
 			IJavaProject javaProject = JavaCore.create(request.getProject().getProject());
 
 			IClasspathEntry[] entries = javaProject.getRawClasspath();
-			addNativesPathToMavenContainer(entries, nativesPath);
+			addNativesPathToMavenContainer(entries, nativesPath.toString());
 			javaProject.setRawClasspath(entries, progressMonitor);
 			embedder.getLogger().info("MavenNatives - Configured");
 
@@ -56,6 +69,9 @@ public class NativesConfigurator extends AbstractProjectConfigurator
 				Exception executionException = (Exception) result.getExceptions().get(0);
 				throw new RuntimeException("Unable to execute " + NativesConfigExtractor.nativeDependenciesGoal + " goal: " + executionException.getMessage(),executionException);
 			}
+			
+			request.getProject().getFolder(relativeNativesPath).refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
+			
 			embedder.getLogger().info("MavenNatives - Done");
 
 		}
