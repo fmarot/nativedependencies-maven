@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Maven Natives Plugin
+Bundle-SymbolicName: m2eclipse_natives;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: com.googlecode.mavennatives.m2eclipse.natives.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.maven.ide.eclipse;bundle-version="0.9.8",
+ org.maven.ide.components.maven_embedder;bundle-version="2.1.0",
+ org.maven.ide.eclipse.jdt;bundle-version="0.9.8",
+ org.eclipse.core.resources;bundle-version="3.4.1",
+ org.eclipse.jdt.core;bundle-version="3.4.2",
+ org.eclipse.jdt.launching;bundle-version="3.4.1"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Vendor: com.googlecode.mavennatives
+Export-Package: com.googlecode.mavennatives.m2eclipse.natives
