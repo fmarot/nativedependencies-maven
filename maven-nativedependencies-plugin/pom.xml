@@ -3,7 +3,7 @@
 	<groupId>com.googlecode.mavennatives</groupId>
 	<artifactId>maven-nativedependencies-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>maven-nativedependencies-plugin Maven Mojo</name>
 	<url>http://code.google.com/p/mavennatives/</url>
 
@@ -21,9 +21,9 @@
 	</licenses>
 
 	<scm>
-		<url>https://mavennatives.googlecode.com/svn/tags/maven-nativedependencies-plugin-0.0.1</url>
-		<connection>scm:svn:http://mavennatives.googlecode.com/svn/tags/maven-nativedependencies-plugin-0.0.1</connection>
-		<developerConnection>scm:svn:https://mavennatives.googlecode.com/svn/tags/maven-nativedependencies-plugin-0.0.1</developerConnection>
+		<url>https://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</url>
+		<connection>scm:svn:http://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</connection>
+		<developerConnection>scm:svn:https://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</developerConnection>
 	</scm>
 
 	<distributionManagement>
