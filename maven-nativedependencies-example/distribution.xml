@@ -1,0 +1,35 @@
+<assembly xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" 
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/assembly-1.1.1.xsd">
+  <id>assembly</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory></outputDirectory>
+      <scope>runtime</scope>
+      <excludes>
+        <exclude>*:natives-*</exclude>
+      </excludes>
+    </dependencySet>
+  </dependencySets>  
+  <fileSets>
+    <fileSet>
+      <directory>target/natives</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>*.dll</include>
+        <include>*.so</include>
+      </includes>
+    </fileSet>       
+    <fileSet>
+      <directory>src/main/scripts</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>*.sh</include>
+        <include>*.bat</include>
+      </includes>
+      <fileMode>0755</fileMode>
+    </fileSet>      
+  </fileSets>
+ </assembly>
