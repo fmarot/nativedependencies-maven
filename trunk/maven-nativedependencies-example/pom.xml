@@ -92,5 +92,11 @@
 			<version>2.1.0</version>
 			<classifier>natives-win</classifier>
 		</dependency>
+		<dependency>
+			<groupId>lwjgl</groupId>
+			<artifactId>lwjgl</artifactId>
+			<version>2.1.0</version>
+			<classifier>natives-macosx</classifier>
+		</dependency>
 	</dependencies>
 </project>
