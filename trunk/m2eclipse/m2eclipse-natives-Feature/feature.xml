@@ -17,6 +17,10 @@
       This work follows APACHE licensing schema. See http://www.apache.org/licenses/LICENSE-2.0 for more details about usage and distribution.
    </license>
 
+   <url>
+      <update label="maven natives" url="http://mavennatives.googlecode.com/svn/eclipse-update/"/>
+   </url>
+
    <plugin
          id="m2eclipse_natives"
          download-size="0"
