@@ -1,1 +1,1 @@
-java -Djava.library.path=. -jar example-0.0.1-SNAPSHOT.jar
+java -jar -Djava.library.path="${release.natives}" "${finalName}"

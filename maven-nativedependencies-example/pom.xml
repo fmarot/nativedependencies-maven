@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.googlecode.nativedependencies</groupId>
@@ -6,6 +7,14 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>example</name>
 	<url>http://maven.apache.org</url>
+
+	<properties>
+		<finalName>${project.artifactId}-${project.version}.jar</finalName>
+		<main.class>com.googlecode.nativedependencies.example.App</main.class>
+		<natives>${basedir}/target/natives/</natives>
+		<release.natives>natives/</release.natives>
+	</properties>
+
 	<repositories>
 		<repository>
 			<snapshots>
@@ -56,8 +65,9 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.googlecode.nativedependencies.example.App</mainClass>
+							<mainClass>${main.class}</mainClass>
 							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
 						</manifest>
 					</archive>
 				</configuration>
@@ -65,15 +75,24 @@
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.2-beta-4</version>
-				<configuration>
-					<finalName>example</finalName>
-					<descriptors>
-						<descriptor>distribution.xml</descriptor>
-					</descriptors>
-				</configuration>
+				<executions>
+					<execution>
+						<id>bundle-project-sources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/META-INF/assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>lwjgl</groupId>
