@@ -8,7 +8,6 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.logging.SystemStreamLog;
@@ -17,10 +16,8 @@ import org.codehaus.plexus.component.annotations.Component;
 @Component(role = IJarUnpacker.class)
 public class JarUnpacker implements IJarUnpacker
 {
-
 	private Log log = new SystemStreamLog();
 
-	@Override
 	public void copyJarContent(File jarPath, File targetDir) throws IOException
 	{
 		log.info("Copying natives from " + jarPath.getName());
@@ -34,6 +31,10 @@ public class JarUnpacker implements IJarUnpacker
 			File f = new File(targetDir, file.getName());
 
 			log.info("Copying native - " + file.getName());
+			
+			File parentFile = f.getParentFile();
+			parentFile.mkdirs();
+			
 			if (file.isDirectory())
 			{ // if its a directory, create it
 				f.mkdir();
