@@ -128,7 +128,7 @@
 					<configuration>
 						<mavenExecutorId>forked-path</mavenExecutorId>
 						<useReleaseProfile>false</useReleaseProfile>
-						<arguments>-Prelease</arguments>
+						<releaseProfiles>release,mavennativesgpg</releaseProfiles>
 					</configuration>
 				</plugin>
 			</plugins>
