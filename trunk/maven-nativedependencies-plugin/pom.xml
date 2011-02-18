@@ -6,7 +6,7 @@
 	<packaging>maven-plugin</packaging>
 	<version>0.0.4-SNAPSHOT</version>
 	<name>Maven Native Dependencies Plugin</name>
-	<description>This plugins allows the automatic unpacking of natives in jars depending on a classifier with a certain pattern</description>
+	<description>This plugin allows the automatic unpacking of natives in jars depending on a classifier with a certain pattern</description>
 	<url>http://code.google.com/p/mavennatives/</url>
 	<developers>
 		<developer>
