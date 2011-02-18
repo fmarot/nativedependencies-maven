@@ -25,12 +25,16 @@
 		<connection>scm:svn:http://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</connection>
 		<developerConnection>scm:svn:https://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</developerConnection>
 	</scm>
-
 	<distributionManagement>
+		<snapshotRepository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
 		<repository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>mavennativesrepo</id>
-			<url>svn:https://mavennatives.googlecode.com/svn/repo</url>
+			<id>sonatype-nexus-staging</id>
+			<name>Nexus Release Repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
 
