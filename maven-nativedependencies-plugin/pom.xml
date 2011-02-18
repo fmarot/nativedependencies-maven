@@ -128,7 +128,7 @@
 					<configuration>
 						<mavenExecutorId>forked-path</mavenExecutorId>
 						<useReleaseProfile>false</useReleaseProfile>
-						<releaseProfiles>gpgsign,mavennativesgpg</releaseProfiles>
+						<arguments>-Pgpgsign,mavennativesgpg</arguments>
 					</configuration>
 				</plugin>
 			</plugins>
