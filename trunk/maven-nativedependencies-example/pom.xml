@@ -25,16 +25,6 @@
 			<url>http://mavennatives.googlecode.com/svn/repo/</url>
 		</repository>
 	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<id>mavenNatives</id>
-			<name>Maven Natives Repository</name>
-			<url>http://mavennatives.googlecode.com/svn/repo/</url>
-		</pluginRepository>
-	</pluginRepositories>
 
 	<build>
 		<plugins>
@@ -49,7 +39,7 @@
 			<plugin>
 				<groupId>com.googlecode.mavennatives</groupId>
 				<artifactId>maven-nativedependencies-plugin</artifactId>
-				<version>0.0.2</version>
+				<version>0.0.4</version>
 				<executions>
 					<execution>
 						<id>unpacknatives</id>
