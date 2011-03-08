@@ -10,7 +10,7 @@ public class NativesConfigExtractor
 	static final String artifactId = "maven-nativedependencies-plugin";
 	static final String nativesPathAttribute = "nativesTargetDir";
 	static final String defaultNativesPath = "target/natives";
-	static final String nativeDependenciesGoal = "nativedependencies:copy";
+	static final String nativeDependenciesGoal = "copy";
 
 	public boolean isMavenNativesProject(MavenProject mavenProject)
 	{
