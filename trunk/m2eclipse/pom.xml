@@ -60,6 +60,7 @@
 	<modules>
 		<module>m2eclipse-natives</module>
 		<module>m2eclipse-natives-Feature</module>
+		<module>m2eclipse-update</module>
 	</modules>
 	<build>
 		<plugins>

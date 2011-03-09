@@ -1,11 +1,15 @@
 /.project
 /.settings
 /m2eclipse-natives/.project
-/m2eclipse-natives/build.properties
 /m2eclipse-natives/target
 /m2eclipse-natives/.classpath
 /m2eclipse-natives/.settings
+/m2eclipse-natives/bin
 /m2eclipse-natives-Feature/.project
 /m2eclipse-natives-Feature/target
 /m2eclipse-natives-Feature/.settings
+/m2eclipse-update/.project
+/m2eclipse-update/target
+/m2eclipse-update/.classpath
+/m2eclipse-update/.settings
 
