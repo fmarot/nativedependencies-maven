@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>m2eclipse-mavennatives-integration</artifactId>
+    <groupId>com.gemserk.mavennatives.eclipse</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.gemserk.mavennatives.eclipse</groupId>
+  <artifactId>m2eclipse-update</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>eclipse-update-site</packaging>
+  <name>mavennatives update site</name>
+  <description>mavennatives update site</description>
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+					<allowConflictingDependencies>true</allowConflictingDependencies>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

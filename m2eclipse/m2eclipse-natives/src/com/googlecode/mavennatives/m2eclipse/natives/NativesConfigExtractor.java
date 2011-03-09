@@ -12,21 +12,21 @@ public class NativesConfigExtractor
 	static final String defaultNativesPath = "target/natives";
 	static final String nativeDependenciesGoal = "copy";
 
-	public boolean isMavenNativesProject(MavenProject mavenProject)
+	public static boolean isMavenNativesProject(MavenProject mavenProject)
 	{
 		Plugin nativesMavenPlugin = getNativesPlugin(mavenProject);
 		return nativesMavenPlugin!=null;
 	}
 
 
-	private Plugin getNativesPlugin(MavenProject mavenProject)
+	private static Plugin getNativesPlugin(MavenProject mavenProject)
 	{
 		Plugin nativesMavenPlugin = mavenProject.getPlugin(groupId + ":" + artifactId);
 		return nativesMavenPlugin;
 	}
 	
 	
-	public String getNativesPath(MavenProject mavenProject)
+	public static String getNativesPath(MavenProject mavenProject)
 	{
 		Object configuration = getNativesPlugin(mavenProject).getConfiguration();
 		if (configuration instanceof Xpp3Dom)
@@ -45,7 +45,7 @@ public class NativesConfigExtractor
 		return defaultNativesPath;
 	}
 	
-	public String getNativeDependenciesGoal()
+	public static String getNativeDependenciesGoal()
 	{
 		return groupId+":"+artifactId +":" + nativeDependenciesGoal; 
 	}
