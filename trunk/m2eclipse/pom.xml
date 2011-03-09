@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.gemserk.mavennatives.eclipse</groupId>
+	<groupId>com.googlecode.mavennatives.m2eclipse.natives</groupId>
 	<artifactId>m2eclipse-mavennatives-integration</artifactId>
 	<name>Maven Integration for Maven Natives Plugin</name>
 	<version>0.0.1-SNAPSHOT</version>
@@ -58,9 +58,9 @@
 		</repository>
 	</repositories>
 	<modules>
-		<module>m2eclipse-natives</module>
-		<module>m2eclipse-natives-Feature</module>
-		<module>m2eclipse-update</module>
+		<module>com.googlecode.mavennatives.m2eclipse.natives</module>
+		<module>com.googlecode.mavennatives.m2eclipse.natives.feature</module>
+		<module>com.googlecode.mavennatives.m2eclipse.natives.site</module>
 	</modules>
 	<build>
 		<plugins>

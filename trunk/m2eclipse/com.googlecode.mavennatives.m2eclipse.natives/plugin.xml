@@ -5,7 +5,7 @@
          point="org.maven.ide.eclipse.projectConfigurators">
       <configurator
             class="com.googlecode.mavennatives.m2eclipse.natives.NativesConfigurator"
-            id="m2eclipse-natives">
+            id="com.googlecode.mavennatives.m2eclipse.natives.nativesConfigurator">
       </configurator>
    </extension>
 
