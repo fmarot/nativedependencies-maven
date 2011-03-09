@@ -3,8 +3,8 @@
    <description name="m2eclipse-mavennatives-integration" url="http://mavennatives.googlecode.com/svn/eclipse-update/">
       Feature that adds integration for the maven-nativedependencies-plugin with m2eclipse
    </description>
-   <feature url="features/m2eclipse_natives_0.0.1.qualifier.jar" id="m2eclipse_natives" version="0.0.1.qualifier">
-      <category name="mavennatives"/>
+   <feature url="features/com.googlecode.mavennatives.m2eclipse.natives.feature_0.0.1.qualifier.jar" id="com.googlecode.mavennatives.m2eclipse.natives.feature" version="0.0.1.qualifier">
+      <category name="com.googlecode.mavennatives.m2eclipse.natives"/>
    </feature>
-   <category-def name="mavennatives" label="maven natives integration"/>
+   <category-def name="com.googlecode.mavennatives.m2eclipse.natives" label="Maven Natives Integration"/>
 </site>
