@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="m2eclipse_natives"
-      label="M2eclipse Natives_Feature"
+      id="com.googlecode.mavennatives.m2eclipse.natives.feature"
+      label="M2eclipse Natives Integration Feature"
       version="0.0.1.qualifier"
       provider-name="com.googlecode.mavennatives">
 
@@ -18,11 +18,11 @@
    </license>
 
    <url>
-      <update label="maven natives" url="http://mavennatives.googlecode.com/svn/eclipse-update/"/>
+      <update label="Maven Natives Integration" url="http://mavennatives.googlecode.com/svn/eclipse-update/"/>
    </url>
 
    <plugin
-         id="m2eclipse_natives"
+         id="com.googlecode.mavennatives.m2eclipse.natives"
          download-size="0"
          install-size="0"
          version="0.0.0"
