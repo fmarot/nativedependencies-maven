@@ -45,8 +45,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
  * @requiresProject true
  * @requiresDependencyResolution
  */
-public class CopyNativesMojo extends AbstractMojo
-{
+public class CopyNativesMojo extends AbstractMojo {
 	/**
 	 * POM
 	 * 
@@ -63,48 +62,51 @@ public class CopyNativesMojo extends AbstractMojo
 	private File nativesTargetDir;
 
 	/**
+	 * @parameter expression="${separateDirs}" default-value="false"
+	 */
+	private boolean separateDirs;
+
+	/**
 	 * @component
 	 */
 	private IJarUnpacker jarUnpacker;
 
-	public void execute() throws MojoExecutionException, MojoFailureException
-	{
-		try
-		{
+	public void execute() throws MojoExecutionException, MojoFailureException {
+		try {
 			getLog().info("Saving natives in " + nativesTargetDir);
+			if(separateDirs)
+				getLog().info("Storing artifacts in separate dirs according to classifier");
 			Set<Artifact> artifacts = project.getArtifacts();
 			nativesTargetDir.mkdirs();
-			for (Artifact artifact : artifacts)
-			{
+			for (Artifact artifact : artifacts) {
 				String classifier = artifact.getClassifier();
-				if (classifier != null && classifier.startsWith("natives-"))
-				{
+				if (classifier != null && classifier.startsWith("natives-")) {
+
 					getLog().info(String.format("G:%s - A:%s - C:%s", artifact.getGroupId(), artifact.getArtifactId(), artifact.getClassifier()));
-					jarUnpacker.copyJarContent(artifact.getFile(), nativesTargetDir);
+					File artifactDir = nativesTargetDir;
+					if (separateDirs) {
+						String suffix = classifier.substring("natives-".length());
+						artifactDir = new File(nativesTargetDir,suffix);
+						artifactDir.mkdirs();
+					}
+					jarUnpacker.copyJarContent(artifact.getFile(), artifactDir);
 				}
 
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			throw new MojoFailureException("Unable to copy natives", e);
 		}
 	}
 
-	
-
-	public void setMavenProject(MavenProject mavenProject)
-	{
+	public void setMavenProject(MavenProject mavenProject) {
 		this.project = mavenProject;
 	}
 
-	public void setNativesTargetDir(File nativesTargetDir2)
-	{
+	public void setNativesTargetDir(File nativesTargetDir2) {
 		this.nativesTargetDir = nativesTargetDir2;
 	}
 
-	public void setJarUnpacker(IJarUnpacker jarUnpacker)
-	{
+	public void setJarUnpacker(IJarUnpacker jarUnpacker) {
 		this.jarUnpacker = jarUnpacker;
 	}
 
