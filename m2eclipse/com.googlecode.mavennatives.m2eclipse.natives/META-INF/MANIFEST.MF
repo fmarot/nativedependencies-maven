@@ -5,12 +5,13 @@ Bundle-SymbolicName: com.googlecode.mavennatives.m2eclipse.natives;singleton:=tr
 Bundle-Version: 0.0.2.qualifier
 Bundle-Activator: com.googlecode.mavennatives.m2eclipse.natives.Activator
 Require-Bundle: org.eclipse.core.runtime,
- org.maven.ide.eclipse;bundle-version="0.12.0",
- org.maven.ide.eclipse.jdt;bundle-version="0.12.0",
- org.maven.ide.eclipse.maven_embedder;bundle-version="0.12.1",
  org.eclipse.core.resources;bundle-version="3.4.1",
  org.eclipse.jdt.core;bundle-version="3.4.2",
- org.eclipse.jdt.launching;bundle-version="3.4.1"
+ org.eclipse.jdt.launching;bundle-version="3.4.1",
+ org.eclipse.m2e.core;bundle-version="1.0.100",
+ org.eclipse.m2e.jdt;bundle-version="1.0.100",
+ org.eclipse.m2e.maven.runtime;bundle-version="1.0.100",
+ org.slf4j.api;bundle-version="1.6.1"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: com.googlecode.mavennatives
