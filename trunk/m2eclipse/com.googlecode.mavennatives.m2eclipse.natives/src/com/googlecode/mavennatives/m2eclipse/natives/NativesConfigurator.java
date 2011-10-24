@@ -1,5 +1,6 @@
 package com.googlecode.mavennatives.m2eclipse.natives;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -19,27 +20,30 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.maven.ide.eclipse.MavenPlugin;
-import org.maven.ide.eclipse.core.MavenLogger;
-import org.maven.ide.eclipse.embedder.IMaven;
-import org.maven.ide.eclipse.jdt.BuildPathManager;
-import org.maven.ide.eclipse.jdt.IClasspathDescriptor;
-import org.maven.ide.eclipse.jdt.IJavaProjectConfigurator;
-import org.maven.ide.eclipse.project.IMavenProjectFacade;
-import org.maven.ide.eclipse.project.MavenProjectChangedEvent;
-import org.maven.ide.eclipse.project.MavenProjectManager;
-import org.maven.ide.eclipse.project.ResolverConfiguration;
-import org.maven.ide.eclipse.project.configurator.AbstractBuildParticipant;
-import org.maven.ide.eclipse.project.configurator.AbstractProjectConfigurator;
-import org.maven.ide.eclipse.project.configurator.ProjectConfigurationRequest;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.IMaven;
+import org.eclipse.m2e.core.internal.project.registry.MavenProjectManager;
+import org.eclipse.m2e.core.lifecyclemapping.model.IPluginExecutionMetadata;
+import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
+import org.eclipse.m2e.core.project.ResolverConfiguration;
+import org.eclipse.m2e.core.project.configurator.AbstractBuildParticipant;
+import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
+import org.eclipse.m2e.jdt.AbstractJavaProjectConfigurator;
+import org.eclipse.m2e.jdt.IClasspathDescriptor;
+import org.eclipse.m2e.jdt.IClasspathManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class NativesConfigurator extends AbstractProjectConfigurator implements IJavaProjectConfigurator {
+public class NativesConfigurator extends AbstractJavaProjectConfigurator {
+
+	static Logger logger = LoggerFactory.getLogger(NativesConfigurator.class);
 
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor progressMonitor) throws CoreException {
 
 		System.out.println();
-		MavenLogger.log("Configuring mvn natives");
+		logger.info("Configuring mvn natives");
 
 		MavenProject mavenProject = request.getMavenProject();
 
@@ -49,7 +53,7 @@ public class NativesConfigurator extends AbstractProjectConfigurator implements 
 
 			IPath nativesPath = request.getProject().getFullPath().makeRelative().append(relativeNativesPath);
 
-			MavenLogger.log("MavenNatives - Setting nativesPath: " + nativesPath.toString());
+			logger.info("MavenNatives - Setting nativesPath: " + nativesPath.toString());
 
 			IProject project = request.getProject().getProject();
 			IJavaProject javaProject = JavaCore.create(project);
@@ -57,60 +61,75 @@ public class NativesConfigurator extends AbstractProjectConfigurator implements 
 			IClasspathEntry[] entries = javaProject.getRawClasspath();
 			addNativesPathToMavenContainer(entries, nativesPath.toString());
 			javaProject.setRawClasspath(entries, progressMonitor);
-			MavenLogger.log("MavenNatives - Configured");
+			logger.info("MavenNatives - Configured");
 
 			IFile pom = request.getPom();
-			executeNativeDependenciesCopy(progressMonitor, pom);
+			executeNativeDependenciesCopy(request, progressMonitor, pom);
 
 			request.getProject().getFolder(relativeNativesPath).refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
 
-			MavenLogger.log("MavenNatives - Done");
+			logger.info("MavenNatives - Done");
 
 		} else {
-			MavenLogger.log("MavenNatives - Is not a MavenNatives project");
+			logger.info("MavenNatives - Is not a MavenNatives project");
 		}
 
 	}
 
-	private static void executeNativeDependenciesCopy(IProgressMonitor progressMonitor, IFile pom) throws CoreException {
-		MavenPlugin plugin = MavenPlugin.getDefault();
-		MavenProjectManager projectManager = plugin.getMavenProjectManager();
+	private void executeNativeDependenciesCopy(ProjectConfigurationRequest request, IProgressMonitor progressMonitor, IFile pom) throws CoreException {
+		List<MojoExecution> executions = getMojoExecutions(request, progressMonitor);
 
-		IMavenProjectFacade projectFacade = projectManager.create(pom, false, progressMonitor);
-
-		ResolverConfiguration resolverConfiguration = projectFacade.getResolverConfiguration();
-		MavenExecutionRequest mavenrequest = projectManager.createExecutionRequest(pom, resolverConfiguration, progressMonitor);
-
-		List<String> goals = new ArrayList<String>();
-		goals.add(NativesConfigExtractor.getNativeDependenciesGoal());
-		mavenrequest.setGoals(goals);
-		IMaven maven = plugin.getMaven();
-		MavenExecutionResult executionResult = maven.execute(mavenrequest, progressMonitor);
-
-		if (executionResult.hasExceptions()) {
-			List<Throwable> exceptions = executionResult.getExceptions();
-			for (Throwable throwable : exceptions) {
-				// TODO report failed build
-				throwable.printStackTrace();
-			}
-			Exception executionException = (Exception) executionResult.getExceptions().get(0);
-			throw new RuntimeException("Unable to execute " + NativesConfigExtractor.nativeDependenciesGoal + " goal: " + executionException.getMessage(), executionException);
-		} else {
-			MavenLogger.log("Native dependencies extracted fine");
+		if (executions.size() != 1) {
+			throw new IllegalArgumentException();
 		}
+
+		MojoExecution execution = executions.get(0);
+
+		maven.execute(request.getMavenSession(), execution, progressMonitor);
+
+		// String nativesPath = NativesConfigExtractor.getNativesPath(request.getMavenProject());
+
+		// IPath nativesDir = request.getMavenProjectFacade().getFullPath(new File(nativesPath));
+
+		// request.getProject().getFolder(nativesDir).refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
+
+		//
+		// MavenExecutionRequest mavenrequest = MavenPlugin.getMaven().createExecutionRequest(progressMonitor);
+		//
+		// List<String> goals = new ArrayList<String>();
+		// goals.add(NativesConfigExtractor.getNativeDependenciesGoal());
+		// mavenrequest.setGoals(goals);
+		// IMaven maven = MavenPlugin.getMaven();
+		// MavenExecutionResult executionResult = maven.execute(mavenrequest, progressMonitor);
+		//
+		// if (executionResult.hasExceptions()) {
+		// List<Throwable> exceptions = executionResult.getExceptions();
+		// for (Throwable throwable : exceptions) {
+		// // TODO report failed build
+		// throwable.printStackTrace();
+		// }
+		// Exception executionException = (Exception) executionResult.getExceptions().get(0);
+		// throw new RuntimeException("Unable to execute " + NativesConfigExtractor.nativeDependenciesGoal + " goal: " + executionException.getMessage(), executionException);
+		// } else {
+		// logger.info("Native dependencies extracted fine");
+		// }
 	}
 
 	private void addNativesPathToMavenContainer(IClasspathEntry[] classpathEntries, String nativesPath) {
 		for (int i = 0; i < classpathEntries.length; i++) {
 			IClasspathEntry entry = classpathEntries[i];
-			if (BuildPathManager.isMaven2ClasspathContainer(entry.getPath())) {
+			if (isMaven2ClasspathContainer(entry.getPath())) {
 				classpathEntries[i] = addNativesPathToMavenContainer(entry, nativesPath);
 			}
 		}
 	}
 
+	public static boolean isMaven2ClasspathContainer(IPath containerPath) {
+		return containerPath != null && containerPath.segmentCount() > 0 && IClasspathManager.CONTAINER_ID.equals(containerPath.segment(0));
+	}
+
 	private IClasspathEntry addNativesPathToMavenContainer(IClasspathEntry entry, String nativesPath) {
-		IClasspathAttribute nativeAttr = JavaCore.newClasspathAttribute(JavaRuntime.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY, nativesPath);
+		IClasspathAttribute nativeAttr = JavaRuntime.newLibraryPathsAttribute(new String[] { nativesPath });
 		entry = JavaCore.newContainerEntry(entry.getPath(), entry.getAccessRules(), new IClasspathAttribute[] { nativeAttr }, entry.isExported());
 		return entry;
 	}
@@ -122,41 +141,26 @@ public class NativesConfigurator extends AbstractProjectConfigurator implements 
 	}
 
 	public void configureClasspath(IMavenProjectFacade facade, IClasspathDescriptor classpath, IProgressMonitor monitor) throws CoreException {
-		MavenLogger.log("configureClassPathCalled");
+		logger.info("configureClassPathCalled");
 		System.out.println("configureClassPathCalled");
-
+//		MavenProject mavenProject = facade.getMavenProject();
+//		String relativeNativesPath = NativesConfigExtractor.getNativesPath(mavenProject);
+//		
+//
+//		IPath nativesPath = facade.getProject().getFullPath().makeRelative().append(relativeNativesPath);
+//		
+//		addNativesPathToMavenContainer(classpath.getEntries(),nativesPath.toOSString());
 	}
 
 	public void configureRawClasspath(ProjectConfigurationRequest request, IClasspathDescriptor classpath, IProgressMonitor monitor) throws CoreException {
-		MavenLogger.log("configureRawClassPathCalled");
+		logger.info("configureRawClassPathCalled");
 		System.out.println("configureClassPathCalled");
+		MavenProject mavenProject = request.getMavenProject();
+		String relativeNativesPath = NativesConfigExtractor.getNativesPath(mavenProject);
+		
 
+		IPath nativesPath = request.getProject().getFullPath().makeRelative().append(relativeNativesPath);
+		
+		addNativesPathToMavenContainer(classpath.getEntries(),nativesPath.toOSString());
 	}
-
-	@Override
-	public AbstractBuildParticipant getBuildParticipant(MojoExecution execution) {
-		MavenLogger.log("getBuildParticipant " + execution.toString());
-		System.out.println("getBuildParticipant " + execution.toString());
-
-		if (execution.getGroupId().equalsIgnoreCase(NativesConfigExtractor.groupId) && execution.getArtifactId().equalsIgnoreCase(NativesConfigExtractor.artifactId) && execution.getGoal().equalsIgnoreCase(NativesConfigExtractor.nativeDependenciesGoal)) {
-
-			return new AbstractBuildParticipant() {
-
-				public Set<IProject> build(int kind, IProgressMonitor progressMonitor) throws Exception {
-					return null;
-				}
-
-				@Override
-				public void clean(IProgressMonitor progressMonitor) throws CoreException {
-					MavenLogger.log("AfterClean mavennatives - " + this.toString());
-					IMavenProjectFacade projectFacade = getMavenProjectFacade();
-					IFile pom = projectFacade.getPom();
-					executeNativeDependenciesCopy(progressMonitor, pom);
-				}
-			};
-		} else {
-			return super.getBuildParticipant(execution);
-		}
-	}
-
 }

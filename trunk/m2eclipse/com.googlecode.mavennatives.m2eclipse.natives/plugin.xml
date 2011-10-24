@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension
-         point="org.maven.ide.eclipse.projectConfigurators">
-      <configurator
-            class="com.googlecode.mavennatives.m2eclipse.natives.NativesConfigurator"
-            id="com.googlecode.mavennatives.m2eclipse.natives.nativesConfigurator"
-            name="Maven Natives Project Configurator">
-      </configurator>
-   </extension>
-
+	<extension
+		point="org.eclipse.m2e.core.projectConfigurators">
+		<configurator
+			class="com.googlecode.mavennatives.m2eclipse.natives.NativesConfigurator"
+			id="com.googlecode.mavennatives.m2eclipse.natives.nativesConfigurator"
+			name="Maven Natives Project Configurator">
+		</configurator>
+	</extension>
+	<extension
+		point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
+	</extension>
 </plugin>
