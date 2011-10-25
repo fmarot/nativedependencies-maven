@@ -1,12 +1,7 @@
 package com.googlecode.mavennatives.m2eclipse.natives;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import org.apache.maven.execution.MavenExecutionRequest;
-import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFile;
@@ -20,17 +15,12 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.IMaven;
-import org.eclipse.m2e.core.internal.project.registry.MavenProjectManager;
-import org.eclipse.m2e.core.lifecyclemapping.model.IPluginExecutionMetadata;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.MavenProjectChangedEvent;
-import org.eclipse.m2e.core.project.ResolverConfiguration;
-import org.eclipse.m2e.core.project.configurator.AbstractBuildParticipant;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
 import org.eclipse.m2e.jdt.AbstractJavaProjectConfigurator;
 import org.eclipse.m2e.jdt.IClasspathDescriptor;
+import org.eclipse.m2e.jdt.IClasspathEntryDescriptor;
 import org.eclipse.m2e.jdt.IClasspathManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,14 +44,6 @@ public class NativesConfigurator extends AbstractJavaProjectConfigurator {
 			IPath nativesPath = request.getProject().getFullPath().makeRelative().append(relativeNativesPath);
 
 			logger.info("MavenNatives - Setting nativesPath: " + nativesPath.toString());
-
-			IProject project = request.getProject().getProject();
-			IJavaProject javaProject = JavaCore.create(project);
-
-			IClasspathEntry[] entries = javaProject.getRawClasspath();
-			addNativesPathToMavenContainer(entries, nativesPath.toString());
-			javaProject.setRawClasspath(entries, progressMonitor);
-			logger.info("MavenNatives - Configured");
 
 			IFile pom = request.getPom();
 			executeNativeDependenciesCopy(request, progressMonitor, pom);
@@ -115,11 +97,12 @@ public class NativesConfigurator extends AbstractJavaProjectConfigurator {
 		// }
 	}
 
-	private void addNativesPathToMavenContainer(IClasspathEntry[] classpathEntries, String nativesPath) {
-		for (int i = 0; i < classpathEntries.length; i++) {
-			IClasspathEntry entry = classpathEntries[i];
+	private void addNativesPathToMavenContainer(List<IClasspathEntryDescriptor> entrydescriptors, String nativesPath) {
+		for (int i = 0; i < entrydescriptors.size(); i++) {
+			IClasspathEntryDescriptor entry = entrydescriptors.get(i);
 			if (isMaven2ClasspathContainer(entry.getPath())) {
-				classpathEntries[i] = addNativesPathToMavenContainer(entry, nativesPath);
+				IClasspathAttribute nativeAttr = JavaRuntime.newLibraryPathsAttribute(new String[] { nativesPath });
+				entry.setClasspathAttribute(nativeAttr.getName(), nativeAttr.getValue());
 			}
 		}
 	}
@@ -154,13 +137,13 @@ public class NativesConfigurator extends AbstractJavaProjectConfigurator {
 
 	public void configureRawClasspath(ProjectConfigurationRequest request, IClasspathDescriptor classpath, IProgressMonitor monitor) throws CoreException {
 		logger.info("configureRawClassPathCalled");
-		System.out.println("configureClassPathCalled");
+		System.out.println("configureRawClassPathCalled");
 		MavenProject mavenProject = request.getMavenProject();
 		String relativeNativesPath = NativesConfigExtractor.getNativesPath(mavenProject);
 		
 
 		IPath nativesPath = request.getProject().getFullPath().makeRelative().append(relativeNativesPath);
 		
-		addNativesPathToMavenContainer(classpath.getEntries(),nativesPath.toOSString());
+		addNativesPathToMavenContainer(classpath.getEntryDescriptors(),nativesPath.toOSString());
 	}
 }
