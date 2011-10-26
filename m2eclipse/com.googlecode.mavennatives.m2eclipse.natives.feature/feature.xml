@@ -6,7 +6,7 @@
       provider-name="com.googlecode.mavennatives">
 
    <description url="http://mavennatives.googlecode.com">
-      Extension for m2eclipse to handle native dependencies in maven projects
+      Extension for m2e to handle native dependencies in maven projects
       WARNING: This version is only for Eclipse m2e 1.0+ if you are using m2eclipse from sonatype version 0.12.* uncheck the "Show only the latest versions of available software" option from the eclipse install screen and install the 0.0.1 version of this plugin.
    </description>
 
