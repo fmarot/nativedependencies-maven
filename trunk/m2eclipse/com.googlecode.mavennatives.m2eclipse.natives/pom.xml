@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.googlecode.mavennatives.m2eclipse.natives</groupId>
 		<artifactId>m2eclipse-mavennatives-integration</artifactId>
-		<version>0.0.2.201110262051</version>
+		<version>0.0.2.201110262159</version>
 	</parent>
 	<artifactId>com.googlecode.mavennatives.m2eclipse.natives</artifactId>
 	<name>Maven Integration for Maven Natives Plug-in</name>

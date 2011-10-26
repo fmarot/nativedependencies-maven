@@ -15,7 +15,7 @@
 				<!--<repository location="0.0.1.201103101931/"  />
 				<repository location="0.0.2.201110262051/"  />-->
 				<repository location="http://mavennatives.googlecode.com/svn/eclipse-update/0.0.1.201103101931/"  />
-				<repository location="http://mavennatives.googlecode.com/svn/eclipse-update/0.0.2.201110262051/"  />
+				<repository location="http://mavennatives.googlecode.com/svn/eclipse-update/0.0.2.201110262159/"  />
 			</add>
 		</p2.composite.repository>
 	</target>
