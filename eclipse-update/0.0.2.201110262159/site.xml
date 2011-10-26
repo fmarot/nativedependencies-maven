@@ -3,7 +3,7 @@
    <description name="m2eclipse-mavennatives-integration">
       Feature that adds integration for the maven-nativedependencies-plugin with m2eclipse
    </description>
-   <feature url="features/com.googlecode.mavennatives.m2eclipse.natives.feature_0.0.2.201110262051.jar" id="com.googlecode.mavennatives.m2eclipse.natives.feature" version="0.0.2.201110262051">
+   <feature url="features/com.googlecode.mavennatives.m2eclipse.natives.feature_0.0.2.201110262159.jar" id="com.googlecode.mavennatives.m2eclipse.natives.feature" version="0.0.2.201110262159">
       <category name="com.googlecode.mavennatives.m2eclipse.natives"/>
    </feature>
    <category-def name="com.googlecode.mavennatives.m2eclipse.natives" label="Maven Natives Integration"/>
