@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>m2eclipse-mavennatives-integration</artifactId>
 		<groupId>com.googlecode.mavennatives.m2eclipse.natives</groupId>
-		<version>0.0.2.201110262051</version>
+		<version>0.0.2.201110262159</version>
 	</parent>
 	<groupId>com.gemserk.mavennatives.eclipse</groupId>
 	<artifactId>com.googlecode.mavennatives.m2eclipse.natives.site</artifactId>
-	<version>0.0.2.201110262051</version>
+	<version>0.0.2.201110262159</version>
 	<packaging>eclipse-update-site</packaging>
 	<name>mavennatives update site</name>
 	<description>mavennatives update site</description>
