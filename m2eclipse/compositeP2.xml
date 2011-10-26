@@ -10,10 +10,12 @@
 	<target name="repo2runnable">
 		<p2.composite.repository>
 			<repository location="file:/tmp/compositerepo" name="A new repository"
-				kind="M" />
+				 />
 			<add>
-				<repository location="0.0.1.201103101931/" kind="M" />
-				<repository location="0.0.2.201110262051/" kind="M" />
+				<!--<repository location="0.0.1.201103101931/"  />
+				<repository location="0.0.2.201110262051/"  />-->
+				<repository location="http://mavennatives.googlecode.com/svn/eclipse-update/0.0.1.201103101931/"  />
+				<repository location="http://mavennatives.googlecode.com/svn/eclipse-update/0.0.2.201110262051/"  />
 			</add>
 		</p2.composite.repository>
 	</target>
