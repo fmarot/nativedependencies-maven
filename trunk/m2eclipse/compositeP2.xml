@@ -1,0 +1,22 @@
+<project default="runInEclipse" name="repo2runnable">
+
+
+	<target name="runInEclipse">
+		<!-- requires Eclipse 3.5M7+; see http://wiki.eclipse.org/Equinox/p2/Ant_Tasks 
+			use "Run in the same JRE as the workspace" to run within Eclipse -->
+		<antcall target="repo2runnable" />
+	</target>
+
+	<target name="repo2runnable">
+		<p2.composite.repository>
+			<repository location="file:/tmp/compositerepo" name="A new repository"
+				kind="M" />
+			<add>
+				<repository location="http://mavennatives.googlecode.com/svn/eclipse-update/" kind="M" />
+				<repository location="file:/tmp/newupdatesite" kind="M" />
+			</add>
+		</p2.composite.repository>
+	</target>
+
+
+</project>
