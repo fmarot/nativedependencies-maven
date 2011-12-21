@@ -3,7 +3,7 @@
 	<groupId>com.googlecode.mavennatives</groupId>
 	<artifactId>maven-nativedependencies-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>0.0.6</version>
+	<version>0.0.7-SNAPSHOT</version>
 	<name>Maven Native Dependencies Plugin</name>
 	<description>This plugin allows the automatic unpacking of natives in jars depending on a classifier with a certain pattern</description>
 	<url>http://code.google.com/p/mavennatives/</url>
@@ -36,9 +36,9 @@
 	</licenses>
 
 	<scm>
-		<url>https://mavennatives.googlecode.com/svn/tags/maven-nativedependencies-plugin-0.0.6</url>
-		<connection>scm:svn:http://mavennatives.googlecode.com/svn/tags/maven-nativedependencies-plugin-0.0.6</connection>
-		<developerConnection>scm:svn:https://mavennatives.googlecode.com/svn/tags/maven-nativedependencies-plugin-0.0.6</developerConnection>
+		<url>https://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</url>
+		<connection>scm:svn:http://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</connection>
+		<developerConnection>scm:svn:https://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</developerConnection>
 	</scm>
 	<distributionManagement>
 		<snapshotRepository>
