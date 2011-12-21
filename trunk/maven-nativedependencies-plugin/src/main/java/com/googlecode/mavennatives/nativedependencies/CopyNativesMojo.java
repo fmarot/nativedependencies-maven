@@ -43,7 +43,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
  * @goal copy
  * @phase package
  * @requiresProject true
- * @requiresDependencyResolution
+ * @requiresDependencyResolution test
  */
 public class CopyNativesMojo extends AbstractMojo {
 	/**
