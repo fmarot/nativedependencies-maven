@@ -17,25 +17,14 @@ package com.googlecode.mavennatives.nativedependencies;
  */
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
 import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.zip.CRC32;
 
-import org.apache.commons.io.CopyUtils;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
-import org.jmock.Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * Unpacks native dependencies
@@ -71,10 +60,15 @@ public class CopyNativesMojo extends AbstractMojo {
 	 */
 	private IJarUnpacker jarUnpacker;
 
+	/** 
+	 * @component 
+	 * */
+	private BuildContext buildContext;
+
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		try {
 			getLog().info("Saving natives in " + nativesTargetDir);
-			if(separateDirs)
+			if (separateDirs)
 				getLog().info("Storing artifacts in separate dirs according to classifier");
 			Set<Artifact> artifacts = project.getArtifacts();
 			nativesTargetDir.mkdirs();
@@ -86,13 +80,14 @@ public class CopyNativesMojo extends AbstractMojo {
 					File artifactDir = nativesTargetDir;
 					if (separateDirs) {
 						String suffix = classifier.substring("natives-".length());
-						artifactDir = new File(nativesTargetDir,suffix);
+						artifactDir = new File(nativesTargetDir, suffix);
 						artifactDir.mkdirs();
 					}
 					jarUnpacker.copyJarContent(artifact.getFile(), artifactDir);
 				}
 
 			}
+			buildContext.refresh(nativesTargetDir);
 		} catch (Exception e) {
 			throw new MojoFailureException("Unable to copy natives", e);
 		}
@@ -108,6 +103,10 @@ public class CopyNativesMojo extends AbstractMojo {
 
 	public void setJarUnpacker(IJarUnpacker jarUnpacker) {
 		this.jarUnpacker = jarUnpacker;
+	}
+	
+	public void setBuildContext(BuildContext buildContext) {
+		this.buildContext = buildContext;
 	}
 
 }
