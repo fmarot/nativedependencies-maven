@@ -17,6 +17,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sonatype.plexus.build.incremental.DefaultBuildContext;
 
 @RunWith(JMock.class)
 public class CopyNativesMojoTest
@@ -43,7 +44,8 @@ public class CopyNativesMojoTest
 		mojo.setJarUnpacker(jarUnpacker);
 		nativesTargetDir = context.mock(File.class);
 		mojo.setNativesTargetDir(nativesTargetDir);
-		artifactFactory = new ArtifactStubFactory();		
+		artifactFactory = new ArtifactStubFactory();
+		mojo.setBuildContext(new DefaultBuildContext());
 	}
 	
 	
