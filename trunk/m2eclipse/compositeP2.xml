@@ -9,11 +9,12 @@
 
 	<target name="repo2runnable">
 		<p2.composite.repository>
-			<repository location="file:/tmp/compositerepo" name="A new repository"
+			<repository location="file:/tmp/compositerepo" name="M2E - Maven Natives Plugin"
 				 />
 			<add>
 				<repository location="http://mavennatives.googlecode.com/svn/eclipse-update/0.0.1.201103101931/"  />
 				<repository location="http://mavennatives.googlecode.com/svn/eclipse-update/0.0.2.201110262159/"  />
+				<repository location="http://mavennatives.googlecode.com/svn/eclipse-update/0.0.3.201211152116/"  />
 			</add>
 		</p2.composite.repository>
 	</target>
