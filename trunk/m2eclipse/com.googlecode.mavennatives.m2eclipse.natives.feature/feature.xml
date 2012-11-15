@@ -2,7 +2,7 @@
 <feature
       id="com.googlecode.mavennatives.m2eclipse.natives.feature"
       label="M2eclipse Natives Integration Feature"
-      version="0.0.3.201211152116"
+      version="0.0.4.qualifier"
       provider-name="com.googlecode.mavennatives">
 
    <description url="http://mavennatives.googlecode.com">
