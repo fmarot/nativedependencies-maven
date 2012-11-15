@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="m2eclipse-mavennatives-integration">
+      Feature that adds integration for the maven-nativedependencies-plugin with m2eclipse
+   </description>
+   <feature url="features/com.googlecode.mavennatives.m2eclipse.natives.feature_0.0.3.201211152116.jar" id="com.googlecode.mavennatives.m2eclipse.natives.feature" version="0.0.3.201211152116">
+      <category name="com.googlecode.mavennatives.m2eclipse.natives"/>
+   </feature>
+   <category-def name="com.googlecode.mavennatives.m2eclipse.natives" label="Maven Natives Integration"/>
+</site>
