@@ -74,6 +74,26 @@
 					</execution>
 				</executions>
 			</plugin>
+
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<configuration>
+					<!-- run using mvn exec:exec -->
+					<!-- NOTE: we can't run mvn exec:java as it does not spawn a new process required 
+						by 'java.library.path' option to work -->
+					<executable>java</executable>
+					<arguments>
+						<argument>-Djava.library.path=/media/Data-lvm/dev/mavennatives/maven-nativedependencies-example/target/natives/</argument>
+						<argument>-classpath</argument>
+						<classpath />
+						<argument>com.googlecode.nativedependencies.example.App</argument> <!-- main class -->
+					</arguments>
+
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 

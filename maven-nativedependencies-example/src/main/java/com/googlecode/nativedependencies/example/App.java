@@ -13,8 +13,6 @@ public class App
     {
     	int targetWidth = 640;
     	int targetHeight = 480;
-    	 
-    	
     	
     	try {
     		DisplayMode chosenMode = new DisplayMode(targetWidth,targetHeight);
