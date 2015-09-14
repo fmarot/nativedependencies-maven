@@ -1,4 +1,4 @@
-package com.googlecode.mavennatives.nativedependencies;
+package com.teamtter.mavennatives.nativedependencies;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.plexus.build.incremental.DefaultBuildContext;
+
+import com.teamtter.mavennatives.nativedependencies.CopyNativesMojo;
+import com.teamtter.mavennatives.nativedependencies.IJarUnpacker;
 
 @RunWith(JMock.class)
 public class CopyNativesMojoTest

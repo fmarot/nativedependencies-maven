@@ -1,4 +1,4 @@
-package com.googlecode.mavennatives.nativedependencies;
+package com.teamtter.mavennatives.nativedependencies;
 
 import java.io.File;
 import java.io.IOException;

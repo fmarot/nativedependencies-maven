@@ -1,4 +1,4 @@
-package com.googlecode.nativedependencies.example;
+package com.teamtter.nativedependencies.example;
 
 import org.lwjgl.Sys;
 import org.lwjgl.glfw.*;

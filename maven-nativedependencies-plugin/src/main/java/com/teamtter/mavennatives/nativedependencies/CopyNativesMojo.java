@@ -1,4 +1,4 @@
-package com.googlecode.mavennatives.nativedependencies;
+package com.teamtter.mavennatives.nativedependencies;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
@@ -28,7 +28,6 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * Unpacks native dependencies
- * 
  * @goal copy
  * @phase package
  * @requiresProject true
@@ -37,7 +36,6 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 public class CopyNativesMojo extends AbstractMojo {
 	/**
 	 * POM
-	 * 
 	 * @parameter expression="${project}"
 	 * @readonly
 	 * @required
@@ -45,7 +43,6 @@ public class CopyNativesMojo extends AbstractMojo {
 	private MavenProject project;
 
 	/**
-	 * 
 	 * @parameter expression="${nativesTargetDir}" default-value="${project.build.directory}/natives"
 	 */
 	private File nativesTargetDir;

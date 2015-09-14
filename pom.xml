@@ -12,8 +12,8 @@
 
 	<modules>
 		<module>m2eclipse</module>
-		<module>maven-nativedependencies-example</module>
-		<module>maven-nativedependencies-plugin</module>
+		<module>nativedependencies-maven-example</module>
+		<module>nativedependencies-maven-plugin</module>
 	</modules>
 
 </project>
