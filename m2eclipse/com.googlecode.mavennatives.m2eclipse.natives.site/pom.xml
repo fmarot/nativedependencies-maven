@@ -9,7 +9,6 @@
 	<groupId>com.gemserk.mavennatives.eclipse</groupId>
 	<artifactId>com.googlecode.mavennatives.m2eclipse.natives.site</artifactId>
 	<packaging>eclipse-update-site</packaging>
-	<name>mavennatives update site</name>
 	<description>mavennatives update site</description>
 	<build>
 		<extensions>

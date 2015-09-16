@@ -7,7 +7,7 @@
 		<version>0.0.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.googlecode.mavennatives.m2eclipse.natives</artifactId>
-	<name>Maven Integration for Maven Natives Plug-in</name>
+	<description>Maven Integration for Maven Natives Plug-in</description>
 	<packaging>eclipse-plugin</packaging>
 	<build>
 		<plugins>
