@@ -3,18 +3,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.googlecode.mavennatives.it001</groupId>
+	<groupId>com.teamtter.mavennatives.it001</groupId>
 	<artifactId>nativedependencies-it001</artifactId>
 	<version>1.0</version>
 	<packaging>pom</packaging>
-	<name>NativeDependencies it001</name>
+
 	<description>Tests that provided native deps are used</description>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>com.googlecode.mavennatives</groupId>
-				<artifactId>maven-nativedependencies-plugin</artifactId>
+				<groupId>com.teamtter.mavennatives</groupId>
+				<artifactId>nativedependencies-maven-plugin</artifactId>
 				<version>@project.version@</version>
 				<executions>
 					<execution>

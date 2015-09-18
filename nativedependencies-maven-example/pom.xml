@@ -27,20 +27,7 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>com.teamtter.mavennatives</groupId>
-				<artifactId>nativedependencies-maven-plugin</artifactId>
-				<version>0.0.8-SNAPSHOT</version>
-				<executions>
-					<execution>
-						<id>unpacknatives</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -55,6 +42,7 @@
 					</archive>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.2.1</version>
@@ -74,6 +62,21 @@
 				</executions>
 			</plugin>
 
+			<plugin>
+				<!-- our plugin, target of this test -->
+				<groupId>com.teamtter.mavennatives</groupId>
+				<artifactId>nativedependencies-maven-plugin</artifactId>
+				<version>0.0.8-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<id>unpacknatives</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -89,7 +92,6 @@
 						<classpath />
 						<argument>com.teamtter.nativedependencies.example.App</argument> <!-- main class -->
 					</arguments>
-
 				</configuration>
 			</plugin>
 
@@ -102,6 +104,7 @@
 			<artifactId>lwjgl</artifactId>
 			<version>${lwjgl.version}</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl-platform</artifactId>
@@ -114,6 +117,7 @@
 			<version>${lwjgl.version}</version>
 			<classifier>natives-osx</classifier>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl-platform</artifactId>

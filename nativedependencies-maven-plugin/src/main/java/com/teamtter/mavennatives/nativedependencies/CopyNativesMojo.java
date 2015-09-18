@@ -65,8 +65,9 @@ public class CopyNativesMojo extends AbstractMojo {
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		try {
 			getLog().info("Saving natives in " + nativesTargetDir);
-			if (separateDirs)
+			if (separateDirs) {
 				getLog().info("Storing artifacts in separate dirs according to classifier");
+			}
 			Set<Artifact> artifacts = project.getArtifacts();
 			nativesTargetDir.mkdirs();
 			for (Artifact artifact : artifacts) {
