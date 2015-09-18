@@ -1,3 +1,5 @@
+<!-- Thsi file helps Eclipse M2E understand this Maven plugin -->
+<!-- See more info here: https://wiki.eclipse.org/M2E_compatible_maven_plugins -->
 <lifecycleMappingMetadata>
   <pluginExecutions>
     <pluginExecution>
