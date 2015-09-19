@@ -87,7 +87,7 @@
 						by 'java.library.path' option to work -->
 					<executable>java</executable>
 					<arguments>
-						<argument>-Djava.library.path=/media/Data-lvm/dev/mavennatives/maven-nativedependencies-example/target/natives/</argument>
+						<argument>-Djava.library.path=${project.basedir}/target/natives/</argument>
 						<argument>-classpath</argument>
 						<classpath />
 						<argument>com.teamtter.nativedependencies.example.App</argument> <!-- main class -->
