@@ -23,10 +23,8 @@ import com.teamtter.mavennatives.nativedependencies.CopyNativesMojo;
 import com.teamtter.mavennatives.nativedependencies.IJarUnpacker;
 
 @RunWith(JMock.class)
-public class CopyNativesMojoTest
-{
-	Mockery context = new Mockery()
-	{
+public class CopyNativesMojoTest {
+	Mockery context = new Mockery() {
 		{
 			setImposteriser(ClassImposteriser.INSTANCE);
 		}
@@ -36,13 +34,12 @@ public class CopyNativesMojoTest
 	private MavenProject mavenProject;
 	private File nativesTargetDir;
 	private ArtifactStubFactory artifactFactory;
-	
+
 	@Before
-	public void setUp()
-	{
+	public void setUp() {
 		mojo = new CopyNativesMojo();
 		mavenProject = context.mock(MavenProject.class);
-		mojo.setMavenProject(mavenProject);
+		mojo.setMavenProject(mavenProject); 
 		jarUnpacker = context.mock(IJarUnpacker.class);
 		mojo.setJarUnpacker(jarUnpacker);
 		nativesTargetDir = context.mock(File.class);
@@ -50,69 +47,67 @@ public class CopyNativesMojoTest
 		artifactFactory = new ArtifactStubFactory();
 		mojo.setBuildContext(new DefaultBuildContext());
 	}
-	
-	
+
 	@Test
-	public void executeWithoutDependenciesOnlyCreatesTheNativesDir() throws MojoExecutionException, MojoFailureException
-	{
+	public void executeWithoutDependenciesOnlyCreatesTheNativesDir()
+			throws MojoExecutionException, MojoFailureException {
 		final Set<Artifact> artifacts = new HashSet<Artifact>();
-			
-		context.checking(new Expectations()
-		{
+
+		context.checking(new Expectations() {
 			{
 				oneOf(nativesTargetDir).mkdirs();
-				oneOf(mavenProject).getArtifacts();will(returnValue(artifacts));
+				oneOf(mavenProject).getArtifacts();
+				will(returnValue(artifacts));
 			}
 		});
-		
+
 		mojo.execute();
-		
+
 	}
-	
+
 	@Test
-	public void executeWithoutNativeDependenciesOnlyCreatesTheNativesDir() throws MojoExecutionException, MojoFailureException, IOException
-	{
+	public void executeWithoutNativeDependenciesOnlyCreatesTheNativesDir()
+			throws MojoExecutionException, MojoFailureException, IOException {
 		final Set<Artifact> artifacts = new HashSet<Artifact>();
-			
-		artifacts.add(artifactFactory.createArtifact("groupid1","artifactid1","1.0"));
-		artifacts.add(artifactFactory.createArtifact("groupid2","artifactid2","2.0"));
-		artifacts.add(artifactFactory.createArtifact("groupid3","artifactid3","3.0"));
-		
-		
-		context.checking(new Expectations()
-		{
+
+		artifacts.add(artifactFactory.createArtifact("groupid1", "artifactid1", "1.0"));
+		artifacts.add(artifactFactory.createArtifact("groupid2", "artifactid2", "2.0"));
+		artifacts.add(artifactFactory.createArtifact("groupid3", "artifactid3", "3.0"));
+
+		context.checking(new Expectations() {
 			{
 				oneOf(nativesTargetDir).mkdirs();
-				oneOf(mavenProject).getArtifacts();will(returnValue(artifacts));
+				oneOf(mavenProject).getArtifacts();
+				will(returnValue(artifacts));
 			}
 		});
-		
+
 		mojo.execute();
 	}
-	
+
 	@Test
-	public void executeWithOneNativeDependenciesCallsTheUnpacker() throws MojoExecutionException, MojoFailureException, IOException
-	{
+	public void executeWithOneNativeDependenciesCallsTheUnpacker()
+			throws MojoExecutionException, MojoFailureException, IOException {
 		final Set<Artifact> artifacts = new HashSet<Artifact>();
-			
-		artifacts.add(artifactFactory.createArtifact("groupid1","artifactid1","1.0"));
-		Artifact nativeArtifact = artifactFactory.createArtifact("groupid2","artifactid2","2.0","compile","jar","natives-windows");
+
+		artifacts.add(artifactFactory.createArtifact("groupid1", "artifactid1", "1.0"));
+		Artifact nativeArtifact = artifactFactory.createArtifact("groupid2", "artifactid2", "2.0", "compile", "jar",
+				"natives-windows");
 		final File nativeFile = new File("test1");
 		nativeArtifact.setFile(nativeFile);
-		
+
 		artifacts.add(nativeArtifact);
-		artifacts.add(artifactFactory.createArtifact("groupid3","artifactid3","3.0"));
-		
-		
-		context.checking(new Expectations()
-		{
+		artifacts.add(artifactFactory.createArtifact("groupid3", "artifactid3", "3.0"));
+
+		context.checking(new Expectations() {
 			{
 				oneOf(nativesTargetDir).mkdirs();
-				oneOf(mavenProject).getArtifacts();will(returnValue(artifacts));
+				oneOf(mavenProject).getArtifacts();
+				will(returnValue(artifacts));
 				oneOf(jarUnpacker).copyJarContent(nativeFile, nativesTargetDir);
 			}
 		});
-		
+
 		mojo.execute();
 	}
 

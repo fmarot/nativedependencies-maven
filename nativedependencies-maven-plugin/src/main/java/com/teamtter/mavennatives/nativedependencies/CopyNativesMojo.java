@@ -23,43 +23,42 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
+import lombok.Setter;
+
 /**
  * Unpacks native dependencies
- * @goal copy
- * @phase package
- * @requiresProject true
- * @requiresDependencyResolution test
  */
+@Mojo(name = "copy" /** the goal */
+, threadSafe = false /** until proven otherwise, false */
+, defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
 public class CopyNativesMojo extends AbstractMojo {
-	/**
-	 * POM
-	 * @parameter expression="${project}"
-	 * @readonly
-	 * @required
-	 */
-	private MavenProject project;
 
-	/**
-	 * @parameter expression="${nativesTargetDir}" default-value="${project.build.directory}/natives"
-	 */
+	@Parameter(defaultValue = "${project}", readonly = true)
+	@Setter
+	private MavenProject mavenProject;
+
+	@Parameter(property = "nativesTargetDir", defaultValue = "${project.build.directory}/natives")
+	@Setter
 	private File nativesTargetDir;
 
-	/**
-	 * @parameter expression="${separateDirs}" default-value="false"
-	 */
+	@Parameter(property = "separateDirs", defaultValue = "false")
+	@Setter
 	private boolean separateDirs;
 
-	/**
-	 * @component
-	 */
+	@Component
+	@Setter
 	private IJarUnpacker jarUnpacker;
 
-	/** 
-	 * @component 
-	 * */
+	@Component
+	@Setter
 	private BuildContext buildContext;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -68,13 +67,14 @@ public class CopyNativesMojo extends AbstractMojo {
 			if (separateDirs) {
 				getLog().info("Storing artifacts in separate dirs according to classifier");
 			}
-			Set<Artifact> artifacts = project.getArtifacts();
+			Set<Artifact> artifacts = mavenProject.getArtifacts();
 			nativesTargetDir.mkdirs();
 			for (Artifact artifact : artifacts) {
 				String classifier = artifact.getClassifier();
 				if (classifier != null && classifier.startsWith("natives-")) {
 
-					getLog().info(String.format("G:%s - A:%s - C:%s", artifact.getGroupId(), artifact.getArtifactId(), artifact.getClassifier()));
+					getLog().info(String.format("G:%s - A:%s - C:%s", artifact.getGroupId(), artifact.getArtifactId(),
+							artifact.getClassifier()));
 					File artifactDir = nativesTargetDir;
 					if (separateDirs) {
 						String suffix = classifier.substring("natives-".length());
@@ -89,22 +89,6 @@ public class CopyNativesMojo extends AbstractMojo {
 		} catch (Exception e) {
 			throw new MojoFailureException("Unable to copy natives", e);
 		}
-	}
-
-	public void setMavenProject(MavenProject mavenProject) {
-		this.project = mavenProject;
-	}
-
-	public void setNativesTargetDir(File nativesTargetDir2) {
-		this.nativesTargetDir = nativesTargetDir2;
-	}
-
-	public void setJarUnpacker(IJarUnpacker jarUnpacker) {
-		this.jarUnpacker = jarUnpacker;
-	}
-	
-	public void setBuildContext(BuildContext buildContext) {
-		this.buildContext = buildContext;
 	}
 
 }

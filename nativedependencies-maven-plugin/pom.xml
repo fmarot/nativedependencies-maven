@@ -198,6 +198,12 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.apache.maven.plugin-tools</groupId>
+			<artifactId>maven-plugin-annotations</artifactId>
+			<version>3.4</version> <!-- This is my version, please check latest -->
+			<scope>provided</scope> <!-- It comes from maven itself -->
+		</dependency>
+		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-artifact</artifactId>
 			<version>${maven.version}</version>
@@ -249,6 +255,12 @@
 			<artifactId>plexus-build-api</artifactId>
 			<version>0.0.7</version>
 		</dependency>
+
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>1.16.6</version>
+			</dependency>
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.codehaus.plexus</groupId> -->
 <!-- 			<artifactId>plexus-utils</artifactId> -->
