@@ -55,7 +55,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>3.3</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
@@ -66,10 +66,29 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.5</version>
+				<version>2.7</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<version>3.4</version>
+				<executions>
+					<execution>
+						<id>default-descriptor</id>
+						<phase>process-classes</phase>
+					</execution>
+					<execution>
+						<!-- if you want to generate help goal -->
+						<id>help-goal</id>
+						<goals>
+							<goal>helpmojo</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
@@ -126,20 +145,20 @@
 <!-- 			</plugin> -->
 
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>2.1</version>
-					<configuration>
-						<mavenExecutorId>forked-path</mavenExecutorId>
-						<useReleaseProfile>false</useReleaseProfile>
-						<arguments>-Pgpgsign,mavennativesgpg</arguments>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+<!-- 		<pluginManagement> -->
+<!-- 			<plugins> -->
+<!-- 				<plugin> -->
+<!-- 					<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 					<artifactId>maven-release-plugin</artifactId> -->
+<!-- 					<version>2.1</version> -->
+<!-- 					<configuration> -->
+<!-- 						<mavenExecutorId>forked-path</mavenExecutorId> -->
+<!-- 						<useReleaseProfile>false</useReleaseProfile> -->
+<!-- 						<arguments>-Pgpgsign,mavennativesgpg</arguments> -->
+<!-- 					</configuration> -->
+<!-- 				</plugin> -->
+<!-- 			</plugins> -->
+<!-- 		</pluginManagement> -->
 	</build>
 
 	<profiles>
@@ -177,6 +196,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-invoker-plugin</artifactId>
+						<version>2.0.0</version>
 						<configuration>
 							<cloneAllFiles>true</cloneAllFiles>
 							<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
@@ -250,17 +270,12 @@
 			<artifactId>plexus-component-annotations</artifactId>
 			<version>1.0-beta-3.0.5</version>
 		</dependency>
-		<dependency>
-			<groupId>org.sonatype.plexus</groupId>
-			<artifactId>plexus-build-api</artifactId>
-			<version>0.0.7</version>
-		</dependency>
 
-			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>1.16.6</version>
-			</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.6</version>
+		</dependency>
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.codehaus.plexus</groupId> -->
 <!-- 			<artifactId>plexus-utils</artifactId> -->
