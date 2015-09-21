@@ -19,9 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sonatype.plexus.build.incremental.DefaultBuildContext;
 
-import com.teamtter.mavennatives.nativedependencies.CopyNativesMojo;
-import com.teamtter.mavennatives.nativedependencies.IJarUnpacker;
-
 @RunWith(JMock.class)
 public class CopyNativesMojoTest {
 	Mockery context = new Mockery() {
@@ -39,7 +36,7 @@ public class CopyNativesMojoTest {
 	public void setUp() {
 		mojo = new CopyNativesMojo();
 		mavenProject = context.mock(MavenProject.class);
-		mojo.setMavenProject(mavenProject); 
+		mojo.setMavenProject(mavenProject);
 		jarUnpacker = context.mock(IJarUnpacker.class);
 		mojo.setJarUnpacker(jarUnpacker);
 		nativesTargetDir = context.mock(File.class);
@@ -49,25 +46,21 @@ public class CopyNativesMojoTest {
 	}
 
 	@Test
-	public void executeWithoutDependenciesOnlyCreatesTheNativesDir()
-			throws MojoExecutionException, MojoFailureException {
+	public void executeWithoutDependenciesOnlyCreatesTheNativesDir() throws MojoExecutionException, MojoFailureException {
 		final Set<Artifact> artifacts = new HashSet<Artifact>();
 
 		context.checking(new Expectations() {
 			{
-				oneOf(nativesTargetDir).mkdirs();
 				oneOf(mavenProject).getArtifacts();
 				will(returnValue(artifacts));
 			}
 		});
 
 		mojo.execute();
-
 	}
 
 	@Test
-	public void executeWithoutNativeDependenciesOnlyCreatesTheNativesDir()
-			throws MojoExecutionException, MojoFailureException, IOException {
+	public void executeWithoutNativeDependencies() throws MojoExecutionException, MojoFailureException, IOException {
 		final Set<Artifact> artifacts = new HashSet<Artifact>();
 
 		artifacts.add(artifactFactory.createArtifact("groupid1", "artifactid1", "1.0"));
@@ -76,7 +69,6 @@ public class CopyNativesMojoTest {
 
 		context.checking(new Expectations() {
 			{
-				oneOf(nativesTargetDir).mkdirs();
 				oneOf(mavenProject).getArtifacts();
 				will(returnValue(artifacts));
 			}
@@ -86,13 +78,11 @@ public class CopyNativesMojoTest {
 	}
 
 	@Test
-	public void executeWithOneNativeDependenciesCallsTheUnpacker()
-			throws MojoExecutionException, MojoFailureException, IOException {
+	public void executeWithOneNativeDependenciesCallsTheUnpacker() throws MojoExecutionException, MojoFailureException, IOException {
 		final Set<Artifact> artifacts = new HashSet<Artifact>();
 
 		artifacts.add(artifactFactory.createArtifact("groupid1", "artifactid1", "1.0"));
-		Artifact nativeArtifact = artifactFactory.createArtifact("groupid2", "artifactid2", "2.0", "compile", "jar",
-				"natives-windows");
+		Artifact nativeArtifact = artifactFactory.createArtifact("groupid2", "artifactid2", "2.0", "compile", "jar", "natives-windows");
 		final File nativeFile = new File("test1");
 		nativeArtifact.setFile(nativeFile);
 

@@ -17,6 +17,7 @@ package com.teamtter.mavennatives.nativedependencies;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
@@ -33,13 +34,13 @@ import org.sonatype.plexus.build.incremental.BuildContext;
 
 import lombok.Setter;
 
-/**
- * Unpacks native dependencies
- */
+/** Unpacks native dependencies */
 @Mojo(name = "copy" /** the goal */
 , threadSafe = false /** until proven otherwise, false */
 , defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
 public class CopyNativesMojo extends AbstractMojo {
+
+	private static final String NATIVES_PREFIX = "natives-";
 
 	@Parameter(defaultValue = "${project}", readonly = true)
 	@Setter
@@ -53,6 +54,14 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Setter
 	private boolean separateDirs;
 
+	@Parameter(property = "autoDetectOSNatives", defaultValue = "false")
+	@Setter
+	private boolean autoDetectOSNatives;
+
+	@Parameter(property = "skip", defaultValue = "false")
+	@Setter
+	private boolean skip;
+
 	@Component
 	@Setter
 	private IJarUnpacker jarUnpacker;
@@ -61,34 +70,61 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Setter
 	private BuildContext buildContext;
 
+	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		if (skip) {
+			getLog().info("Skipping execution due to 'skip' == true");
+		} else {
+			copyNativeDependencies();
+		}
+	}
+
+	private void copyNativeDependencies() throws MojoFailureException {
 		try {
-			getLog().info("Saving natives in " + nativesTargetDir);
-			if (separateDirs) {
-				getLog().info("Storing artifacts in separate dirs according to classifier");
-			}
+			getLog().info("Saving natives in " + nativesTargetDir + (separateDirs ? "separated dirs according to classifier" : ""));
+
 			Set<Artifact> artifacts = mavenProject.getArtifacts();
-			nativesTargetDir.mkdirs();
+			boolean atLeastOneartifactCopied = false;
 			for (Artifact artifact : artifacts) {
 				String classifier = artifact.getClassifier();
-				if (classifier != null && classifier.startsWith("natives-")) {
-
-					getLog().info(String.format("G:%s - A:%s - C:%s", artifact.getGroupId(), artifact.getArtifactId(),
-							artifact.getClassifier()));
-					File artifactDir = nativesTargetDir;
-					if (separateDirs) {
-						String suffix = classifier.substring("natives-".length());
-						artifactDir = new File(nativesTargetDir, suffix);
-						artifactDir.mkdirs();
-					}
-					jarUnpacker.copyJarContent(artifact.getFile(), artifactDir);
+				if (classifierMatchesConfig(classifier)) {
+					unpackArtifact(artifact, classifier);
+					atLeastOneartifactCopied = true;
 				}
-
 			}
-			buildContext.refresh(nativesTargetDir);
+			
+			if (atLeastOneartifactCopied) {
+				buildContext.refresh(nativesTargetDir);
+			}
 		} catch (Exception e) {
 			throw new MojoFailureException("Unable to copy natives", e);
 		}
+	}
+
+	private void unpackArtifact(Artifact artifact, String classifier) throws IOException {
+		String groupId = artifact.getGroupId();
+		String artifactId = artifact.getArtifactId();
+		getLog().info(String.format("G:%s - A:%s - C:%s", groupId, artifactId, classifier));
+		File unpackingDir = computeUnpackingDir(classifier);
+		jarUnpacker.copyJarContent(artifact.getFile(), unpackingDir);
+	}
+
+	private boolean classifierMatchesConfig(String classifier) {
+		boolean matches = classifier != null && classifier.startsWith(NATIVES_PREFIX);
+		// TODO: add test for autoDetectOSNatives
+		return matches;
+	}
+
+	private File computeUnpackingDir(String classifier) {
+		File artifactDir;
+		if (separateDirs) {
+			String suffix = classifier.substring(NATIVES_PREFIX.length());
+			artifactDir = new File(nativesTargetDir, suffix);
+		} else {
+			artifactDir = nativesTargetDir;
+		}
+		artifactDir.mkdirs();
+		return artifactDir;
 	}
 
 }
