@@ -5,8 +5,9 @@ This maven plugin has then been renamed to "nativedependencies-maven-plugin" (to
 
 # TODO
 
-* use latest dep versions
+
 * use real Java 5 annotations
+* parameter to be able to skip the plugin execution (overridable through a variable)
 * add parameters to auto-detect platform and get only platform specific libs
 * make Eclipse plugin automatically add -Djava.library.path (to run targets, junit tests, etc)
 * make Eclipse plugin automatically add LD_LIBRARY_PATH entries (to run targets, junit tests, etc)
