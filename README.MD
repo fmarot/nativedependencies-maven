@@ -5,10 +5,11 @@ This maven plugin has then been renamed to "nativedependencies-maven-plugin" (to
 
 # TODO
 
-* add parameters to auto-detect platform and get only platform specific libs
-* transparently handle misc compression format (zip, tar, tgz, 7zip...)
+* publish on Maven Central
+* transparently handle misc compression format (zip, tar, tgz, 7zip...) and single file not compressed deps (.dll, .so, .dylib...)
 * offer possibility to extract native files only once in a multi-module project at the root
 * keep a cache of the signature (md5, sha1, date ???) for each compressed file to avoid uncompressing it again if it has not changed
+* option to avoid overwriting deps if newer already present
 * update Eclipse plugin to
 ** match new names and grouId
 ** match current Eclipse V4 standards
@@ -21,6 +22,8 @@ This maven plugin has then been renamed to "nativedependencies-maven-plugin" (to
 
 * use real Java 5 annotations
 * parameter to be able to skip the plugin execution (overridable through a variable)
+* add parameters to auto-detect platform and get only platform specific libs
+
 
 ## Problematic that this plugin will try to solve
 
