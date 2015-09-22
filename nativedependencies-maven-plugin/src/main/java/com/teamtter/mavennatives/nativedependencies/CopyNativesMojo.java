@@ -63,12 +63,14 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Parameter(property = "skip", defaultValue = "false")
 	@Setter
 	private boolean skip;
-	
+
 	@Parameter
 	@Setter
-	private List<OsFilter> osFilters = new ArrayList() {{
-		add(new AcceptEverythingOsFilter());	// unless configured otherwise, we will handle ALL native deps (no filter)
-	}};
+	private List<OsFilter> osFilters = new ArrayList() {
+		{
+			add(new AcceptEverythingOsFilter()); // unless configured otherwise, we will handle ALL native deps (no filter)
+		}
+	};
 
 	@Component
 	@Setter
@@ -94,13 +96,14 @@ public class CopyNativesMojo extends AbstractMojo {
 			Set<Artifact> artifacts = mavenProject.getArtifacts();
 			boolean atLeastOneartifactCopied = false;
 			for (Artifact artifact : artifacts) {
+				getLog().info("Testing: " + artifactToString(artifact));
 				String classifier = artifact.getClassifier();
 				if (classifierMatchesConfig(classifier)) {
 					unpackArtifact(artifact, classifier);
 					atLeastOneartifactCopied = true;
 				}
 			}
-			
+
 			if (atLeastOneartifactCopied) {
 				buildContext.refresh(nativesTargetDir);
 			}
@@ -110,20 +113,29 @@ public class CopyNativesMojo extends AbstractMojo {
 	}
 
 	private void unpackArtifact(Artifact artifact, String classifier) throws IOException {
-		String groupId = artifact.getGroupId();
-		String artifactId = artifact.getArtifactId();
-		getLog().info(String.format("G:%s - A:%s - C:%s", groupId, artifactId, classifier));
+		getLog().info("Will unpack: " + artifactToString(artifact));
 		File unpackingDir = computeUnpackingDir(classifier);
 		jarUnpacker.copyJarContent(artifact.getFile(), unpackingDir);
 	}
 
+	private String artifactToString(Artifact artifact) {
+		String groupId = artifact.getGroupId();
+		String artifactId = artifact.getArtifactId();
+		String classifier = artifact.getClassifier();
+		return String.format("G:%s - A:%s - C:%s", groupId, artifactId, classifier);
+	}
+
 	private boolean classifierMatchesConfig(String classifier) {
+		if (classifier == null) {
+			return false;
+		}
+
 		boolean prefixMatches = classifier != null && classifier.startsWith(NATIVES_PREFIX);
 		String suffix = classifier.replace(NATIVES_PREFIX, "");
 		boolean suffixMatchesCurrentOs = false;
 		for (OsFilter filter : osFilters) {
 			// if at least one filter matches the current os/arch then handle this artifact
-			if (filter.accepts(suffix) ) {
+			if (filter.accepts(suffix, getLog())) {
 				suffixMatchesCurrentOs = true;
 				break;
 			}

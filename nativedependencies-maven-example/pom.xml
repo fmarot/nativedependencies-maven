@@ -113,7 +113,6 @@
 			<artifactId>lwjgl</artifactId>
 			<version>${lwjgl.version}</version>
 		</dependency>
-		<!-- 
 		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl-platform</artifactId>
@@ -126,7 +125,6 @@
 			<version>${lwjgl.version}</version>
 			<classifier>natives-osx</classifier>
 		</dependency>
-		-->
 		<dependency>
 			<groupId>org.lwjgl</groupId>
 			<artifactId>lwjgl-platform</artifactId>
