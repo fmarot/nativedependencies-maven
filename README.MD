@@ -22,6 +22,14 @@ This maven plugin has then been renamed to "nativedependencies-maven-plugin" (to
 * use real Java 5 annotations
 * parameter to be able to skip the plugin execution (overridable through a variable)
 
+## Problematic that this plugin will try to solve
+
+* enable a native developer to compile it's native lib (we don't care how) and place them in a folder where they won't be overwriten on each mvn text byt the ones in .m2 or Archiva
+** use another folder and play on the order of folder declaration in the -Djava.library.path ???
+** do not overwrite if newer
+** another solution ?
+* streamline command-line VS Eclipse use => if it works on command-line, it should work in Eclipse without touching anything !
+
 
 # Reasons for forking original project
 
