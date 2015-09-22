@@ -18,6 +18,8 @@ package com.teamtter.mavennatives.nativedependencies;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
@@ -40,7 +42,7 @@ import lombok.Setter;
 , defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
 public class CopyNativesMojo extends AbstractMojo {
 
-	private static final String NATIVES_PREFIX = "natives-";
+	public static final String NATIVES_PREFIX = "natives-";
 
 	@Parameter(defaultValue = "${project}", readonly = true)
 	@Setter
@@ -61,6 +63,12 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Parameter(property = "skip", defaultValue = "false")
 	@Setter
 	private boolean skip;
+	
+	@Parameter
+	@Setter
+	private List<OsFilter> osFilters = new ArrayList() {{
+		add(new AcceptEverythingOsFilter());	// unless configured otherwise, we will handle ALL native deps (no filter)
+	}};
 
 	@Component
 	@Setter
@@ -110,8 +118,17 @@ public class CopyNativesMojo extends AbstractMojo {
 	}
 
 	private boolean classifierMatchesConfig(String classifier) {
-		boolean matches = classifier != null && classifier.startsWith(NATIVES_PREFIX);
-		// TODO: add test for autoDetectOSNatives
+		boolean prefixMatches = classifier != null && classifier.startsWith(NATIVES_PREFIX);
+		String suffix = classifier.replace(NATIVES_PREFIX, "");
+		boolean suffixMatchesCurrentOs = false;
+		for (OsFilter filter : osFilters) {
+			// if at least one filter matches the current os/arch then handle this artifact
+			if (filter.accepts(suffix) ) {
+				suffixMatchesCurrentOs = true;
+				break;
+			}
+		}
+		boolean matches = prefixMatches && suffixMatchesCurrentOs;
 		return matches;
 	}
 

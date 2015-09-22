@@ -78,6 +78,11 @@
 				</executions>
 				<configuration>
 					<skip>false</skip>
+					<osSuffixFilter>
+						<linux>lin</linux>
+						<mac>mac</mac>
+						<windows>win</windows>
+					</osSuffixFilter>
 				</configuration>
 			</plugin>
 
