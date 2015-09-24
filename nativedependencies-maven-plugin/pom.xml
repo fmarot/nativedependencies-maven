@@ -12,15 +12,10 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.version>3.3.3</maven.version>
 	</properties>
 	
-	<!-- 
-	<issueManagement>
-		<system>googlecode</system>
-		<url>http://code.google.com/p/mavennatives/issues/list</url>
-	</issueManagement>
- 	-->
 
 	<licenses>
 		<license>
@@ -31,26 +26,30 @@
 	</licenses>
 	
 	<!-- 
+	<issueManagement>
+		<system>googlecode</system>
+		<url>http://code.google.com/p/mavennatives/issues/list</url>
+	</issueManagement>
+	
 	<scm>
 		<url>https://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</url>
 		<connection>scm:svn:http://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</connection>
 		<developerConnection>scm:svn:https://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</developerConnection>
 	</scm>
-	
-	
+	-->
+
 	<distributionManagement>
+		<!-- To deploy to Maven Central, if you are using the Maven deploy plugin, which is the default behavior, we need this "distributionManagement" section. -->
 		<snapshotRepository>
-			<id>sonatype-nexus-snapshots</id>
-			<name>Sonatype Nexus Snapshots</name>
+			<id>ossrh</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 		<repository>
-			<id>sonatype-nexus-staging</id>
-			<name>Nexus Release Repository</name>
+			<id>ossrh</id>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
-	-->
+
 	<build>
 		<plugins>
 			<plugin>
@@ -59,7 +58,6 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
-					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 
@@ -67,9 +65,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.7</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
 			</plugin>
 
 			<plugin>
@@ -110,7 +105,9 @@
 					</execution>
 				</executions>
 			</plugin>
+			
 			<plugin>
+				<!-- used to generate & deploy sources -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
 				<version>2.1.2</version>
@@ -120,29 +117,24 @@
 						<goals>
 							<goal>jar-no-fork</goal>
 						</goals>
-						<configuration>
-							<encoding>UTF-8</encoding>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 
-<!-- 			<plugin> -->
-<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
-<!-- 				<artifactId>maven-javadoc-plugin</artifactId> -->
-<!-- 				<version>2.7</version> -->
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<id>attach-javadocs</id> -->
-<!-- 						<goals> -->
-<!-- 							<goal>jar</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<encoding>UTF-8</encoding> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
-<!-- 			</plugin> -->
+			<plugin>
+				<!-- used to generate & deploy javadoc -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.7</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
 		</plugins>
 <!-- 		<pluginManagement> -->
