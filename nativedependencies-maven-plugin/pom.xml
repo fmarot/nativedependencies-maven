@@ -5,38 +5,41 @@
 	<groupId>com.teamtter.mavennatives</groupId>
 	<artifactId>nativedependencies-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>0.0.8-SNAPSHOT</version>
+	<version>0.0.8</version>
+
+	<name>${project.groupId}:${project.artifactId}</name>
 	<description>This plugin allows the automatic unpacking of natives in jars depending on a classifier with a certain pattern.
 	It is a fork from http://code.google.com/p/mavennatives/ . Thanks to the original authors ruben.garat@gemserk.com and ariel.coppes@gemserk.com !</description>
 	<url>https://github.com/fmarot/mavennatives</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.version>3.3.3</maven.version>
 	</properties>
-	
+
 
 	<licenses>
 		<license>
 			<name>Apache License 2</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
-	<!-- 
-	<issueManagement>
-		<system>googlecode</system>
-		<url>http://code.google.com/p/mavennatives/issues/list</url>
-	</issueManagement>
-	
+
+	<developers>
+		<developer>
+			<name>Francois MAROT</name>
+			<email>myFirstName.myLastName@gmail.com</email>
+			<organization>Home</organization>
+			<organizationUrl>http://careers.stackoverflow.com/francoismarot</organizationUrl>
+		</developer>
+	</developers>
+
 	<scm>
-		<url>https://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</url>
-		<connection>scm:svn:http://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</connection>
-		<developerConnection>scm:svn:https://mavennatives.googlecode.com/svn/trunk/maven-nativedependencies-plugin</developerConnection>
+		<connection>scm:git:git@github.com:fmarot/mavennatives.git</connection>
+		<developerConnection>scm:git:git@github.com:fmarot/mavennatives.git</developerConnection>
+		<url>git@github.com:fmarot/mavennatives.git</url>
 	</scm>
-	-->
 
 	<distributionManagement>
 		<!-- To deploy to Maven Central, if you are using the Maven deploy plugin, which is the default behavior, we need this "distributionManagement" section. -->
@@ -105,7 +108,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<!-- used to generate & deploy sources -->
 				<groupId>org.apache.maven.plugins</groupId>
@@ -154,27 +157,6 @@
 	</build>
 
 	<profiles>
-		<profile>
-			<id>gpgsign</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.1</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
 		<profile>
 			<id>run-its</id> <!-- run Integration Tests -->
 			<activation>
