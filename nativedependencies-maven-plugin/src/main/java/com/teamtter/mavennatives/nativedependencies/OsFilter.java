@@ -1,10 +1,11 @@
 package com.teamtter.mavennatives.nativedependencies;
 
-import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.util.StringUtils;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Data
 public class OsFilter {
 	static final String OS = System.getProperty("os.name").toLowerCase();
@@ -15,7 +16,7 @@ public class OsFilter {
 	private String osArch;
 	private String suffix;
 
-	public boolean accepts(String effectiveSuffix, Log log) {
+	public boolean accepts(String effectiveSuffix) {
 
 		effectiveSuffix = effectiveSuffix.toLowerCase();
 		osName = osName != null ? osName.toLowerCase() : "";

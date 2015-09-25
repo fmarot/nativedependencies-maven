@@ -35,11 +35,13 @@ import org.apache.maven.project.MavenProject;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /** Unpacks native dependencies */
 @Mojo(name = "copy" /** the goal */
 , threadSafe = false /** until proven otherwise, false */
 , defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
+@Slf4j
 public class CopyNativesMojo extends AbstractMojo {
 
 	public static final String NATIVES_PREFIX = "natives-";
@@ -64,13 +66,13 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Setter
 	private boolean skip;
 
+	// @formatter:off
 	@Parameter
 	@Setter
-	private List<OsFilter> osFilters = new ArrayList() {
-		{
-			add(new AcceptEverythingOsFilter()); // unless configured otherwise, we will handle ALL native deps (no filter)
-		}
-	};
+	private List<OsFilter> osFilters = new ArrayList() {{
+		add(new AcceptEverythingOsFilter()); // unless configured otherwise, we will handle ALL native deps (no filter)
+	}};
+	// @formatter:on
 
 	@Component
 	@Setter
@@ -83,7 +85,7 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		if (skip) {
-			getLog().info("Skipping execution due to 'skip' == true");
+			log.info("Skipping execution due to 'skip' == true");
 		} else {
 			copyNativeDependencies();
 		}
@@ -91,12 +93,12 @@ public class CopyNativesMojo extends AbstractMojo {
 
 	private void copyNativeDependencies() throws MojoFailureException {
 		try {
-			getLog().info("Saving natives in " + nativesTargetDir + (separateDirs ? "separated dirs according to classifier" : ""));
+			log.info("Saving natives in " + nativesTargetDir + (separateDirs ? "separated dirs according to classifier" : ""));
 
 			Set<Artifact> artifacts = mavenProject.getArtifacts();
 			boolean atLeastOneartifactCopied = false;
 			for (Artifact artifact : artifacts) {
-				getLog().info("Testing: " + artifactToString(artifact));
+				log.info("Testing: " + artifactToString(artifact));
 				String classifier = artifact.getClassifier();
 				if (classifierMatchesConfig(classifier)) {
 					unpackArtifact(artifact, classifier);
@@ -113,7 +115,7 @@ public class CopyNativesMojo extends AbstractMojo {
 	}
 
 	private void unpackArtifact(Artifact artifact, String classifier) throws IOException {
-		getLog().info("Will unpack: " + artifactToString(artifact));
+		log.info("Will unpack: " + artifactToString(artifact));
 		File unpackingDir = computeUnpackingDir(classifier);
 		jarUnpacker.copyJarContent(artifact.getFile(), unpackingDir);
 	}
@@ -135,7 +137,7 @@ public class CopyNativesMojo extends AbstractMojo {
 		boolean suffixMatchesCurrentOs = false;
 		for (OsFilter filter : osFilters) {
 			// if at least one filter matches the current os/arch then handle this artifact
-			if (filter.accepts(suffix, getLog())) {
+			if (filter.accepts(suffix)) {
 				suffixMatchesCurrentOs = true;
 				break;
 			}
