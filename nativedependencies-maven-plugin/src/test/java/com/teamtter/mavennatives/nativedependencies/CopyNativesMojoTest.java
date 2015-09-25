@@ -22,25 +22,25 @@ import org.sonatype.plexus.build.incremental.DefaultBuildContext;
 @RunWith(JMock.class)
 public class CopyNativesMojoTest {
 
-	Mockery						context	= new Mockery() {
+	Mockery context = new Mockery() {
 
-											{
-												setImposteriser(ClassImposteriser.INSTANCE);
-											}
-										};
-	private CopyNativesMojo		mojo;
-	private IJarUnpacker		jarUnpacker;
-	private MavenProject		mavenProject;
-	private File				nativesTargetDir;
-	private ArtifactStubFactory	artifactFactory;
+		{
+			setImposteriser(ClassImposteriser.INSTANCE);
+		}
+	};
+	private CopyNativesMojo mojo;
+	private IArtifactHandler jarUnpacker;
+	private MavenProject mavenProject;
+	private File nativesTargetDir;
+	private ArtifactStubFactory artifactFactory;
 
 	@Before
 	public void setUp() {
 		mojo = new CopyNativesMojo();
 		mavenProject = context.mock(MavenProject.class);
 		mojo.setMavenProject(mavenProject);
-		jarUnpacker = context.mock(IJarUnpacker.class);
-		mojo.setJarUnpacker(jarUnpacker);
+		jarUnpacker = context.mock(IArtifactHandler.class);
+		mojo.setArtifactHandler(jarUnpacker);
 		nativesTargetDir = context.mock(File.class);
 		mojo.setNativesTargetDir(nativesTargetDir);
 		artifactFactory = new ArtifactStubFactory();
@@ -86,7 +86,7 @@ public class CopyNativesMojoTest {
 		final Set<Artifact> artifacts = new HashSet<Artifact>();
 
 		artifacts.add(artifactFactory.createArtifact("groupid1", "artifactid1", "1.0"));
-		Artifact nativeArtifact = artifactFactory.createArtifact("groupid2", "artifactid2", "2.0", "compile", "jar", CopyNativesMojo.NATIVES_PREFIX + "windows");
+		final Artifact nativeArtifact = artifactFactory.createArtifact("groupid2", "artifactid2", "2.0", "compile", "jar", CopyNativesMojo.NATIVES_PREFIX + "windows");
 		final File nativeFile = new File("test1");
 		nativeArtifact.setFile(nativeFile);
 
@@ -99,7 +99,7 @@ public class CopyNativesMojoTest {
 				oneOf(nativesTargetDir).mkdirs();
 				oneOf(mavenProject).getArtifacts();
 				will(returnValue(artifacts));
-				oneOf(jarUnpacker).copyJarContent(nativeFile, nativesTargetDir);
+				oneOf(jarUnpacker).moveOrUnpackTo(nativesTargetDir, nativeArtifact);
 			}
 		});
 

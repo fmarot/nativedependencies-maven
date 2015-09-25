@@ -76,7 +76,7 @@ public class CopyNativesMojo extends AbstractMojo {
 
 	@Component
 	@Setter
-	private IJarUnpacker jarUnpacker;
+	private IArtifactHandler artifactHandler;
 
 	@Component
 	@Setter
@@ -101,7 +101,7 @@ public class CopyNativesMojo extends AbstractMojo {
 				log.info("Testing: " + artifactToString(artifact));
 				String classifier = artifact.getClassifier();
 				if (classifierMatchesConfig(classifier)) {
-					unpackArtifact(artifact, classifier);
+					handleDependancyCopyingOrUnpacking(artifact, classifier);
 					atLeastOneartifactCopied = true;
 				}
 			}
@@ -114,10 +114,11 @@ public class CopyNativesMojo extends AbstractMojo {
 		}
 	}
 
-	private void unpackArtifact(Artifact artifact, String classifier) throws IOException {
+	/** Copy the native dep into 'unpackingDir' or unzip, depending on the file type */
+	private void handleDependancyCopyingOrUnpacking(Artifact artifact, String classifier) throws IOException {
 		log.info("Will unpack: " + artifactToString(artifact));
 		File unpackingDir = computeUnpackingDir(classifier);
-		jarUnpacker.copyJarContent(artifact.getFile(), unpackingDir);
+		artifactHandler.moveOrUnpackTo(unpackingDir, artifact);
 	}
 
 	private String artifactToString(Artifact artifact) {
