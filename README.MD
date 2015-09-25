@@ -27,9 +27,9 @@ The plugin is available from Maven Central:
 * keep a cache of the signature (md5, sha1, date ???) for each compressed file to avoid uncompressing it again if it has not changed
 * option to avoid overwriting deps if newer already present
 * update Eclipse plugin to:
-** match new names and grouId
-** match current Eclipse V4 standards
-** m2e connector ???
+  * match new names and grouId
+  * match current Eclipse V4 standards
+  * m2e connector ???
 * make Eclipse plugin automatically add -Djava.library.path (to run targets, junit tests, etc)
 * make Eclipse plugin automatically add LD_LIBRARY_PATH entries (to run targets, junit tests, etc)
 * optionnally enable other locations to be added in both above
@@ -44,9 +44,9 @@ The plugin is available from Maven Central:
 ## Problematic that this plugin will try to solve
 
 * enable a native developer to compile it's native lib (we don't care how) and place them in a folder where they won't be overwriten on each mvn text byt the ones in .m2 or Archiva
-** use another folder and play on the order of folder declaration in the -Djava.library.path ???
-** do not overwrite if newer
-** another solution ?
+  * use another folder and play on the order of folder declaration in the -Djava.library.path ???
+  * do not overwrite if newer
+  * another solution ?
 * streamline command-line VS Eclipse use => if it works on command-line, it should work in Eclipse without touching anything !
 
 
