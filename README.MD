@@ -8,11 +8,13 @@ This maven plugin has then been renamed to "nativedependencies-maven-plugin" (to
 
 The plugin is available from Maven Central:
 
+```xml
  <dependency>
      <groupId>com.teamtter.mavennatives</groupId>
      <artifactId>nativedependencies-maven-plugin</artifactId>
      <version>0.0.8</version>
  </dependency>
+ ```
  
  ## Options
  
