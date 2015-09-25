@@ -16,7 +16,7 @@ The plugin is available from Maven Central:
  </dependency>
  ```
  
- ## Options
+## Options
  
  TODO...
 
