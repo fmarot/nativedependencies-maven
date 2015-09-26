@@ -24,6 +24,7 @@ The plugin is available from Maven Central:
 = TODO
 
 * transparently handle misc compression format (zip, tar, tgz, 7zip...) and single file not compressed deps (.dll, .so, .dylib...)
+* handle transitive native dependencies
 * offer possibility to extract native files only once in a multi-module project at the root (handle overwriting ???)
 * keep a cache of the signature (md5, sha1, date ???) for each compressed file to avoid uncompressing it again if it has not changed
 * option to avoid overwriting deps if newer already present
