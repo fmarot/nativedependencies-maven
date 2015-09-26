@@ -16,39 +16,41 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.maven.artifact.Artifact;
-import org.codehaus.plexus.component.annotations.Component;
+import org.junit.Test;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component(role = IArtifactHandler.class)
-@Slf4j // Starting with Maven 3.1.0, SLF4J Logger can be used directly too, without Plexus
-public class ArtifactHandler implements IArtifactHandler {
+@Slf4j
+public class UncompressTest {
+
+	@Test
+	public void toto() {
+		uncompressAFile(new File("/tmp/commons-compress-1.10-bin.tar.gz"), new File("/tmp/ooo"));
+		uncompressAnArchive(new File("/tmp/ooo/commons-compress-1.10-bin.tar"), new File("/tmp/ooo"));
+	}
 
 	private static List<String> zipLikeExtensions = Arrays.asList("jar", "zip", "gz", ".7z", ".7zip");
 
 	private static List<String> tarGzExensions = Arrays.asList("tar.gz", "tgz");
 
-	@Override
-	public void moveOrUnpackTo(File unpackingDir, Artifact artifact) {
-		File artifactFile = artifact.getFile();
+	public void moveOrUnpackTo(File unpackingDir, File artifactFile) {
 		String fileName = artifactFile.getName();
 		String extension = FilenameUtils.getExtension(fileName);
 
 		try {
 			if (fileName.contains(".tar.") || tarGzExensions.contains(extension)) {
-				log.info("Artifact {} will be uncompressed as tar-gz-like to {}", artifactFile, unpackingDir);
+				log.info("Artifact {} will be uncompressed as tar-gz-like, will be moved as is to {}", artifactFile, unpackingDir);
 				String basename = FilenameUtils.getBaseName(artifactFile.getName());
 				File uncompressedTarFile = new File(unpackingDir, basename);
 				uncompressAFile(artifactFile, uncompressedTarFile);
 				uncompressAnArchive(uncompressedTarFile, unpackingDir);
 				uncompressedTarFile.delete();
 			} else if (zipLikeExtensions.contains(extension)) {
-				log.info("Artifact {} will be uncompressed as zip-like to {}", artifactFile, unpackingDir);
-				uncompressAnArchive(artifactFile, unpackingDir);
+				log.info("Artifact {} will be uncompressed as zip-like, will be moved as is to {}", artifactFile, unpackingDir);
+				uncompressAFile(artifactFile, unpackingDir);
 			} else {
 				log.info("Artifact {} can not be unpacked, will be moved as is to {}", artifactFile, unpackingDir);
 				File targetFile = new File(unpackingDir, fileName);

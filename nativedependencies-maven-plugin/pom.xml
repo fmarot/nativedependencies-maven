@@ -192,16 +192,26 @@
 	</profiles>
 
 	<dependencies>
+	
+		<!-- Required to unzip/untar & all -->
+		
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
-			<scope>provided</scope>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
+			<version>1.10</version>
 		</dependency>
+		<dependency>
+			<groupId>org.tukaani</groupId>
+			<artifactId>xz</artifactId>
+			<version>1.5</version>
+		</dependency>
+
+		<!-- Maven plugin specific -->
+		
 		<dependency>
 			<groupId>org.apache.maven.plugin-tools</groupId>
 			<artifactId>maven-plugin-annotations</artifactId>
-			<version>3.4</version> <!-- This is my version, please check latest -->
+			<version>3.4</version>
 			<scope>provided</scope> <!-- It comes from maven itself -->
 		</dependency>
 		<dependency>
@@ -229,7 +239,6 @@
 			<artifactId>maven-core</artifactId>
 			<version>${maven.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.maven.plugin-testing</groupId>
 			<artifactId>maven-plugin-testing-harness</artifactId>
@@ -252,26 +261,25 @@
 			<version>1.0-beta-3.0.5</version>
 		</dependency>
 
+		<!-- Misc -->
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.5</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.16.6</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.codehaus.plexus</groupId> -->
-<!-- 			<artifactId>plexus-utils</artifactId> -->
-<!-- 			<version>3.0.4</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.codehaus.plexus</groupId> -->
-<!-- 			<artifactId>plexus-component-annotations</artifactId> -->
-<!-- 			<version>1.0-beta-3.0.5</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.maven.shared</groupId> -->
-<!-- 			<artifactId>maven-common-artifact-filters</artifactId> -->
-<!-- 			<version>1.4</version> -->
-<!-- 		</dependency> -->
 		
 		<!-- Test libs -->
 
