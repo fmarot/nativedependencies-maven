@@ -66,7 +66,7 @@
 				<!-- our plugin, target of this test -->
 				<groupId>com.teamtter.mavennatives</groupId>
 				<artifactId>nativedependencies-maven-plugin</artifactId>
-				<version>0.0.8</version>
+				<version>0.0.9-SNAPSHOT</version>
 				<executions>
 					<execution>
 						<id>unpacknatives</id>
@@ -78,11 +78,19 @@
 				</executions>
 				<configuration>
 					<skip>false</skip>
-					<osSuffixFilter>
-						<linux>lin</linux>
-						<mac>mac</mac>
-						<windows>win</windows>
-					</osSuffixFilter>
+					<autoDetectOSNatives>false</autoDetectOSNatives>
+					<osFilters>
+						<osFilter>
+							<osName>linux</osName>
+							<!-- <osArch>64</osArch> -->
+							<suffix>linux</suffix>
+						</osFilter>
+						<osFilter>
+							<osName>windows</osName>
+							<!-- <osArch>64</osArch> -->
+							<suffix>win</suffix>
+						</osFilter>
+					</osFilters>
 				</configuration>
 			</plugin>
 

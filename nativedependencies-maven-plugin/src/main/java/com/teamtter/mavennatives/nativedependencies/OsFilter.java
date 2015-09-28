@@ -2,11 +2,13 @@ package com.teamtter.mavennatives.nativedependencies;
 
 import org.codehaus.plexus.util.StringUtils;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Data
+@AllArgsConstructor
 public class OsFilter {
 	static final String OS = System.getProperty("os.name").toLowerCase();
 	static final String OS_ARCH = System.getProperty("os.arch").toLowerCase();
@@ -15,6 +17,9 @@ public class OsFilter {
 	/** Optional, WARNING: for 32bit, should be "x86", not "32" !!! */
 	private String osArch;
 	private String suffix;
+
+	public OsFilter() {
+	}
 
 	public boolean accepts(String effectiveSuffix) {
 
@@ -30,7 +35,7 @@ public class OsFilter {
 			}
 		}
 
-		log.info(this.toString() + " accepts suffix '" + effectiveSuffix + "': " + filterMatches);
+		log.debug(this.toString() + " accepts suffix '" + effectiveSuffix + "': " + filterMatches);
 		return filterMatches;
 	}
 

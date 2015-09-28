@@ -69,9 +69,7 @@ public class CopyNativesMojo extends AbstractMojo {
 	// @formatter:off
 	@Parameter
 	@Setter
-	private List<OsFilter> osFilters = new ArrayList() {{
-		add(new AcceptEverythingOsFilter()); // unless configured otherwise, we will handle ALL native deps (no filter)
-	}};
+	private List<OsFilter> osFilters = new ArrayList();
 	// @formatter:on
 
 	@Component
@@ -84,11 +82,38 @@ public class CopyNativesMojo extends AbstractMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		initOsFiltersIfNeeded();
 		if (skip) {
 			log.info("Skipping execution due to 'skip' == true");
 		} else {
 			copyNativeDependencies();
 		}
+	}
+
+	private void initOsFiltersIfNeeded() {
+		if (autoDetectOSNatives) {
+			if (osFilters.size() != 0) {
+				log.warn("Some OS filters have been set but will be overriden by auto-OS-detection. Please define filters OR set autoDetectOSNatives = true");
+			}
+			OsFilter thisComputer = new OsFilter(OsFilter.OS, null, getbasicOsTrigramm(OsFilter.OS));
+			osFilters.add(thisComputer);
+		} else if (osFilters.size() == 0) {
+			osFilters.add(new AcceptEverythingOsFilter()); // we will handle ALL native deps
+		} else {
+			log.debug("{} OS filters have been defined", osFilters.size());
+		}
+	}
+
+	private String getbasicOsTrigramm(String os) {
+		if (os.contains("win")) {
+			return "win";
+		} else if (os.contains("lin")) {
+			return "lin";
+		} else if (os.contains("mac")) {
+			return "mac";
+		}
+		log.warn("unable to auto-detect OS...");
+		return "";
 	}
 
 	private void copyNativeDependencies() throws MojoFailureException {
@@ -98,11 +123,13 @@ public class CopyNativesMojo extends AbstractMojo {
 			Set<Artifact> artifacts = mavenProject.getArtifacts();
 			boolean atLeastOneartifactCopied = false;
 			for (Artifact artifact : artifacts) {
-				log.info("Testing: " + artifactToString(artifact));
 				String classifier = artifact.getClassifier();
 				if (classifierMatchesConfig(classifier)) {
+					log.info("{} => ok", artifactToString(artifact));
 					handleDependancyCopyingOrUnpacking(artifact, classifier);
 					atLeastOneartifactCopied = true;
+				} else {
+					log.info("{} => ko, native will be filtered out", artifactToString(artifact));
 				}
 			}
 
@@ -134,7 +161,9 @@ public class CopyNativesMojo extends AbstractMojo {
 		}
 
 		boolean prefixMatches = classifier != null && classifier.startsWith(NATIVES_PREFIX);
+		log.info("prefixMatches={}", prefixMatches);
 		String suffix = classifier.replace(NATIVES_PREFIX, "");
+		log.info("suffix = {}", suffix);
 		boolean suffixMatchesCurrentOs = false;
 		for (OsFilter filter : osFilters) {
 			// if at least one filter matches the current os/arch then handle this artifact
