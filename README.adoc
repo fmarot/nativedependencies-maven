@@ -23,6 +23,8 @@ The plugin is available from Maven Central:
 
 = TODO
 
+* make the plugin recognizable in Eclipse with no error from m2e (even if m2e makes nothins about it)
+* update Eclipse plugin to have iso-functionnality but handling new groupId/artifactId so that we can use this new maven plugin in real projects
 * offer possibility to extract native files only once in a multi-module project at the root (handle overwriting ???)
 * keep a cache of the signature (md5, sha1, date ???) for each compressed file to avoid uncompressing it again if it has not changed
 * option to avoid overwriting deps if newer already present
