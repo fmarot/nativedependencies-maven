@@ -6,6 +6,6 @@ import org.apache.maven.artifact.Artifact;
 
 public interface IArtifactHandler {
 
-	public void moveOrUnpackTo(File unpackingDir, Artifact artifact);
+	public void moveOrUnpackTo(File unpackingDir, Artifact artifact) throws ArtifactUnpackingException;
 
 }

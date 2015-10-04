@@ -32,6 +32,7 @@ public class ArtifactHandler implements IArtifactHandler {
 
 	private static List<String> tarGzExensions = Arrays.asList("tar.gz", "tgz");
 
+	/** Wraps any Exception encountered into an ArtifactUnpackingException which is a RUNTIME Exception */
 	@Override
 	public void moveOrUnpackTo(File unpackingDir, Artifact artifact) {
 		File artifactFile = artifact.getFile();
@@ -56,6 +57,7 @@ public class ArtifactHandler implements IArtifactHandler {
 			}
 		} catch (Exception e) {
 			log.error("Error unpacking or moving artifact {}", artifactFile);
+			throw new ArtifactUnpackingException(e);
 		}
 	}
 
@@ -80,7 +82,8 @@ public class ArtifactHandler implements IArtifactHandler {
 				}
 			}
 		} catch (IOException | ArchiveException e) {
-			log.error("Unable to fully uncompress {} to {}", fileIn, dirOut, e);
+			log.error("Unable to fully uncompress {} to {}", fileIn, dirOut);
+			throw new ArtifactUnpackingException(e);
 		}
 	}
 
@@ -97,7 +100,8 @@ public class ArtifactHandler implements IArtifactHandler {
 				}
 			}
 		} catch (IOException | CompressorException e) {
-			log.error("Unable to fully uncompress {} to {}", fileIn, dirOut, e);
+			log.error("Unable to fully uncompress {} to {}", fileIn, dirOut);
+			throw new ArtifactUnpackingException(e);
 		}
 	}
 

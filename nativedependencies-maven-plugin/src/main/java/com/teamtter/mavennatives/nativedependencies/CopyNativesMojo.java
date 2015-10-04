@@ -17,7 +17,6 @@ package com.teamtter.mavennatives.nativedependencies;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -50,7 +49,13 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Setter
 	private MavenProject mavenProject;
 
-	@Parameter(property = "nativesTargetDir", defaultValue = "${project.build.directory}/natives")
+	// @Parameter(property = "nativesTargetDir", defaultValue = "${project.build.directory}/natives")
+	/**
+	 * by default, in case of a multi module project, we will unpack ALL NATIVES to
+	 * the same dir, thus saving space and unzip time while allowing all interdependant
+	 * projects to benefit from the presence of native libs
+	 */
+	@Parameter(property = "nativesTargetDir", defaultValue = "${session.executionRootDirectory}/natives")
 	@Setter
 	private File nativesTargetDir;
 
@@ -66,11 +71,9 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Setter
 	private boolean skip;
 
-	// @formatter:off
 	@Parameter
 	@Setter
-	private List<OsFilter> osFilters = new ArrayList();
-	// @formatter:on
+	private List<OsFilter> osFilters = new ArrayList<>();
 
 	@Component
 	@Setter
@@ -79,6 +82,8 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Component
 	@Setter
 	private BuildContext buildContext;
+
+	private UnpackedArtifactsInfo unpackedArtifactsInfo;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -117,11 +122,13 @@ public class CopyNativesMojo extends AbstractMojo {
 	}
 
 	private void copyNativeDependencies() throws MojoFailureException {
+		boolean atLeastOneartifactCopied = false;
 		try {
 			log.info("Saving natives in " + nativesTargetDir + (separateDirs ? "separated dirs according to classifier" : ""));
 
-			Set<Artifact> artifacts = mavenProject.getArtifacts();
-			boolean atLeastOneartifactCopied = false;
+			unpackedArtifactsInfo = loadAlreadyUnpackedArtifactsInfo();
+
+			Set<Artifact> artifacts = mavenProject.getArtifacts(); // warning: depending on the phase, come may be missing, see MavenProject javadoc
 			for (Artifact artifact : artifacts) {
 				String classifier = artifact.getClassifier();
 				if (classifierMatchesConfig(classifier)) {
@@ -133,19 +140,48 @@ public class CopyNativesMojo extends AbstractMojo {
 				}
 			}
 
+		} catch (Exception e) {
 			if (atLeastOneartifactCopied) {
 				buildContext.refresh(nativesTargetDir);
 			}
-		} catch (Exception e) {
 			throw new MojoFailureException("Unable to copy natives", e);
+		} finally {
+			if (atLeastOneartifactCopied) {
+				writeAlreadyUnpackedArtifactsInfo(unpackedArtifactsInfo);
+			}
 		}
 	}
 
+	private UnpackedArtifactsInfo loadAlreadyUnpackedArtifactsInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private void writeAlreadyUnpackedArtifactsInfo(UnpackedArtifactsInfo unpackedArtifactsInfo2) {
+		// TODO Auto-generated method stub
+
+	}
+
 	/** Copy the native dep into 'unpackingDir' or unzip, depending on the file type */
-	private void handleDependancyCopyingOrUnpacking(Artifact artifact, String classifier) throws IOException {
-		log.info("Will unpack: " + artifactToString(artifact));
-		File unpackingDir = computeUnpackingDir(classifier);
-		artifactHandler.moveOrUnpackTo(unpackingDir, artifact);
+	private void handleDependancyCopyingOrUnpacking(Artifact artifact, String classifier) {
+		if (artifactAlreadyUnpacked(artifact)) {
+			log.debug("Artifact {} already unpacked", artifact);
+		} else {
+			log.info("Will unpack: " + artifactToString(artifact));
+			File unpackingDir = computeUnpackingDir(classifier);
+			artifactHandler.moveOrUnpackTo(unpackingDir, artifact);
+			updateAlreadyUnpackedArtifactsWith(artifact);
+		}
+	}
+
+	private void updateAlreadyUnpackedArtifactsWith(Artifact artifact) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private boolean artifactAlreadyUnpacked(Artifact artifact) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	private String artifactToString(Artifact artifact) {
