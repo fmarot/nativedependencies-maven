@@ -16,6 +16,21 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.version>3.3.3</maven.version>
+
+		<compiler.source>1.7</compiler.source>
+		<compiler.target>1.7</compiler.target>
+		
+		<compiler.plugin.version>3.3</compiler.plugin.version>
+		<resources.plugin.version>2.7</resources.plugin.version>
+		<plugin.plugin.version>3.4</plugin.plugin.version>
+		<plexus.component.metadata.version>1.5.5</plexus.component.metadata.version>
+		<source.plugin.version>2.1.2</source.plugin.version>
+		<javadoc.plugin.version>2.7</javadoc.plugin.version>
+		<invoker.plugin.version>2.0.0</invoker.plugin.version>
+		
+		<commons.compress.version>1.10</commons.compress.version>
+		<tukaani.xz.version>1.5</tukaani.xz.version>
+		<jackson.version>2.6.0</jackson.version>
 	</properties>
 
 
@@ -57,23 +72,23 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
+				<version>${compiler.plugin.version}</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>${compiler.source}</source>
+					<target>${compiler.target}</target>
 				</configuration>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.7</version>
+				<version>${resources.plugin.version}</version>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-plugin-plugin</artifactId>
-				<version>3.4</version>
+				<version>${plugin.plugin.version}</version>
 				<executions>
 					<execution>
 						<id>default-descriptor</id>
@@ -92,7 +107,7 @@
 			<plugin>
 				<groupId>org.codehaus.plexus</groupId>
 				<artifactId>plexus-component-metadata</artifactId>
-				<version>1.5.5</version>
+				<version>${plexus.component.metadata.version}</version>
 				<executions>
 					<execution>
 						<id>process-classes</id>
@@ -113,7 +128,7 @@
 				<!-- used to generate & deploy sources -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.2</version>
+				<version>${source.plugin.version}</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -128,7 +143,7 @@
 				<!-- used to generate & deploy javadoc -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.7</version>
+				<version>${javadoc.plugin.version}</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -170,7 +185,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-invoker-plugin</artifactId>
-						<version>2.0.0</version>
+						<version>${invoker.plugin.version}</version>
 						<configuration>
 							<cloneAllFiles>true</cloneAllFiles>
 							<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
@@ -194,20 +209,27 @@
 	<dependencies>
 	
 		<!-- Required to unzip/untar & all -->
-		
+
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
-			<version>1.10</version>
+			<version>${commons.compress.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.tukaani</groupId>
 			<artifactId>xz</artifactId>
-			<version>1.5</version>
+			<version>${tukaani.xz.version}</version>
+		</dependency>
+		
+		<!-- read/write JSON -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 
 		<!-- Maven plugin specific -->
-		
+
 		<dependency>
 			<groupId>org.apache.maven.plugin-tools</groupId>
 			<artifactId>maven-plugin-annotations</artifactId>
@@ -262,7 +284,7 @@
 		</dependency>
 
 		<!-- Misc -->
-		
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

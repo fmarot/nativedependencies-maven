@@ -17,6 +17,7 @@ package com.teamtter.mavennatives.nativedependencies;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -33,6 +34,9 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,6 +46,8 @@ import lombok.extern.slf4j.Slf4j;
 , defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
 @Slf4j
 public class CopyNativesMojo extends AbstractMojo {
+
+	private static final String ALREADY_UNPACKED_ARTIFACTS_INFO_FILE = "alreadyUnpackedArtifactsInfo.json";
 
 	public static final String NATIVES_PREFIX = "natives-";
 
@@ -55,7 +61,7 @@ public class CopyNativesMojo extends AbstractMojo {
 	 * the same dir, thus saving space and unzip time while allowing all interdependant
 	 * projects to benefit from the presence of native libs
 	 */
-	@Parameter(property = "nativesTargetDir", defaultValue = "${session.executionRootDirectory}/natives")
+	@Parameter(property = "nativesTargetDir", defaultValue = "${session.executionRootDirectory}/target/natives")
 	@Setter
 	private File nativesTargetDir;
 
@@ -83,7 +89,13 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Setter
 	private BuildContext buildContext;
 
-	private UnpackedArtifactsInfo unpackedArtifactsInfo;
+	private static ObjectMapper jsonMapper;
+
+	static {
+		jsonMapper = new ObjectMapper();
+		jsonMapper.enable(SerializationFeature.INDENT_OUTPUT);
+		jsonMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+	}
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -123,17 +135,16 @@ public class CopyNativesMojo extends AbstractMojo {
 
 	private void copyNativeDependencies() throws MojoFailureException {
 		boolean atLeastOneartifactCopied = false;
+		UnpackedArtifactsInfo unpackedArtifactsInfo = loadAlreadyUnpackedArtifactsInfo();
 		try {
 			log.info("Saving natives in " + nativesTargetDir + (separateDirs ? "separated dirs according to classifier" : ""));
-
-			unpackedArtifactsInfo = loadAlreadyUnpackedArtifactsInfo();
 
 			Set<Artifact> artifacts = mavenProject.getArtifacts(); // warning: depending on the phase, come may be missing, see MavenProject javadoc
 			for (Artifact artifact : artifacts) {
 				String classifier = artifact.getClassifier();
-				if (classifierMatchesConfig(classifier)) {
+				if (classifierMatchesConfig(classifier) && !artifactAlreadyUnpacked(unpackedArtifactsInfo, artifact)) {
 					log.info("{} => ok", artifactToString(artifact));
-					handleDependancyCopyingOrUnpacking(artifact, classifier);
+					handleDependancyCopyingOrUnpacking(artifact, classifier, unpackedArtifactsInfo);
 					atLeastOneartifactCopied = true;
 				} else {
 					log.info("{} => ko, native will be filtered out", artifactToString(artifact));
@@ -153,35 +164,45 @@ public class CopyNativesMojo extends AbstractMojo {
 	}
 
 	private UnpackedArtifactsInfo loadAlreadyUnpackedArtifactsInfo() {
-		// TODO Auto-generated method stub
-		return null;
+		File file = new File(nativesTargetDir, ALREADY_UNPACKED_ARTIFACTS_INFO_FILE);
+		UnpackedArtifactsInfo info = new UnpackedArtifactsInfo();
+		if (file.exists()) {
+			try {
+				info = jsonMapper.readValue(file, UnpackedArtifactsInfo.class);
+			} catch (IOException e) {
+				log.error("Unable to read file {}", file, e);
+				// just log, only problem may be slower execution because of no reusing existing file
+			}
+		}
+		return info;
 	}
 
-	private void writeAlreadyUnpackedArtifactsInfo(UnpackedArtifactsInfo unpackedArtifactsInfo2) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/** Copy the native dep into 'unpackingDir' or unzip, depending on the file type */
-	private void handleDependancyCopyingOrUnpacking(Artifact artifact, String classifier) {
-		if (artifactAlreadyUnpacked(artifact)) {
-			log.debug("Artifact {} already unpacked", artifact);
-		} else {
-			log.info("Will unpack: " + artifactToString(artifact));
-			File unpackingDir = computeUnpackingDir(classifier);
-			artifactHandler.moveOrUnpackTo(unpackingDir, artifact);
-			updateAlreadyUnpackedArtifactsWith(artifact);
+	private void writeAlreadyUnpackedArtifactsInfo(UnpackedArtifactsInfo unpackedArtifactsInfo) {
+		File file = new File(nativesTargetDir, ALREADY_UNPACKED_ARTIFACTS_INFO_FILE);
+		try {
+			jsonMapper.writeValue(file, unpackedArtifactsInfo);
+		} catch (IOException e) {
+			log.error("Unable to write to file {}", file, e);
+			// just log, only problem may be slower execution because of no reusing existing file
 		}
 	}
 
-	private void updateAlreadyUnpackedArtifactsWith(Artifact artifact) {
-		// TODO Auto-generated method stub
-
+	/** Copy the native dep into 'unpackingDir' or unzip, depending on the file type */
+	private void handleDependancyCopyingOrUnpacking(Artifact artifact, String classifier, UnpackedArtifactsInfo unpackedArtifactsInfo) {
+		log.info("Will unpack: " + artifactToString(artifact));
+		File unpackingDir = computeUnpackingDir(classifier);
+		artifactHandler.moveOrUnpackTo(unpackingDir, artifact);
+		unpackedArtifactsInfo.flagAsUnpacked(artifact.getFile());
 	}
 
-	private boolean artifactAlreadyUnpacked(Artifact artifact) {
-		// TODO Auto-generated method stub
-		return false;
+	private boolean artifactAlreadyUnpacked(UnpackedArtifactsInfo unpackedArtifactsInfo, Artifact artifact) {
+		File currentArtifactFile = artifact.getFile();
+		boolean contains = false;
+		if (unpackedArtifactsInfo.containsExactly(currentArtifactFile)) {
+			contains = true;
+			log.debug("Artifact {} already unpacked", artifact);
+		}
+		return contains;
 	}
 
 	private String artifactToString(Artifact artifact) {
