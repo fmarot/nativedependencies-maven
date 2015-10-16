@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 /** Unpacks native dependencies */
 @Mojo(name = "copy" /** the goal */
 , threadSafe = false /** until proven otherwise, false */
-, defaultPhase = LifecyclePhase.PACKAGE, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
+, defaultPhase = LifecyclePhase.TEST, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
 @Slf4j
 public class CopyNativesMojo extends AbstractMojo {
 
