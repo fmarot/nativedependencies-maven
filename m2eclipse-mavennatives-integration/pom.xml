@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.googlecode.mavennatives.m2eclipse.natives</groupId>
+	<groupId>com.teamtter.mavennatives.m2eclipse.natives</groupId>
 	<artifactId>m2eclipse-mavennatives-integration</artifactId>
 	<version>0.0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -41,7 +41,7 @@
 
 	<scm>
 		<url>https://mavennatives.googlecode.com/svn/trunk/m2eclipse</url>
-		<connection>scm:svn:http://mavennatives.googlecode.com/svn/trunk/m2eclipse</connection>
+		<connection>scm:svn:http://www.teamtter.com/mavennatives/svn/trunk/m2eclipse</connection>
 		<developerConnection>scm:svn:https://mavennatives.googlecode.com/svn/trunk/m2eclipse</developerConnection>
 	</scm>
 	<properties>
@@ -55,9 +55,9 @@
 		</repository>
 	</repositories>
 	<modules>
-		<module>com.googlecode.mavennatives.m2eclipse.natives</module>
-		<module>com.googlecode.mavennatives.m2eclipse.natives.feature</module>
-		<module>com.googlecode.mavennatives.m2eclipse.natives.site</module>
+		<module>com.teamtter.mavennatives.m2eclipse.natives</module>
+		<module>com.teamtter.mavennatives.m2eclipse.natives.feature</module>
+		<module>com.teamtter.mavennatives.m2eclipse.natives.site</module>
 	</modules>
 	<build>
 		<plugins>

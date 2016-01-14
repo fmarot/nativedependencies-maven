@@ -1,4 +1,4 @@
-package com.googlecode.mavennatives.m2eclipse.natives;
+package com.teamtter.mavennatives.m2eclipse.natives;
 
 import java.util.List;
 

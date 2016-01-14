@@ -3,7 +3,7 @@
 	<pluginExecutions>
 		<pluginExecution>
 			<pluginExecutionFilter>
-				<groupId>com.googlecode.mavennatives</groupId>
+				<groupId>com.teamtter.mavennatives</groupId>
 				<artifactId>maven-nativedependencies-plugin</artifactId>
 				<versionRange>[0.0.5,)</versionRange>
 				<goals>
@@ -12,7 +12,7 @@
 			</pluginExecutionFilter>
 			<action>
 				<configurator>
-					<id>com.googlecode.mavennatives.m2eclipse.natives.nativesConfigurator</id>
+					<id>com.teamtter.mavennatives.m2eclipse.natives.nativesConfigurator</id>
 				</configurator>
 			</action>
 		</pluginExecution>

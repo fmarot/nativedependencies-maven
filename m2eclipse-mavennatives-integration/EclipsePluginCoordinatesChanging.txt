@@ -1,0 +1,11 @@
+com.googlecode.mavennatives
+com.teamtter.mavennatives
+
+com.googlecode.mavennatives.m2eclipse.natives
+com.teamtter.mavennatives.m2eclipse.natives
+
+http://www.teamtter.com/mavennatives
+http://www.teamtter.com/mavennatives
+
+
+com.googlecode.mavennatives.m2eclipse.natives

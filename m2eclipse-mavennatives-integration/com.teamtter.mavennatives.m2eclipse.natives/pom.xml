@@ -3,11 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.googlecode.mavennatives.m2eclipse.natives</groupId>
+		<groupId>com.teamtter.mavennatives.m2eclipse.natives</groupId>
 		<artifactId>m2eclipse-mavennatives-integration</artifactId>
 		<version>0.0.4-SNAPSHOT</version>
 	</parent>
-	<artifactId>com.googlecode.mavennatives.m2eclipse.natives</artifactId>
+	<artifactId>com.teamtter.mavennatives.m2eclipse.natives</artifactId>
 
 	<packaging>eclipse-plugin</packaging>
 	<build>

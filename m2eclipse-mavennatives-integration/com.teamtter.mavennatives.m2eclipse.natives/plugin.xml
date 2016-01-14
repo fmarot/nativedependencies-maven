@@ -4,8 +4,8 @@
 	<extension
 		point="org.eclipse.m2e.core.projectConfigurators">
 		<configurator
-			class="com.googlecode.mavennatives.m2eclipse.natives.NativesConfigurator"
-			id="com.googlecode.mavennatives.m2eclipse.natives.nativesConfigurator"
+			class="com.teamtter.mavennatives.m2eclipse.natives.NativesConfigurator"
+			id="com.teamtter.mavennatives.m2eclipse.natives.nativesConfigurator"
 			name="Maven Natives Project Configurator">
 		</configurator>
 	</extension>

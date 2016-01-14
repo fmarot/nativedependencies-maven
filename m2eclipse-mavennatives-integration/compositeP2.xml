@@ -12,9 +12,9 @@
 			<repository location="file:/tmp/compositerepo" name="M2E - Maven Natives Plugin"
 				 />
 			<add>
-				<repository location="http://mavennatives.googlecode.com/svn/eclipse-update/0.0.1.201103101931/"  />
-				<repository location="http://mavennatives.googlecode.com/svn/eclipse-update/0.0.2.201110262159/"  />
-				<repository location="http://mavennatives.googlecode.com/svn/eclipse-update/0.0.3.201211152116/"  />
+				<repository location="http://www.teamtter.com/mavennatives/svn/eclipse-update/0.0.1.201103101931/"  />
+				<repository location="http://www.teamtter.com/mavennatives/svn/eclipse-update/0.0.2.201110262159/"  />
+				<repository location="http://www.teamtter.com/mavennatives/svn/eclipse-update/0.0.3.201211152116/"  />
 			</add>
 		</p2.composite.repository>
 	</target>

@@ -1,4 +1,4 @@
-package com.googlecode.mavennatives.m2eclipse.natives;
+package com.teamtter.mavennatives.m2eclipse.natives;
 
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
@@ -6,7 +6,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 public class NativesConfigExtractor
 {
-	static final String groupId = "com.googlecode.mavennatives";
+	static final String groupId = "com.teamtter.mavennatives";
 	static final String artifactId = "maven-nativedependencies-plugin";
 	static final String nativesPathAttribute = "nativesTargetDir";
 	static final String defaultNativesPath = "target/natives";
