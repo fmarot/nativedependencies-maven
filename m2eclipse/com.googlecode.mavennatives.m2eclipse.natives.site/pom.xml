@@ -10,8 +10,8 @@
 	<artifactId>com.googlecode.mavennatives.m2eclipse.natives.site</artifactId>
 	<version>0.0.4-SNAPSHOT</version>
 	<packaging>eclipse-update-site</packaging>
-	<name>mavennatives update site</name>
-	<description>mavennatives update site</description>
+        <!-- <name>mavennatives update site</name> -->
+        <!-- <description>mavennatives update site</description> -->
 	<build>
 		<extensions>
 			<extension>

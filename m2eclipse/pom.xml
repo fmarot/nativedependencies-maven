@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.googlecode.mavennatives.m2eclipse.natives</groupId>
 	<artifactId>m2eclipse-mavennatives-integration</artifactId>
-	<name>Maven Integration for Maven Natives Plugin</name>
+        <!-- <name>Maven Integration for Maven Natives Plugin</name> -->
 	<version>0.0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<description>An Eclipse plug-in that adds support for M2Eclipse integration with the Maven Natives Plugin.</description>
