@@ -11,8 +11,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<modules>
-		<module>m2eclipse</module>
 		<module>nativedependencies-maven-example</module>
 		<module>nativedependencies-maven-plugin</module>
+		<module>m2eclipse</module>
 	</modules>
 </project>

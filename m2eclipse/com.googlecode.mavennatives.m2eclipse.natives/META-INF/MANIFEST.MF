@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Maven Natives Plugin Integration
-Bundle-SymbolicName: com.teamtter.mavennatives.m2eclipse.natives;singleton:=true
+Bundle-SymbolicName: com.googlecode.mavennatives.m2eclipse.natives;singleton:=true
 Bundle-Version: 0.0.4.qualifier
 Bundle-Activator: com.googlecode.mavennatives.m2eclipse.natives.Activator
 Require-Bundle: org.eclipse.core.runtime,

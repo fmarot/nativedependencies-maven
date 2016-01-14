@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -24,8 +25,8 @@ public class NativesConfigurator extends AbstractJavaProjectConfigurator {
 
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor progressMonitor) throws CoreException {
-		
-		logger.info("Configuring mvn natives");
+
+		logger.info("Configuring mvn natives !");
 
 		MavenProject mavenProject = request.getMavenProject();
 
@@ -33,13 +34,15 @@ public class NativesConfigurator extends AbstractJavaProjectConfigurator {
 
 			String relativeNativesPath = NativesConfigExtractor.getNativesPath(mavenProject);
 
-			IPath nativesPath = request.getProject().getFullPath().makeRelative().append(relativeNativesPath);
+			IProject project = request.getProject();
+			IPath relativePath = project.getFullPath().makeRelative();
+			IPath nativesPath = relativePath.append(relativeNativesPath);
 
 			logger.info("MavenNatives - Setting nativesPath: " + nativesPath.toString());
 
 			executeNativeDependenciesCopy(request, progressMonitor);
 
-			request.getProject().getFolder(relativeNativesPath).refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
+			project.getFolder(relativeNativesPath).refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
 
 			logger.info("MavenNatives - Done");
 
@@ -70,21 +73,19 @@ public class NativesConfigurator extends AbstractJavaProjectConfigurator {
 			}
 		}
 	}
-	
-	
 
 	public static boolean isMaven2ClasspathContainer(IPath containerPath) {
 		return containerPath != null && containerPath.segmentCount() > 0 && IClasspathManager.CONTAINER_ID.equals(containerPath.segment(0));
 	}
 
-
+	@Override
 	public void configureRawClasspath(ProjectConfigurationRequest request, IClasspathDescriptor classpath, IProgressMonitor monitor) throws CoreException {
 		logger.info("Configuring Raw Classpath");
 		MavenProject mavenProject = request.getMavenProject();
 		String relativeNativesPath = NativesConfigExtractor.getNativesPath(mavenProject);
 
 		String nativesPath = request.getProject().getFullPath().makeRelative().append(relativeNativesPath).toOSString();
-		
-		addNativesPathToMavenContainer(classpath.getEntryDescriptors(),nativesPath);
+
+		addNativesPathToMavenContainer(classpath.getEntryDescriptors(), nativesPath);
 	}
 }
