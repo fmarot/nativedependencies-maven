@@ -23,10 +23,6 @@ public class NativesConfigurator extends AbstractJavaProjectConfigurator {
 
 	static Logger log = LoggerFactory.getLogger(NativesConfigurator.class);
 
-	static {
-		log.error("TOTOTITI");
-	}
-
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor progressMonitor) throws CoreException {
 
