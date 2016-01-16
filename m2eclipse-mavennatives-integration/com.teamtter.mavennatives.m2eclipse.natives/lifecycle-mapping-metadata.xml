@@ -4,8 +4,8 @@
 		<pluginExecution>
 			<pluginExecutionFilter>
 				<groupId>com.teamtter.mavennatives</groupId>
-				<artifactId>maven-nativedependencies-plugin</artifactId>
-				<versionRange>[0.0.5,)</versionRange>
+				<artifactId>nativedependencies-maven-plugin</artifactId>
+				<versionRange>[0.0.1,)</versionRange>
 				<goals>
 					<goal>copy</goal>
 				</goals>

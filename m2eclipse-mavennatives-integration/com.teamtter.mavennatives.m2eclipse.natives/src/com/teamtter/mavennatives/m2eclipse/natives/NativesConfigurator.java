@@ -21,12 +21,12 @@ import org.slf4j.LoggerFactory;
 
 public class NativesConfigurator extends AbstractJavaProjectConfigurator {
 
-	static Logger logger = LoggerFactory.getLogger(NativesConfigurator.class);
+	static Logger log = LoggerFactory.getLogger(NativesConfigurator.class);
 
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor progressMonitor) throws CoreException {
 
-		logger.info("Configuring mvn natives !");
+		log.info("Configuring mvn natives !");
 
 		MavenProject mavenProject = request.getMavenProject();
 
@@ -38,16 +38,16 @@ public class NativesConfigurator extends AbstractJavaProjectConfigurator {
 			IPath relativePath = project.getFullPath().makeRelative();
 			IPath nativesPath = relativePath.append(relativeNativesPath);
 
-			logger.info("MavenNatives - Setting nativesPath: " + nativesPath.toString());
+			log.info("MavenNatives - Setting nativesPath: " + nativesPath.toString());
 
 			executeNativeDependenciesCopy(request, progressMonitor);
 
 			project.getFolder(relativeNativesPath).refreshLocal(IResource.DEPTH_INFINITE, progressMonitor);
 
-			logger.info("MavenNatives - Done");
+			log.info("MavenNatives - Done");
 
 		} else {
-			logger.info("MavenNatives - Is not a MavenNatives project");
+			log.info("MavenNatives - Is not a MavenNatives project");
 		}
 
 	}
@@ -80,7 +80,7 @@ public class NativesConfigurator extends AbstractJavaProjectConfigurator {
 
 	@Override
 	public void configureRawClasspath(ProjectConfigurationRequest request, IClasspathDescriptor classpath, IProgressMonitor monitor) throws CoreException {
-		logger.info("Configuring Raw Classpath");
+		log.info("Configuring Raw Classpath");
 		MavenProject mavenProject = request.getMavenProject();
 		String relativeNativesPath = NativesConfigExtractor.getNativesPath(mavenProject);
 
