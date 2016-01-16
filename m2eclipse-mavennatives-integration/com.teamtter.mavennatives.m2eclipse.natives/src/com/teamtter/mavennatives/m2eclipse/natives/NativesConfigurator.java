@@ -26,7 +26,6 @@ public class NativesConfigurator extends AbstractJavaProjectConfigurator {
 	@Override
 	public void configure(ProjectConfigurationRequest request, IProgressMonitor progressMonitor) throws CoreException {
 
-		log.error("TOTOTITI 2");
 		log.info("Configuring mvn natives !");
 
 		MavenProject mavenProject = request.getMavenProject();
