@@ -16,3 +16,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: com.teamtter.mavennatives
 Export-Package: com.teamtter.mavennatives.m2eclipse.natives
+Bundle-ClassPath: src/com
