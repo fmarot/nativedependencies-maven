@@ -20,6 +20,10 @@ The plugin is available from Maven Central:
 == Options
  
  TODO...
+ 
+= Compiling the code
+
+you need a real Java 7 to compile as we face errors with Java 8's javac.
 
 = TODO
 
@@ -47,7 +51,7 @@ The plugin is available from Maven Central:
 
 == Problematic that this plugin will try to solve
 
-* enable a native developer to compile it's native lib (we don't care how) and place them in a folder where they won't be overwriten on each mvn text byt the ones in .m2 or Archiva
+* enable a native developer to compile it's native lib (we don't care how) and place them in a folder where they won't be overwriten on each mvn run by the ones in .m2 or Archiva
 ** use another folder and play on the order of folder declaration in the -Djava.library.path ???
 ** do not overwrite if newer
 ** another solution ?
@@ -59,6 +63,6 @@ The plugin is available from Maven Central:
 * add finer grain control over what natives dependencies will be unpacked.
 * familiarize myself with the dev of Maven plugins.
 * improve eclipse plugin
-* finally find a way to prevent each and every project using native libs to have to manually (god I have this word!) configure the -Djava.library.path and LD_LIBRARY_PATH
+* finally find a way to prevent each and every project using native libs to have to manually (god I hate this word!) configure the -Djava.library.path and LD_LIBRARY_PATH
 
-License kept to : Apache License 2.0 
+License : Apache License 2.0 
