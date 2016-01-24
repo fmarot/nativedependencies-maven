@@ -26,6 +26,13 @@ This is a fork of the previously existing https://code.google.com/p/mavennatives
 
 The maven plugin has then been renamed to "nativedependencies-maven-plugin" to follow Apache Maven conventions and groupId changed to "com.teamtter.mavennatives".
 
+Reasons for forking original project:
+
+* add finer grain control over what natives dependencies will be unpacked.
+* familiarize myself with the dev of Maven plugins.
+* improve eclipse plugin
+* finally find a way to prevent each and every project using native libs to have to manually (god I hate this word!) configure the -Djava.library.path and LD_LIBRARY_PATH
+
 = How to use the Maven plugin
 
 == Maven dependency
@@ -85,7 +92,7 @@ TODO installation guide
 
 you need a real Java 7 to compile as we face errors with Java 8's javac.
 
-= Done
+= Features Done
 
 * use real Java 5 annotations
 * parameter to be able to skip the plugin execution (overridable through a variable)
@@ -95,20 +102,5 @@ you need a real Java 7 to compile as we face errors with Java 8's javac.
 * m2e connector => make Eclipse plugin automatically add -Djava.library.path (to run targets, junit tests, etc)
 * keep a cache of the signature (md5, sha1, date ???) for each compressed file to avoid uncompressing it again if it has not changed => this has been done through saving the last modification date of the artifacts in a json file in target/natives dir
 
-= Problematic that this plugin will try to solve
-
-* enable a native developer to compile it's native lib (we don't care how) and place them in a folder where they won't be overwriten on each mvn run by the ones in .m2 or Archiva
-** use another folder and play on the order of folder declaration in the -Djava.library.path ???
-** do not overwrite if newer
-** another solution ?
-* streamline command-line VS Eclipse use => if it works on command-line, it should work in Eclipse without touching anything !
-
-
-= Reasons for forking original project
-
-* add finer grain control over what natives dependencies will be unpacked.
-* familiarize myself with the dev of Maven plugins.
-* improve eclipse plugin
-* finally find a way to prevent each and every project using native libs to have to manually (god I hate this word!) configure the -Djava.library.path and LD_LIBRARY_PATH
 
 License : Apache License 2.0 
