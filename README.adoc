@@ -32,6 +32,8 @@ This is a fork of the previously existing https://code.google.com/p/mavennatives
 
 The maven plugin has then been renamed to "nativedependencies-maven-plugin" to follow Apache Maven conventions and groupId changed to "com.teamtter.mavennatives".
 
+Big thanks to the original writers of Maven Native Dependencies.
+
 Reasons for forking original project:
 
 * add finer grain control over what natives dependencies will be unpacked.
@@ -111,4 +113,6 @@ you need a real Java 7 to compile as we face errors with Java 8's javac.
 * keep a cache of the signature (md5, sha1, date ???) for each compressed file to avoid uncompressing it again if it has not changed => this has been done through saving the last modification date of the artifacts in a json file in target/natives dir
 
 
-License : Apache License 2.0 
+= License
+
+Apache License 2.0 
