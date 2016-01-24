@@ -1,4 +1,6 @@
-:toc:
+:toc: macro
+...
+toc::[]
 
 = mavennatives
 
