@@ -86,7 +86,9 @@ The plugin is available from Maven Central, just add the following snippet to yo
  
 = How to use the Eclipse M2E extension
 
-TODO installation guide 
+TODO installation guide
+
+TODO upload the Eclipse update site somewhere so users are not forced to recompile their own
  
 = Compiling the code
 
