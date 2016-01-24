@@ -2,19 +2,34 @@
 
 == Maven plugin
 
+This Maven plugin will unpack the native dependencies (usually .so files on Linux, DLLs on Windows) into a single folder.
+
+Those "native" dependencies are recognized thanks to the https://books.sonatype.com/mvnref-book/reference/profiles-sect-tips-tricks.html#profiles-sect-platform-classifier[Maven classifier] which *must* start with the "natives-" prefix.
+
+If those artifacts are .zip, .tgz, .7z or any other recognized format, their content will be transparently extracted (optionnaly in different subdirectories) in target/natives/ directory.
+
+By default, in case of a multi module project, we will unpack all natives dependencies to the same dir located at the root of the project
+(thus saving space and unzip time while allowing all interdependent projects to benefit from the presence of native libs)
+
 == Eclipse plugin (Eclipse M2E Extension)
+
+In order to ease the development from within your Eclipse IDE, we have a plugin to automatically add the path to the "natives" directory to "Native library location" of the project (hence -Djava.library.path).
+ 
+image:./doc/eclipsePluginResult.png[using the nativedependencies-maven-plugin m2e extension in Eclipse]
+
+However, it currently does not set the LD_LIBRARY_PATH (on Linux) nor the PATH (on Windows) so native code trying to load it's own native dependencies will not work automagically.
+In this case you'll have to set the variable before launching Eclipse.
 
 == about the project
 
 Automatically exported from code.google.com/p/mavennatives which was at version 0.0.7.
 This maven plugin has then been renamed to "nativedependencies-maven-plugin" (to follow Apache Maven conventions) and groupid changed to com.teamtter.mavennatives.
 
-
 = How to use the Maven plugin
 
 == Maven dependency
 
-The plugin is available from Maven Central:
+The plugin is available from Maven Central, just add the following snippet to your pom to use it:
 
 [source,xml]
 -------------------------------------------
@@ -27,7 +42,39 @@ The plugin is available from Maven Central:
  
 == Options
  
- TODO...
+[source,xml]
+-------------------------------------------
+			<plugin>
+				<groupId>com.teamtter.mavennatives</groupId>
+				<artifactId>nativedependencies-maven-plugin</artifactId>
+				<version>0.0.9-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<id>unpacknatives</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<skip>false</skip>
+					<autoDetectOSNatives>false</autoDetectOSNatives> <!-- if 'true' then you don't need the 'osFilters' list -->
+					<osFilters>
+						<osFilter>
+							<osName>linux</osName>
+							<osArch>64</osArch>
+							<suffix>linux</suffix>
+						</osFilter>
+						<osFilter>
+							<osName>windows</osName>
+							<!-- <osArch>64</osArch> --> <!-- this line is not mandatory -->
+							<suffix>win</suffix>
+						</osFilter>
+					</osFilters>
+				</configuration>
+			</plugin>
+-------------------------------------------
  
  = How to use the Eclipse M2E extension 
  

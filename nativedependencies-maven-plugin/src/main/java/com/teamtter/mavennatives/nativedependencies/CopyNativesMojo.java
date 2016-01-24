@@ -58,7 +58,7 @@ public class CopyNativesMojo extends AbstractMojo {
 	// @Parameter(property = "nativesTargetDir", defaultValue = "${project.build.directory}/natives")
 	/**
 	 * by default, in case of a multi module project, we will unpack ALL NATIVES to
-	 * the same dir, thus saving space and unzip time while allowing all interdependant
+	 * the same dir, thus saving space and unzip time while allowing all interdependent
 	 * projects to benefit from the presence of native libs
 	 */
 	@Parameter(property = "nativesTargetDir", defaultValue = "${session.executionRootDirectory}/target/natives")
