@@ -20,10 +20,11 @@ image:./doc/eclipsePluginResult.png[using the nativedependencies-maven-plugin m2
 However, it currently does not set the LD_LIBRARY_PATH (on Linux) nor the PATH (on Windows) so native code trying to load it's own native dependencies will not work automagically.
 In this case you'll have to set the variable before launching Eclipse.
 
-== about the project
+== About the project
 
-Automatically exported from code.google.com/p/mavennatives which was at version 0.0.7.
-This maven plugin has then been renamed to "nativedependencies-maven-plugin" (to follow Apache Maven conventions) and groupid changed to com.teamtter.mavennatives.
+This is a fork of the previously existing https://code.google.com/p/mavennatives/[Maven Native Dependencies] project which was at version 0.0.7.
+
+The maven plugin has then been renamed to "nativedependencies-maven-plugin" to follow Apache Maven conventions and groupId changed to "com.teamtter.mavennatives".
 
 = How to use the Maven plugin
 
@@ -76,7 +77,9 @@ The plugin is available from Maven Central, just add the following snippet to yo
 			</plugin>
 -------------------------------------------
  
- = How to use the Eclipse M2E extension 
+= How to use the Eclipse M2E extension
+
+TODO installation guide 
  
 = Compiling the code
 
