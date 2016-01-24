@@ -2,7 +2,7 @@
 
 toc::[]
 
-= mavennatives
+= What is nativedependencies-maven-plugin ?
 
 == Maven plugin
 
@@ -18,6 +18,8 @@ By default, in case of a multi module project, we will unpack all natives depend
 == Eclipse plugin (Eclipse M2E Extension)
 
 In order to ease the development from within your Eclipse IDE, we have a plugin to automatically add the path to the "natives" directory to "Native library location" of the project (hence -Djava.library.path).
+
+This plugin is an M2E extension that acts on Maven projects using the "nativedependencies-maven-plugin".
  
 image:./doc/eclipsePluginResult.png[using the nativedependencies-maven-plugin m2e extension in Eclipse]
 
