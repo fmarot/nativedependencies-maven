@@ -7,25 +7,20 @@
 	<version>0.0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<description>An Eclipse plug-in that adds support for M2Eclipse integration with the Maven Natives Plugin.</description>
-	<url>http://code.google.com/p/mavennatives/</url>
+	<url>https://github.com/fmarot/nativedependencies-maven</url>
+
 	<developers>
 		<developer>
-			<id>rgarat</id>
-			<email>ruben.garat@gemserk.com</email>
-			<organization>Gemserk</organization>
-			<url>http://blog.gemserk.com</url>
-		</developer>
-		<developer>
-			<id>acoppes</id>
-			<email>ariel.coppes@gemserk.com</email>
-			<organization>Gemserk</organization>
-			<url>http://blog.gemserk.com</url>
+			<name>Francois MAROT</name>
+			<email>myFirstName.myLastName@gmail.com</email>
+			<organization>Home</organization>
+			<organizationUrl>http://careers.stackoverflow.com/francoismarot</organizationUrl>
 		</developer>
 	</developers>
 
 	<issueManagement>
-		<system>googlecode</system>
-		<url>http://code.google.com/p/mavennatives/issues/list</url>
+		<system>GitHub</system>
+		<url>https://github.com/fmarot/nativedependencies-maven/issues/</url>
 	</issueManagement>
 
 	<licenses>
@@ -36,17 +31,16 @@
 		</license>
 	</licenses>
 
-
-
-
 	<scm>
-		<url>https://mavennatives.googlecode.com/svn/trunk/m2eclipse</url>
+		<url>https://github.com/fmarot/nativedependencies-maven/tree/master/m2eclipse-mavennatives-integration</url>
 		<connection>scm:svn:http://www.teamtter.com/mavennatives/svn/trunk/m2eclipse</connection>
-		<developerConnection>scm:svn:https://mavennatives.googlecode.com/svn/trunk/m2eclipse</developerConnection>
+		<developerConnection>scm:git:git@github.com:fmarot/nativedependencies-maven.git</developerConnection>
 	</scm>
+
 	<properties>
-		<tycho-version>0.13.0</tycho-version>
+		<tycho-version>0.25.0-SNAPSHOT</tycho-version>
 	</properties>
+
 	<repositories>
 		<repository>
 			<id>helios</id>
@@ -54,11 +48,20 @@
 			<url>http://download.eclipse.org/releases/indigo</url>
 		</repository>
 	</repositories>
+
 	<modules>
 		<module>com.teamtter.mavennatives.m2eclipse.natives</module>
 		<module>com.teamtter.mavennatives.m2eclipse.natives.feature</module>
 		<module>com.teamtter.mavennatives.m2eclipse.natives.site</module>
 	</modules>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>tycho-snapshots</id>
+			<url>https://repo.eclipse.org/content/repositories/tycho-snapshots/</url>
+		</pluginRepository>
+	</pluginRepositories>
+	
 	<build>
 		<plugins>
 			<plugin>
@@ -104,6 +107,7 @@
 			</plugin>
 
 		</plugins>
+
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -116,7 +120,8 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-	</build>
 
+
+	</build>
 
 </project>
