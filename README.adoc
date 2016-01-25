@@ -1,6 +1,6 @@
 :toc: macro
 
-image:https://travis-ci.org/fmarot/mavennatives.svg?branch=master["Build Status", link="https://travis-ci.org/fmarot/mavennatives"]
+image:https://travis-ci.org/fmarot/nativedependencies-maven.svg?branch=master["Build Status", link="https://travis-ci.org/fmarot/mavennatives"]
 
 toc::[]
 
