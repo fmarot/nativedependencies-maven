@@ -28,9 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j // Starting with Maven 3.1.0, SLF4J Logger can be used directly too, without Plexus
 public class ArtifactHandler implements IArtifactHandler {
 
-	private static List<String> zipLikeExtensions = Arrays.asList(".jar", ".zip", ".gz", ".7z", ".7zip");
+	private static List<String> zipLikeExtensions = Arrays.asList("jar", "zip", "gz", "7z", "7zip");
 
-	private static List<String> tarGzExensions = Arrays.asList(".tar.gz", ".tgz");
+	private static List<String> tarGzExensions = Arrays.asList("tar.gz", "tgz");
 
 	/** Wraps any Exception encountered into an ArtifactUnpackingException which is a RUNTIME Exception */
 	@Override
