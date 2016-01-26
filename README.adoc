@@ -4,9 +4,9 @@ image:https://travis-ci.org/fmarot/nativedependencies-maven.svg?branch=master["B
 
 toc::[]
 
-= What is nativedependencies-maven-plugin ?
+= What is nativedependencies-maven ?
 
-== Maven plugin
+== Maven plugin (nativedependencies-maven-plugin)
 
 This Maven plugin will unpack the native dependencies (usually .so files on Linux, DLLs on Windows) into a single folder.
 
