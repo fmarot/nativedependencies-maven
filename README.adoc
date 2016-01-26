@@ -40,8 +40,17 @@ Reasons for forking original project:
 
 * add finer grain control over what natives dependencies will be unpacked.
 * familiarize myself with the dev of Maven plugins.
-* improve eclipse plugin
+* improve eclipse plugin (NOT done at the moment)
 * finally find a way to prevent each and every project using native libs to have to manually (god I hate this word!) configure the -Djava.library.path and LD_LIBRARY_PATH
+
+Current features added to original plugin:
+
+* use GitHub instead of the dead Google Code 
+* more modern code using annotations
+* parameter to be able to skip the plugin execution (overridable through a variable)
+* add parameters to auto-detect platform and get only platform specific libs
+* transparently handle misc compression format (zip, tar, tgz, 7zip...) and single file not compressed deps (.dll, .so, .dylib...)
+* keep a cache of the signature for each compressed artifact to avoid uncompressing it again if it has not changed. #performance
 
 = How to use the Maven plugin
 
@@ -110,18 +119,9 @@ Or you can always https://github.com/fmarot/nativedependencies-maven/issues[open
 
 = Compiling the code
 
-you need a real Java 7 to compile as we face errors with Java 8's javac.
+Commited code is compiled by https://travis-ci.org/fmarot/nativedependencies-maven/builds/[Travis-CI]
 
-= Features Done
-
-* use real Java 5 annotations
-* parameter to be able to skip the plugin execution (overridable through a variable)
-* add parameters to auto-detect platform and get only platform specific libs
-* transparently handle misc compression format (zip, tar, tgz, 7zip...) and single file not compressed deps (.dll, .so, .dylib...)
-* handle transitive native dependencies (it already worked !)
-* m2e connector => make Eclipse plugin automatically add -Djava.library.path (to run targets, junit tests, etc)
-* keep a cache of the signature (md5, sha1, date ???) for each compressed file to avoid uncompressing it again if it has not changed => this has been done through saving the last modification date of the artifacts in a json file in target/natives dir
-
+Eclipse's Tycho seem to require Java 8.
 
 = License
 
