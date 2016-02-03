@@ -63,7 +63,7 @@ The plugin is available from Maven Central, just add the following snippet to yo
 <dependency>
     <groupId>com.teamtter.mavennatives</groupId>
     <artifactId>nativedependencies-maven-plugin</artifactId>
-    <version>0.0.8</version>
+    <version>1.0.0</version>
 </dependency>
 -------------------------------------------
  
@@ -71,44 +71,63 @@ The plugin is available from Maven Central, just add the following snippet to yo
  
 [source,xml]
 -------------------------------------------
-			<plugin>
-				<groupId>com.teamtter.mavennatives</groupId>
-				<artifactId>nativedependencies-maven-plugin</artifactId>
-				<version>0.0.9-SNAPSHOT</version>
-				<executions>
-					<execution>
-						<id>unpacknatives</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<skip>false</skip>
-					<autoDetectOSNatives>false</autoDetectOSNatives> <!-- if 'true' then you don't need the 'osFilters' list -->
-					<osFilters>
-						<osFilter>
-							<osName>linux</osName>
-							<osArch>64</osArch>
-							<suffix>linux</suffix>
-						</osFilter>
-						<osFilter>
-							<osName>windows</osName>
-							<!-- <osArch>64</osArch> --> <!-- this line is not mandatory -->
-							<suffix>win</suffix>
-						</osFilter>
-					</osFilters>
-				</configuration>
-			</plugin>
+<plugin>
+	<groupId>com.teamtter.mavennatives</groupId>
+	<artifactId>nativedependencies-maven-plugin</artifactId>
+	<version>1.0.0</version>
+	<executions>
+		<execution>
+			<id>unpacknatives</id>
+			<phase>generate-resources</phase>
+			<goals>
+				<goal>copy</goal>
+			</goals>
+		</execution>
+	</executions>
+	<configuration>
+		<skip>false</skip>
+		<autoDetectOSNatives>false</autoDetectOSNatives> <!-- if 'true' then you don't need the 'osFilters' list -->
+														<!-- we advise you set 'autoDetectOSNatives' to true and forget about osFilters -->
+		<!-- <nativesTargetDir>${session.executionRootDirectory}/target/natives</nativesTargetDir> -->
+		<!-- <separateDirs>true</separateDirs> -->
+		<osFilters>
+			<osFilter>
+				<osName>linux</osName>
+				<osArch>64</osArch>
+				<suffix>linux</suffix>
+			</osFilter>
+			<osFilter>
+				<osName>windows</osName>
+				<!-- <osArch>64</osArch> --> <!-- this line is not mandatory -->
+				<suffix>win</suffix>
+			</osFilter>
+		</osFilters>
+	</configuration>
+</plugin>
 -------------------------------------------
+
+== Single module Maven project
+
+TODO
+
+== Multi module Maven project
+
+By default, as you can see commented above (parameter 'nativesTargetDir'), the default directory will be "${session.executionRootDirectory}/target/natives".
+
+This means that in a multi-module configuration, you can have all you native dependencies extracted alongside the main pom in ./target/natives.
+
+This allows you to have a single location where are stored all your native libs, as long as you always run maven related commands *FROM THE ROOT DIRECTORY*.
+
+If you want to target a specific child module, you can use the --projects parameter: mvn install --projects my-child-module
+
  
 = How to use the Eclipse M2E extension
 
-TODO installation guide
+Point Eclipse to the following update site:
 
-TODO upload the Eclipse update site somewhere so users are not forced to recompile their own
- 
+* https://dl.bintray.com/fmarot/com.teamtter.mavennatives.m2eclipse.natives.site/
+
+
 = Getting help
 
 You can ask questions on http://stackoverflow.com[StackOverflow] with the official tag http://stackoverflow.com/questions/tagged/nativedependencies-maven[#nativedependencies-maven]

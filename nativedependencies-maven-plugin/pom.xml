@@ -5,7 +5,7 @@
 	<groupId>com.teamtter.mavennatives</groupId>
 	<artifactId>nativedependencies-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>0.0.9-SNAPSHOT</version>
+	<version>1.0.0</version>
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>This plugin allows the automatic unpacking of natives in jars depending on a classifier with a certain pattern.
@@ -155,23 +155,48 @@
 			</plugin>
 
 		</plugins>
-<!-- 		<pluginManagement> -->
-<!-- 			<plugins> -->
-<!-- 				<plugin> -->
-<!-- 					<groupId>org.apache.maven.plugins</groupId> -->
-<!-- 					<artifactId>maven-release-plugin</artifactId> -->
-<!-- 					<version>2.1</version> -->
-<!-- 					<configuration> -->
-<!-- 						<mavenExecutorId>forked-path</mavenExecutorId> -->
-<!-- 						<useReleaseProfile>false</useReleaseProfile> -->
-<!-- 						<arguments>-Pgpgsign,mavennativesgpg</arguments> -->
-<!-- 					</configuration> -->
-<!-- 				</plugin> -->
-<!-- 			</plugins> -->
-<!-- 		</pluginManagement> -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.1</version>
+					<configuration>
+						<mavenExecutorId>forked-path</mavenExecutorId>
+						<useReleaseProfile>false</useReleaseProfile>
+						<arguments>-Pgpgsign,mavennativesgpg</arguments>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<profiles>
+		<!-- To deploy on central just run "mvn clean deploy -P gpgsign" -->
+		<!-- Then go to https://oss.sonatype.org/#stagingRepositories
+		and select "close" then "release" -->
+		<profile>
+			<id>gpgsign</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.1</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
 		<profile>
 			<id>run-its</id> <!-- run Integration Tests -->
 			<activation>
