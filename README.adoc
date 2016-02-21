@@ -145,8 +145,3 @@ Eclipse's Tycho seem to require Java 8.
 = License
 
 Apache License 2.0 
-
-
-++++
-<script id='fbycc6e'>(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//button.flattr.com/view/?fid=4pol0n&url='+encodeURIComponent(document.URL);f.title='Flattr';f.height=62;f.width=55;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('fbycc6e');</script>
-++++
