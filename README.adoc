@@ -60,11 +60,24 @@ The plugin is available from Maven Central, just add the following snippet to yo
 
 [source,xml]
 -------------------------------------------
-<dependency>
-    <groupId>com.teamtter.mavennatives</groupId>
-    <artifactId>nativedependencies-maven-plugin</artifactId>
-    <version>1.0.0</version>
-</dependency>
+<project>
+	...
+	<build>
+		<plugins>
+			<plugin>
+				<dependency>
+				    <groupId>com.teamtter.mavennatives</groupId>
+				    <artifactId>nativedependencies-maven-plugin</artifactId>
+				    <version>1.0.0</version>
+				    <executions>
+				<execution>
+				...
+				</executions>
+				<configuration>
+				...
+				</configuration>
+      		<plugin>
+		...
 -------------------------------------------
  
 == Options
