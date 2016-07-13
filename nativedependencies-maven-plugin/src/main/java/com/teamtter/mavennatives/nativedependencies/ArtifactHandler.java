@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.compressors.CompressorException;
@@ -34,8 +33,12 @@ public class ArtifactHandler implements IArtifactHandler {
 
 	/** Wraps any Exception encountered into an ArtifactUnpackingException which is a RUNTIME Exception */
 	@Override
-	public void moveOrUnpackTo(File unpackingDir, Artifact artifact) {
+	public void moveOrUnpackArtifactTo(File unpackingDir, Artifact artifact) {
 		File artifactFile = artifact.getFile();
+		moveOrUnpackFileTo(unpackingDir, artifactFile);
+	}
+	
+	public static void moveOrUnpackFileTo(File unpackingDir, File artifactFile) {
 		String fileName = artifactFile.getName();
 		String extension = FilenameUtils.getExtension(fileName);
 
@@ -44,7 +47,7 @@ public class ArtifactHandler implements IArtifactHandler {
 				log.info("Artifact {} will be uncompressed as tar-gz-like to {}", artifactFile, unpackingDir);
 				String basename = FilenameUtils.getBaseName(artifactFile.getName());
 				File uncompressedTarFile = new File(unpackingDir, basename);
-				uncompressAFile(artifactFile, uncompressedTarFile);
+				uncompressAFile(artifactFile, unpackingDir);
 				uncompressAnArchive(uncompressedTarFile, unpackingDir);
 				uncompressedTarFile.delete();
 			} else if (zipLikeExtensions.contains(extension)) {
@@ -60,13 +63,18 @@ public class ArtifactHandler implements IArtifactHandler {
 			throw new ArtifactUnpackingException(e);
 		}
 	}
+	
+	
 
-	public static void uncompressAnArchive(File fileIn, File dirOut) {
+	private static void uncompressAnArchive(File fileIn, File dirOut) {
 		try {
 			FileInputStream fin = new FileInputStream(fileIn);
 			BufferedInputStream bis = new BufferedInputStream(fin);
-
+			
+			// CompressorStreamFactory csf = new CompressorStreamFactory();
+			// try (ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(new BufferedInputStream(csf.createCompressorInputStream(bis)))) {
 			try (ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(bis)) {
+
 				ArchiveEntry entry = null;
 
 				while ((entry = ais.getNextEntry()) != null) {
@@ -81,13 +89,13 @@ public class ArtifactHandler implements IArtifactHandler {
 					}
 				}
 			}
-		} catch (IOException | ArchiveException e) {
+		} catch (Exception e) {
 			log.error("Unable to fully uncompress {} to {}", fileIn, dirOut);
 			throw new ArtifactUnpackingException(e);
 		}
 	}
 
-	public static void uncompressAFile(File fileIn, File dirOut) {
+	private static void uncompressAFile(File fileIn, File dirOut) {
 		dirOut.mkdirs();
 		try {
 			FileInputStream fin = new FileInputStream(fileIn);
@@ -105,4 +113,7 @@ public class ArtifactHandler implements IArtifactHandler {
 		}
 	}
 
+	public static void main(String[] args) {
+		moveOrUnpackFileTo(new File("/tmp"), new File("/home/francois/Downloads/jdk-8u91-linux-x64.tar.gz"));
+	}
 }

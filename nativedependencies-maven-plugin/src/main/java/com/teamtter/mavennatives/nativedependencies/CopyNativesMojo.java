@@ -191,7 +191,7 @@ public class CopyNativesMojo extends AbstractMojo {
 	private void handleDependancyCopyingOrUnpacking(Artifact artifact, String classifier, UnpackedArtifactsInfo unpackedArtifactsInfo) {
 		log.info("Will unpack: " + artifactToString(artifact));
 		File unpackingDir = computeUnpackingDir(classifier);
-		artifactHandler.moveOrUnpackTo(unpackingDir, artifact);
+		artifactHandler.moveOrUnpackArtifactTo(unpackingDir, artifact);
 		unpackedArtifactsInfo.flagAsUnpacked(artifact.getFile());
 	}
 
