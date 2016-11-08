@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -65,8 +67,6 @@ public class ArtifactHandler implements IArtifactHandler {
 			throw new ArtifactUnpackingException(e);
 		}
 	}
-	
-	
 
 	private static void uncompressAnArchive(File fileIn, File dirOut) {
 		try {
@@ -77,6 +77,7 @@ public class ArtifactHandler implements IArtifactHandler {
 
 				ArchiveEntry entry = null;
 
+				List<TarArchiveEntry> tarEntriesSymlinks = new ArrayList<>();
 				while ((entry = ais.getNextEntry()) != null) {
 					if (entry.isDirectory()) {
 						// nothing, will be created if it contains files
@@ -89,17 +90,28 @@ public class ArtifactHandler implements IArtifactHandler {
 							TarArchiveEntry tarEntry = (TarArchiveEntry)entry;
 							if (tarEntry.isSymbolicLink()) {
 								isSpecialCase = true;
-								Files.createSymbolicLink(outFile.toPath(), new File(dirOut, tarEntry.getLinkName()).toPath());
+								log.info("File {} is a symlink", outFile);
+								tarEntriesSymlinks.add(tarEntry);
 							}
 						}
 						
 						if (!isSpecialCase) {	// special cases are already handled
+							log.info("File {} is not special", outFile);
 							try (OutputStream out = new FileOutputStream(outFile)) {
 								IOUtils.copy(ais, out);
 							}
 						}
 					}
 				}
+				
+				// Treat symlinks
+				for (TarArchiveEntry tarEntry : tarEntriesSymlinks) {
+					
+					File outFile = new File(dirOut, tarEntry.getName());					
+					Path linkTarget = new File(outFile.getParent(), tarEntry.getLinkName()).toPath();
+					Files.createSymbolicLink(outFile.toPath(), linkTarget);
+				}
+				
 			}
 		} catch (Exception e) {
 			log.error("Unable to fully uncompress {} to {}", fileIn, dirOut);

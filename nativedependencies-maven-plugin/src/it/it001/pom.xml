@@ -5,7 +5,7 @@
 
 	<groupId>com.teamtter.mavennatives.it001</groupId>
 	<artifactId>nativedependencies-it001</artifactId>
-	<version>1.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<description>Tests that provided native deps are used</description>
@@ -27,11 +27,11 @@
 							<osFilters>
 								<osFilter>
 									<osName>linux</osName>
-<!-- 									<osArch>64</osArch> -->
+									<!-- <osArch>64</osArch> -->
 									<suffix>linux</suffix>
 								</osFilter>
 							</osFilters>
-						
+
 						</configuration>
 					</execution>
 				</executions>
@@ -60,7 +60,14 @@
 			<classifier>natives-windows</classifier>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>test.groupId</groupId>
+			<artifactId>targz_lib_with_symlinks</artifactId>
+			<version>1.0.0</version>
+			<classifier>natives-linux</classifier>
+			<scope>system</scope>
+			<systemPath>${basedir}/archive.tar.gz</systemPath>
+		</dependency>
 	</dependencies>
-
 
 </project>
