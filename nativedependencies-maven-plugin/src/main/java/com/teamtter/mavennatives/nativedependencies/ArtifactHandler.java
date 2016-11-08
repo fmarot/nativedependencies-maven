@@ -6,12 +6,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
@@ -71,8 +73,6 @@ public class ArtifactHandler implements IArtifactHandler {
 			FileInputStream fin = new FileInputStream(fileIn);
 			BufferedInputStream bis = new BufferedInputStream(fin);
 			
-			// CompressorStreamFactory csf = new CompressorStreamFactory();
-			// try (ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(new BufferedInputStream(csf.createCompressorInputStream(bis)))) {
 			try (ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(bis)) {
 
 				ArchiveEntry entry = null;
@@ -83,8 +83,20 @@ public class ArtifactHandler implements IArtifactHandler {
 					} else {
 						File outFile = new File(dirOut, entry.getName());
 						outFile.getParentFile().mkdirs();
-						try (OutputStream out = new FileOutputStream(outFile)) {
-							IOUtils.copy(ais, out);
+						
+						boolean isSpecialCase = false;
+						if (entry instanceof TarArchiveEntry) {
+							TarArchiveEntry tarEntry = (TarArchiveEntry)entry;
+							if (tarEntry.isSymbolicLink()) {
+								isSpecialCase = true;
+								Files.createSymbolicLink(outFile.toPath(), new File(dirOut, tarEntry.getLinkName()).toPath());
+							}
+						}
+						
+						if (!isSpecialCase) {	// special cases are already handled
+							try (OutputStream out = new FileOutputStream(outFile)) {
+								IOUtils.copy(ais, out);
+							}
 						}
 					}
 				}
@@ -114,6 +126,8 @@ public class ArtifactHandler implements IArtifactHandler {
 	}
 
 	public static void main(String[] args) {
-		moveOrUnpackFileTo(new File("/tmp"), new File("/home/francois/Downloads/jdk-8u91-linux-x64.tar.gz"));
+		String destDir = "/media/vg1-data/Downloads/mvntest/out/";
+		String sourceFile = "/media/vg1-data/Downloads/mvntest/archive.tar.gz";
+		moveOrUnpackFileTo(new File(destDir), new File(sourceFile));
 	}
 }
