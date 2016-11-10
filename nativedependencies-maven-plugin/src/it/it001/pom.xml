@@ -24,13 +24,13 @@
 							<goal>copy</goal>
 						</goals>
 						<configuration>
-							<osFilters>
-								<osFilter>
-									<osName>linux</osName>
+<!-- 							<osFilters> -->
+<!-- 								<osFilter> -->
+<!-- 									<osName>linux</osName> -->
 									<!-- <osArch>64</osArch> -->
-									<suffix>linux</suffix>
-								</osFilter>
-							</osFilters>
+<!-- 									<suffix>linux</suffix> -->
+<!-- 								</osFilter> -->
+<!-- 							</osFilters> -->
 
 						</configuration>
 					</execution>

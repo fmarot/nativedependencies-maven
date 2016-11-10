@@ -114,10 +114,12 @@ public class CopyNativesMojo extends AbstractMojo {
 			}
 			OsFilter thisComputer = new OsFilter(OsFilter.OS, null, getbasicOsTrigramm(OsFilter.OS));
 			osFilters.add(thisComputer);
+			log.info("autoDetectOSNatives = true");
 		} else if (osFilters.size() == 0) {
+			log.info("AcceptEverythingOsFilter will be used");
 			osFilters.add(new AcceptEverythingOsFilter()); // we will handle ALL native deps
 		} else {
-			log.debug("{} OS filters have been defined", osFilters.size());
+			log.info("{} OS filters have been defined", osFilters.size());
 		}
 	}
 
@@ -144,8 +146,11 @@ public class CopyNativesMojo extends AbstractMojo {
 				String classifier = artifact.getClassifier();
 				if (classifierMatchesConfig(classifier) && !artifactAlreadyUnpacked(unpackedArtifactsInfo, artifact)) {
 					log.info("{} => ok", artifactToString(artifact));
+					int i = 0;
 					handleDependancyCopyingOrUnpacking(artifact, classifier, unpackedArtifactsInfo);
 					atLeastOneartifactCopied = true;
+					i++;
+					
 				} else {
 					log.info("{} => ko, native will be filtered out", artifactToString(artifact));
 				}

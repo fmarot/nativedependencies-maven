@@ -90,13 +90,13 @@ public class ArtifactHandler implements IArtifactHandler {
 							TarArchiveEntry tarEntry = (TarArchiveEntry)entry;
 							if (tarEntry.isSymbolicLink()) {
 								isSpecialCase = true;
-								log.info("File {} is a symlink", outFile);
+								log.debug("File {} is a symlink", outFile);
 								tarEntriesSymlinks.add(tarEntry);
 							}
 						}
 						
 						if (!isSpecialCase) {	// special cases are already handled
-							log.info("File {} is not special", outFile);
+							log.debug("File {} is not special", outFile);
 							try (OutputStream out = new FileOutputStream(outFile)) {
 								IOUtils.copy(ais, out);
 							}
@@ -106,10 +106,13 @@ public class ArtifactHandler implements IArtifactHandler {
 				
 				// Treat symlinks
 				for (TarArchiveEntry tarEntry : tarEntriesSymlinks) {
-					
 					File outFile = new File(dirOut, tarEntry.getName());					
 					Path linkTarget = new File(outFile.getParent(), tarEntry.getLinkName()).toPath();
-					Files.createSymbolicLink(outFile.toPath(), linkTarget);
+					try {
+						Files.createSymbolicLink(outFile.toPath(), linkTarget);
+					} catch (Exception e) {
+						log.warn("Unable to create symlink {} -> {} (maybe OS/filesystem does not support it ?)", outFile.toPath(), linkTarget);
+					}
 				}
 				
 			}
