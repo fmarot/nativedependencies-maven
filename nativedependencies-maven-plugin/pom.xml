@@ -56,8 +56,9 @@
 		<url>git@github.com:fmarot/mavennatives.git</url>
 	</scm>
 
+<!--
 	<distributionManagement>
-		<!-- To deploy to Maven Central, if you are using the Maven deploy plugin, which is the default behavior, we need this "distributionManagement" section. -->
+		< ! - - To deploy to Maven Central, if you are using the Maven deploy plugin, which is the default behavior, we need this "distributionManagement" section. - - >
 		<snapshotRepository>
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
@@ -66,6 +67,19 @@
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
+	</distributionManagement>
+-->	
+	<distributionManagement>
+		<repository>
+			<id>archiva.internal</id>
+			<name>Internal Release Repository</name>
+			<url>http://centos-dev:8090/repository/internal/</url>
+		</repository>
+		<snapshotRepository>
+			<id>archiva.snapshots</id>
+			<name>Internal Snapshot Repository</name>
+			<url>http://centos-dev:8090/repository/snapshots/</url>
+		</snapshotRepository>
 	</distributionManagement>
 
 	<build>
@@ -145,11 +159,11 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.1</version>
-					<configuration>
+					<version>2.5.3</version>
+					<configuration><!-- 
 						<mavenExecutorId>forked-path</mavenExecutorId>
 						<useReleaseProfile>false</useReleaseProfile>
-						<arguments>-Pgpgsign,mavennativesgpg</arguments>
+						<arguments>-Pgpgsign,mavennativesgpg</arguments> -->
 					</configuration>
 				</plugin>
 			</plugins>
@@ -349,6 +363,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 
 </project>
