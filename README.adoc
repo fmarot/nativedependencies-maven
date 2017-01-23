@@ -12,7 +12,7 @@ This Maven plugin will unpack the native dependencies (usually .so files on Linu
 
 Those "native" dependencies are recognized thanks to the https://books.sonatype.com/mvnref-book/reference/profiles-sect-tips-tricks.html#profiles-sect-platform-classifier[Maven classifier] which *must* start with the "natives-" prefix.
 
-If those artifacts are .zip, .tgz, .7z or any other recognized format, their content will be transparently extracted (optionnaly in different subdirectories) in target/natives/ directory.
+If those artifacts are .zip, .tgz, .7z or any other recognized format, their content will be transparently extracted (optionally in different subdirectories) in target/natives/ directory.
 
 By default, in case of a multi module project, we will unpack all natives dependencies to the same dir located at the root of the project
 (thus saving space and unzip time while allowing all interdependent projects to benefit from the presence of native libs)
