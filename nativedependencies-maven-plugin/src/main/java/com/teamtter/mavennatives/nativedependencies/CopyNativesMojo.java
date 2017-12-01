@@ -144,7 +144,9 @@ public class CopyNativesMojo extends AbstractMojo {
 			Set<Artifact> artifacts = mavenProject.getArtifacts(); // warning: depending on the phase, come may be missing, see MavenProject javadoc
 			for (Artifact artifact : artifacts) {
 				String classifier = artifact.getClassifier();
-				if (classifierMatchesConfig(classifier) && !artifactAlreadyUnpacked(unpackedArtifactsInfo, artifact)) {
+				if (artifactAlreadyUnpacked(unpackedArtifactsInfo, artifact)) {
+					log.info("{} is already unpacked", artifactToString(artifact));
+				} else if (classifierMatchesConfig(classifier)) {
 					log.info("{} => ok", artifactToString(artifact));
 					int i = 0;
 					handleDependancyCopyingOrUnpacking(artifact, classifier, unpackedArtifactsInfo);
