@@ -15,6 +15,8 @@ import java.util.List;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
+import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorInputStream;
@@ -28,20 +30,26 @@ import org.codehaus.plexus.component.annotations.Component;
 import lombok.extern.slf4j.Slf4j;
 
 @Component(role = IArtifactHandler.class)
-@Slf4j // Starting with Maven 3.1.0, SLF4J Logger can be used directly too, without Plexus
+@Slf4j // Starting with Maven 3.1.0, SLF4J Logger can be used directly too, without
+		// Plexus
 public class ArtifactHandler implements IArtifactHandler {
 
-	private static List<String> zipLikeExtensions = Arrays.asList("jar", "zip", "gz", "7z", "7zip");
+	private static List<String> zipLikeExtensions = Arrays.asList("jar", "zip", "gz");
 
 	private static List<String> tarGzExensions = Arrays.asList("tar.gz", "tgz");
 
-	/** Wraps any Exception encountered into an ArtifactUnpackingException which is a RUNTIME Exception */
+	private static List<String> _7zExtensions = Arrays.asList("7z", "7zip");
+
+	/**
+	 * Wraps any Exception encountered into an ArtifactUnpackingException which is a
+	 * RUNTIME Exception
+	 */
 	@Override
 	public void moveOrUnpackArtifactTo(File unpackingDir, Artifact artifact) {
 		File artifactFile = artifact.getFile();
 		moveOrUnpackFileTo(unpackingDir, artifactFile);
 	}
-	
+
 	public static void moveOrUnpackFileTo(File unpackingDir, File artifactFile) {
 		String fileName = artifactFile.getName();
 		String extension = FilenameUtils.getExtension(fileName);
@@ -57,6 +65,9 @@ public class ArtifactHandler implements IArtifactHandler {
 			} else if (zipLikeExtensions.contains(extension)) {
 				log.info("Artifact {} will be uncompressed as zip-like to {}", artifactFile, unpackingDir);
 				uncompressAnArchive(artifactFile, unpackingDir);
+			} else if (_7zExtensions.contains(extension)) {
+				log.info("Artifact {} will be uncompressed as 7z to {}", artifactFile, unpackingDir);
+				uncompress7zArchive(artifactFile, unpackingDir);
 			} else {
 				log.info("Artifact {} can not be unpacked, will be moved as is to {}", artifactFile, unpackingDir);
 				File targetFile = new File(unpackingDir, fileName);
@@ -68,11 +79,36 @@ public class ArtifactHandler implements IArtifactHandler {
 		}
 	}
 
+	private static void uncompress7zArchive(File artifactFile, File unpackingDir) {
+		try {
+			SevenZFile sevenZFile = new SevenZFile(artifactFile);
+			SevenZArchiveEntry entry = sevenZFile.getNextEntry();
+			
+			while (entry != null) {
+				File entryFile = new File(unpackingDir, entry.getName());
+				if (entry.isDirectory()) {
+					entryFile.mkdirs();
+				} else {
+					FileOutputStream out = new FileOutputStream(entryFile);
+					byte[] content = new byte[(int) entry.getSize()];
+					sevenZFile.read(content, 0, content.length);
+					out.write(content);
+					out.close();
+				}
+				entry = sevenZFile.getNextEntry();
+			}
+			sevenZFile.close();
+		} catch (Exception e) {
+			log.error("Unable to fully uncompress {} to {}", artifactFile, unpackingDir);
+			throw new ArtifactUnpackingException(e);
+		}
+	}
+
 	private static void uncompressAnArchive(File fileIn, File dirOut) {
 		try {
 			FileInputStream fin = new FileInputStream(fileIn);
 			BufferedInputStream bis = new BufferedInputStream(fin);
-			
+
 			try (ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(bis)) {
 
 				ArchiveEntry entry = null;
@@ -84,18 +120,18 @@ public class ArtifactHandler implements IArtifactHandler {
 					} else {
 						File outFile = new File(dirOut, entry.getName());
 						outFile.getParentFile().mkdirs();
-						
+
 						boolean isSpecialCase = false;
 						if (entry instanceof TarArchiveEntry) {
-							TarArchiveEntry tarEntry = (TarArchiveEntry)entry;
+							TarArchiveEntry tarEntry = (TarArchiveEntry) entry;
 							if (tarEntry.isSymbolicLink()) {
 								isSpecialCase = true;
 								log.debug("File {} is a symlink", outFile);
 								tarEntriesSymlinks.add(tarEntry);
 							}
 						}
-						
-						if (!isSpecialCase) {	// special cases are already handled
+
+						if (!isSpecialCase) { // special cases are already handled
 							log.debug("File {} is not special", outFile);
 							try (OutputStream out = new FileOutputStream(outFile)) {
 								IOUtils.copy(ais, out);
@@ -103,18 +139,19 @@ public class ArtifactHandler implements IArtifactHandler {
 						}
 					}
 				}
-				
+
 				// Treat symlinks
 				for (TarArchiveEntry tarEntry : tarEntriesSymlinks) {
-					File outFile = new File(dirOut, tarEntry.getName());					
+					File outFile = new File(dirOut, tarEntry.getName());
 					Path linkTarget = new File(outFile.getParent(), tarEntry.getLinkName()).toPath();
 					try {
 						Files.createSymbolicLink(outFile.toPath(), linkTarget);
 					} catch (Exception e) {
-						log.warn("Unable to create symlink {} -> {} (maybe OS/filesystem does not support it ?)", outFile.toPath(), linkTarget);
+						log.warn("Unable to create symlink {} -> {} (maybe OS/filesystem does not support it ?)",
+								outFile.toPath(), linkTarget);
 					}
 				}
-				
+
 			}
 		} catch (Exception e) {
 			log.error("Unable to fully uncompress {} to {}", fileIn, dirOut);
