@@ -19,6 +19,9 @@ By default, in case of a multi module project, we will unpack all natives depend
 
 == Eclipse plugin (Eclipse M2E Extension)
 
+WARNING: this Eclipse extension is not actively used not developped.
+It is kept as a base for possible improvements because it could be usefull if improved.
+
 In order to ease the development from within your Eclipse IDE, we have a plugin to automatically add the path to the "natives" directory to "Native library location" of the project (hence -Djava.library.path).
 
 This plugin is an M2E extension that acts on Maven projects using the "nativedependencies-maven-plugin".
@@ -99,8 +102,11 @@ The plugin is available from Maven Central, just add the following snippet to yo
 	</executions>
 	<configuration>
 		<skip>false</skip>
+		<!-- autoDetectDirUpInFilesystem is documented below-->
+		<autoDetectDirUpInFilesystem>true</autoDetectDirUpInFilesystem>
 		<autoDetectOSNatives>false</autoDetectOSNatives> <!-- if 'true' then you don't need the 'osFilters' list -->
 														<!-- we advise you set 'autoDetectOSNatives' to true and forget about osFilters -->
+															
 		<!-- <nativesTargetDir>${session.executionRootDirectory}/target/natives</nativesTargetDir> -->
 		<!-- <separateDirs>true</separateDirs> -->
 		<osFilters>
@@ -125,6 +131,8 @@ TODO
 
 == Multi module Maven project
 
+=== the old way
+
 By default, as you can see commented above (parameter 'nativesTargetDir'), the default directory will be "${session.executionRootDirectory}/target/natives".
 
 This means that in a multi-module configuration, you can have all you native dependencies extracted alongside the main pom in ./target/natives.
@@ -132,6 +140,31 @@ This means that in a multi-module configuration, you can have all you native dep
 This allows you to have a single location where are stored all your native libs, as long as you always run maven related commands *FROM THE ROOT DIRECTORY*.
 
 If you want to target a specific child module, you can use the --projects parameter: mvn install --projects my-child-module
+
+=== the new way
+
+But in the real world you sometimes run child-modules directly from their own directory.
+Then you would loose time unzipping the native dependencies each time in a different child.
+So we introduced the 'autoDetectDirUpInFilesystem' parameter. It will (try to) autodetect the root of your maven tree and always unzip in the target/native directory alongside your parent pom. Even when you run Maven from a child module.
+
+WARNING: implementation is quite naive and handles only tree file structure like this:
+
+[source,xml]
+-------------------------------------------
+parent-module
+  |
+  |- pom.xml
+  |- child module 1
+  |     |
+  |     |- pom.xml
+  |
+  |--child parent module
+        |- pom.xml
+        |
+        |- lowest child module
+              |
+              |- pom.xml   
+-------------------------------------------
 
  
 = How to use the Eclipse M2E extension
