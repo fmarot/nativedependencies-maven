@@ -17,12 +17,16 @@ package com.teamtter.mavennatives.nativedependencies;
  */
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Parent;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -55,7 +59,6 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Setter
 	private MavenProject mavenProject;
 
-	// @Parameter(property = "nativesTargetDir", defaultValue = "${project.build.directory}/natives")
 	/**
 	 * by default, in case of a multi module project, we will unpack ALL NATIVES to
 	 * the same dir, thus saving space and unzip time while allowing all interdependent
@@ -72,6 +75,20 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Parameter(property = "autoDetectOSNatives", defaultValue = "false")
 	@Setter
 	private boolean autoDetectOSNatives;
+	
+	/**
+	 * If set to true, this parameter will override any value set for {@link #nativesTargetDir}.
+	 * In this case (true), the plugin will try to find the directory of the upper parent pom ('upperPomDir')
+	 * by going up in the filesystem.
+	 * Once this 'upperPomDir' is found, then the $upperPomDir/target/natives directory will be used
+	 * instead of whatever nativesTargetDir was previously set.
+	 * This should simplify a LOT the builds in multi-module projects to unpack everything
+	 * in the same place, whether you are executing mvn from the $nativesTargetDir or directly inside
+	 * a child module.
+	 */
+	@Parameter(property = "autoDetectDirUpInFilesystem", defaultValue = "false")
+	@Setter
+	private boolean autoDetectDirUpInFilesystem;
 
 	@Parameter(property = "skip", defaultValue = "false")
 	@Setter
@@ -100,11 +117,60 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		initOsFiltersIfNeeded();
+		
+		overrideNativesTargetDirIfNeeded();
+		
 		if (skip) {
 			log.info("Skipping execution due to 'skip' == true");
 		} else {
 			copyNativeDependencies();
 		}
+	}
+
+	private void overrideNativesTargetDirIfNeeded() {
+		if (autoDetectDirUpInFilesystem) {
+			nativesTargetDir = new File(lookupUpperParentPom().getParentFile(), "/target/natives/");
+			log.info("nativesTargetDir overriden with {}", nativesTargetDir);
+		}
+	}
+
+	private File lookupUpperParentPom() {
+		File currentPom = new File(mavenProject.getBasedir(), "pom.xml");
+		try {
+	        boolean upperPomFound = false;
+	        while (!upperPomFound) {
+				MavenXpp3Reader currentReader = new MavenXpp3Reader();
+	        	Model currentModel = currentReader.read(new FileReader(currentPom));
+	        	Parent parent = currentModel.getParent();
+	        	if (parent == null) {
+	        		log.info("current pom has no parent and is THE upper pom: {}", currentPom);
+	        		upperPomFound = true;	// upper Pom is 'currentPom'
+	        	} else {
+					String parentGroupId = parent.getGroupId();
+		            String parentArtifactId = parent.getArtifactId();
+		        	File possibleParentPom = new File(currentPom.getParentFile().getParentFile(), "pom.xml");
+			        if (possibleParentPom.exists()) {
+						MavenXpp3Reader possibleParentReader = new MavenXpp3Reader();
+				        Model possibleParentModel = possibleParentReader.read(new FileReader(possibleParentPom));
+				        String possibleParentGroupId = possibleParentModel.getGroupId();
+				        String possibleParentArtifactId = possibleParentModel.getArtifactId();
+				        if (possibleParentGroupId.equals(parentGroupId) && possibleParentArtifactId.equals(parentArtifactId)) {
+				        	currentPom = possibleParentPom;
+				        } else {
+				        	log.info("{} is not parent of {}", possibleParentPom, currentPom);
+				        	upperPomFound = true;	// upper Pom is 'currentPom'
+				        }
+			        } else {
+			        	upperPomFound = true;	// upper Pom is 'currentPom'
+			        }
+	        	}
+	        }
+		} catch (Exception e) {
+			log.warn("Exception looking for parent pom.", e);
+		}
+        log.info("found upper pom: {} ", currentPom);
+		
+		return currentPom;
 	}
 
 	private void initOsFiltersIfNeeded() {
@@ -145,16 +211,16 @@ public class CopyNativesMojo extends AbstractMojo {
 			for (Artifact artifact : artifacts) {
 				String classifier = artifact.getClassifier();
 				if (artifactAlreadyUnpacked(unpackedArtifactsInfo, artifact)) {
-					log.info("{} is already unpacked", artifactToString(artifact));
+					log.debug("{} is already unpacked", artifactToString(artifact));
 				} else if (classifierMatchesConfig(classifier)) {
-					log.info("{} => ok", artifactToString(artifact));
+					log.debug("{} => ok", artifactToString(artifact));
 					int i = 0;
 					handleDependancyCopyingOrUnpacking(artifact, classifier, unpackedArtifactsInfo);
 					atLeastOneartifactCopied = true;
 					i++;
 					
 				} else {
-					log.info("{} => ko, native will be filtered out", artifactToString(artifact));
+					log.debug("{} => ko, native will be filtered out", artifactToString(artifact));
 				}
 			}
 
@@ -225,9 +291,9 @@ public class CopyNativesMojo extends AbstractMojo {
 		}
 
 		boolean prefixMatches = classifier != null && classifier.startsWith(NATIVES_PREFIX);
-		log.info("prefixMatches={}", prefixMatches);
+		log.debug("prefixMatches={}", prefixMatches);
 		String suffix = classifier.replace(NATIVES_PREFIX, "");
-		log.info("suffix = {}", suffix);
+		log.debug("suffix = {}", suffix);
 		boolean suffixMatchesCurrentOs = false;
 		for (OsFilter filter : osFilters) {
 			// if at least one filter matches the current os/arch then handle this artifact
