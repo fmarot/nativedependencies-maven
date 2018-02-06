@@ -13,6 +13,6 @@
 	<modules>
 		<module>nativedependencies-maven-plugin</module>
 		<module>nativedependencies-maven-example</module>
-		<module>m2eclipse-mavennatives-integration</module>
+		<!-- <module>m2eclipse-mavennatives-integration</module>  -->
 	</modules>
 </project>
