@@ -71,7 +71,7 @@ The plugin is available from Maven Central, just add the following snippet to yo
 				<dependency>
 				    <groupId>com.teamtter.mavennatives</groupId>
 				    <artifactId>nativedependencies-maven-plugin</artifactId>
-				    <version>1.0.1</version>
+				    <version>1.0.4</version>
 				    <executions>
 				<execution>
 				...
@@ -90,7 +90,7 @@ The plugin is available from Maven Central, just add the following snippet to yo
 <plugin>
 	<groupId>com.teamtter.mavennatives</groupId>
 	<artifactId>nativedependencies-maven-plugin</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.4</version>
 	<executions>
 		<execution>
 			<id>unpacknatives</id>
