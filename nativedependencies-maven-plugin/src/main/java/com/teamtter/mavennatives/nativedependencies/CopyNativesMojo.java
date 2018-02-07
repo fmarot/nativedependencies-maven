@@ -130,8 +130,10 @@ public class CopyNativesMojo extends AbstractMojo {
 	private void overrideNativesTargetDirIfNeeded() {
 		if (autoDetectDirUpInFilesystem) {
 			nativesTargetDir = new File(lookupUpperParentPom().getParentFile(), "/target/natives/");
-			log.info("nativesTargetDir overriden with {}", nativesTargetDir);
+			log.debug("nativesTargetDir overriden with {}", nativesTargetDir);
 		}
+		mavenProject.getProperties().put("nativesTargetDir", nativesTargetDir.toString());
+		log.info("Natives will be saved in {} " + (separateDirs ? " and separated dirs according to classifier" : ""), nativesTargetDir );
 	}
 
 	private File lookupUpperParentPom() {
@@ -143,7 +145,7 @@ public class CopyNativesMojo extends AbstractMojo {
 	        	Model currentModel = currentReader.read(new FileReader(currentPom));
 	        	Parent parent = currentModel.getParent();
 	        	if (parent == null) {
-	        		log.info("current pom has no parent and is THE upper pom: {}", currentPom);
+	        		log.trace("current pom has no parent and is THE upper pom: {}", currentPom);
 	        		upperPomFound = true;	// upper Pom is 'currentPom'
 	        	} else {
 					String parentGroupId = parent.getGroupId();
@@ -168,7 +170,7 @@ public class CopyNativesMojo extends AbstractMojo {
 		} catch (Exception e) {
 			log.warn("Exception looking for parent pom.", e);
 		}
-        log.info("found upper pom: {} ", currentPom);
+        log.debug("found upper pom: {} ", currentPom);
 		
 		return currentPom;
 	}
@@ -180,9 +182,9 @@ public class CopyNativesMojo extends AbstractMojo {
 			}
 			OsFilter thisComputer = new OsFilter(OsFilter.OS, null, getbasicOsTrigramm(OsFilter.OS));
 			osFilters.add(thisComputer);
-			log.info("autoDetectOSNatives = true");
+			log.debug("autoDetectOSNatives = true");
 		} else if (osFilters.size() == 0) {
-			log.info("AcceptEverythingOsFilter will be used");
+			log.debug("AcceptEverythingOsFilter will be used");
 			osFilters.add(new AcceptEverythingOsFilter()); // we will handle ALL native deps
 		} else {
 			log.info("{} OS filters have been defined", osFilters.size());
@@ -205,8 +207,6 @@ public class CopyNativesMojo extends AbstractMojo {
 		boolean atLeastOneartifactCopied = false;
 		UnpackedArtifactsInfo unpackedArtifactsInfo = loadAlreadyUnpackedArtifactsInfo();
 		try {
-			log.info("Saving natives in " + nativesTargetDir + (separateDirs ? "separated dirs according to classifier" : ""));
-
 			Set<Artifact> artifacts = mavenProject.getArtifacts(); // warning: depending on the phase, come may be missing, see MavenProject javadoc
 			for (Artifact artifact : artifacts) {
 				String classifier = artifact.getClassifier();

@@ -147,6 +147,8 @@ But in the real world you sometimes run child-modules directly from their own di
 Then you would loose time unzipping the native dependencies each time in a different child.
 So we introduced the 'autoDetectDirUpInFilesystem' parameter. It will (try to) autodetect the root of your maven tree and always unzip in the target/native directory alongside your parent pom. Even when you run Maven from a child module.
 
+Now variable ${nativesTargetDir} reference the location. Usefull in pom. It's usefull to configure the exec Maven plugin for exemple.
+
 WARNING: implementation is quite naive and handles only tree file structure like this:
 
 [source,xml]

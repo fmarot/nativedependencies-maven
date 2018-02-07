@@ -4,7 +4,7 @@
 	<groupId>com.teamtter.mavennatives</groupId>
 	<artifactId>nativedependencies-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>1.0.4</version>
+	<version>1.0.5-SNAPSHOT</version>
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>This plugin allows the automatic unpacking of natives in jars depending on a classifier with a certain pattern.
@@ -56,8 +56,9 @@
 	  <tag>HEAD</tag>
   </scm>
 
+<!-- 
 	<distributionManagement>
-		<!-- To deploy to Maven Central, if you are using the Maven deploy plugin, which is the default behavior, we need this "distributionManagement" section. -->
+		< ! - - To deploy to Maven Central, if you are using the Maven deploy plugin, which is the default behavior, we need this "distributionManagement" section. - - >
 		<snapshotRepository>
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
@@ -67,7 +68,8 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
-<!-- 
+	-->
+
 	<distributionManagement>
 		<repository>
 			<id>archiva.internal</id>
@@ -80,7 +82,7 @@
 			<url>http://centos-dev:8090/repository/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
- -->
+
 	<build>
 		<plugins>
 			<plugin>
