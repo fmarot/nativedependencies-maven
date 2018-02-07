@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.teamtter.mavennatives</groupId>
 	<artifactId>nativedependencies-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>1.0.5-SNAPSHOT</version>
+	<version>1.0.5</version>
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>This plugin allows the automatic unpacking of natives in jars depending on a classifier with a certain pattern.
@@ -18,15 +19,15 @@
 
 		<compiler.source>1.7</compiler.source>
 		<compiler.target>1.7</compiler.target>
-		
-		<compiler.plugin.version>3.3</compiler.plugin.version>
-		<resources.plugin.version>2.7</resources.plugin.version>
-		<plugin.plugin.version>3.4</plugin.plugin.version>
-		<plexus.component.metadata.version>1.5.5</plexus.component.metadata.version>
-		<source.plugin.version>2.1.2</source.plugin.version>
-		<javadoc.plugin.version>2.7</javadoc.plugin.version>
-		<invoker.plugin.version>2.0.0</invoker.plugin.version>
-		
+
+		<compiler.plugin.version>3.7.0</compiler.plugin.version>
+		<resources.plugin.version>3.0.2</resources.plugin.version>
+		<plugin.plugin.version>3.5.1</plugin.plugin.version>
+		<plexus.component.metadata.version>1.7.1</plexus.component.metadata.version>
+		<source.plugin.version>3.0.1</source.plugin.version>
+		<javadoc.plugin.version>3.0.0</javadoc.plugin.version>
+		<invoker.plugin.version>3.0.1</invoker.plugin.version>
+
 		<commons.compress.version>1.12</commons.compress.version>
 		<tukaani.xz.version>1.5</tukaani.xz.version>
 		<jackson.version>2.6.0</jackson.version>
@@ -53,24 +54,11 @@
 		<connection>scm:git:git@github.com:fmarot/mavennatives.git</connection>
 		<developerConnection>scm:git:git@github.com:fmarot/mavennatives.git</developerConnection>
 		<url>git@github.com:fmarot/mavennatives.git</url>
-	  <tag>HEAD</tag>
-  </scm>
-
-<!-- 
-	<distributionManagement>
-		< ! - - To deploy to Maven Central, if you are using the Maven deploy plugin, which is the default behavior, we need this "distributionManagement" section. - - >
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement>
-	-->
+		<tag>HEAD</tag>
+	</scm>
 
 	<distributionManagement>
+		<!-- at work... -->
 		<repository>
 			<id>archiva.internal</id>
 			<name>Internal Release Repository</name>
@@ -161,10 +149,8 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
 					<version>2.5.3</version>
-					<configuration><!-- 
-						<mavenExecutorId>forked-path</mavenExecutorId>
-						<useReleaseProfile>false</useReleaseProfile>
-						<arguments>-Pgpgsign,mavennativesgpg</arguments> -->
+					<configuration><!-- <mavenExecutorId>forked-path</mavenExecutorId> <useReleaseProfile>false</useReleaseProfile> 
+							<arguments>-Pgpgsign,mavennativesgpg</arguments> -->
 					</configuration>
 				</plugin>
 			</plugins>
@@ -173,8 +159,8 @@
 
 	<profiles>
 		<!-- To deploy on central just run "mvn clean deploy -P gpgsign" -->
-		<!-- Then go to https://oss.sonatype.org/#stagingRepositories
-		and select "close" then "release" -->
+		<!-- Then go to https://oss.sonatype.org/#stagingRepositories and select 
+			"close" then "release" -->
 		<profile>
 			<id>gpgsign</id>
 			<build>
@@ -182,7 +168,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.1</version>
+						<version>1.6</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
@@ -193,7 +179,7 @@
 							</execution>
 						</executions>
 					</plugin>
-					
+
 					<plugin>
 						<!-- used to generate & deploy javadoc -->
 						<groupId>org.apache.maven.plugins</groupId>
@@ -210,8 +196,21 @@
 					</plugin>
 				</plugins>
 			</build>
+
+			<!-- To deploy to Maven Central, if you are using the Maven deploy plugin, 
+				which is the default behavior, we need this "distributionManagement" section. -->
+			<distributionManagement>
+				<snapshotRepository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+				<repository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+				</repository>
+			</distributionManagement>
 		</profile>
-		
+
 		<profile>
 			<id>run-its</id> <!-- run Integration Tests -->
 			<activation>
@@ -247,7 +246,7 @@
 	</profiles>
 
 	<dependencies>
-	
+
 		<!-- Required to unzip/untar & all -->
 
 		<dependency>
@@ -260,7 +259,7 @@
 			<artifactId>xz</artifactId>
 			<version>${tukaani.xz.version}</version>
 		</dependency>
-		
+
 		<!-- read/write JSON -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -276,36 +275,16 @@
 			<version>3.4</version>
 			<scope>provided</scope> <!-- It comes from maven itself -->
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.maven</groupId> -->
-<!-- 			<artifactId>maven-artifact</artifactId> -->
-<!-- 			<version>${maven.version}</version> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-plugin-api</artifactId>
 			<version>${maven.version}</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.maven</groupId> -->
-<!-- 			<artifactId>maven-project</artifactId> -->
-<!-- 			<version>2.2.1</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.maven</groupId> -->
-<!-- 			<artifactId>maven-model</artifactId> -->
-<!-- 			<version>${maven.version}</version> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-core</artifactId>
 			<version>${maven.version}</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.apache.maven.plugin-testing</groupId> -->
-<!-- 			<artifactId>maven-plugin-testing-harness</artifactId> -->
-<!-- 			<version>3.3.0</version> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<!-- gives access to "BuildContext" -->
 			<groupId>org.sonatype.plexus</groupId>
@@ -342,7 +321,7 @@
 			<artifactId>lombok</artifactId>
 			<version>1.16.8</version>
 		</dependency>
-		
+
 		<!-- Test libs -->
 
 		<dependency>

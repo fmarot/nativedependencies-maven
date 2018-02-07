@@ -116,13 +116,15 @@ public class CopyNativesMojo extends AbstractMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		initOsFiltersIfNeeded();
-		
-		overrideNativesTargetDirIfNeeded();
-		
 		if (skip) {
 			log.info("Skipping execution due to 'skip' == true");
 		} else {
+			initOsFiltersIfNeeded();
+			
+			overrideNativesTargetDirIfNeeded();
+			mavenProject.getProperties().put("nativesTargetDir", nativesTargetDir.toString());
+			log.info("Natives will be saved in {} " + (separateDirs ? " and separated dirs according to classifier" : ""), nativesTargetDir );
+		
 			copyNativeDependencies();
 		}
 	}
@@ -132,8 +134,6 @@ public class CopyNativesMojo extends AbstractMojo {
 			nativesTargetDir = new File(lookupUpperParentPom().getParentFile(), "/target/natives/");
 			log.debug("nativesTargetDir overriden with {}", nativesTargetDir);
 		}
-		mavenProject.getProperties().put("nativesTargetDir", nativesTargetDir.toString());
-		log.info("Natives will be saved in {} " + (separateDirs ? " and separated dirs according to classifier" : ""), nativesTargetDir );
 	}
 
 	private File lookupUpperParentPom() {
