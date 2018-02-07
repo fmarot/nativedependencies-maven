@@ -12,52 +12,15 @@ This Maven plugin will unpack the native dependencies (usually .so files on Linu
 
 Those "native" dependencies are recognized thanks to the https://books.sonatype.com/mvnref-book/reference/profiles-sect-tips-tricks.html#profiles-sect-platform-classifier[Maven classifier] which *must* start with the "natives-" prefix.
 
-If those artifacts are .zip, .tgz, .7z or any other recognized format, their content will be transparently extracted (optionally in different subdirectories) in target/natives/ directory.
+If those artifacts are .zip, .tgz, (.7z are not fully supported) or any other recognized format, their content will be transparently extracted (optionally in different subdirectories) in target/natives/ directory.
 
-By default, in case of a multi module project, we will unpack all natives dependencies to the same dir located at the root of the project
+By default, in case of a multi module project, we will unpack all natives dependencies to the same dir 
 (thus saving space and unzip time while allowing all interdependent projects to benefit from the presence of native libs)
 
-== Eclipse plugin (Eclipse M2E Extension)
 
-WARNING: this Eclipse extension is not actively used not developped.
-It is kept as a base for possible improvements because it could be usefull if improved.
+== How to use
 
-In order to ease the development from within your Eclipse IDE, we have a plugin to automatically add the path to the "natives" directory to "Native library location" of the project (hence -Djava.library.path).
-
-This plugin is an M2E extension that acts on Maven projects using the "nativedependencies-maven-plugin".
- 
-image:./doc/eclipsePluginResult.png[using the nativedependencies-maven-plugin m2e extension in Eclipse]
-
-However, it currently does not set the LD_LIBRARY_PATH (on Linux) nor the PATH (on Windows) so native code trying to load it's own native dependencies will not work automagically.
-In this case you'll have to set the variable before launching Eclipse.
-
-== About the project
-
-This is a fork of the previously existing https://code.google.com/p/mavennatives/[Maven Native Dependencies] project which was at version 0.0.7.
-
-The maven plugin has then been renamed to "nativedependencies-maven-plugin" to follow Apache Maven conventions and groupId changed to "com.teamtter.mavennatives".
-
-Big thanks to the original writers of Maven Native Dependencies.
-
-Reasons for forking original project:
-
-* add finer grain control over what natives dependencies will be unpacked.
-* familiarize myself with the dev of Maven plugins.
-* improve eclipse plugin (NOT done at the moment)
-* finally find a way to prevent each and every project using native libs to have to manually (god I hate this word!) configure the -Djava.library.path and LD_LIBRARY_PATH
-
-Current features added to original plugin:
-
-* use GitHub instead of the dead Google Code 
-* more modern code using annotations
-* parameter to be able to skip the plugin execution (overridable through a variable)
-* add parameters to auto-detect platform and get only platform specific libs
-* transparently handle misc compression format (zip, tar, tgz, 7zip...) and single file not compressed deps (.dll, .so, .dylib...)
-* keep a cache of the signature for each compressed artifact to avoid uncompressing it again if it has not changed. #performance
-
-= How to use the Maven plugin
-
-== Maven dependency
+=== Maven dependency
 
 The plugin is available from Maven Central, just add the following snippet to your pom to use it:
 
@@ -83,7 +46,7 @@ The plugin is available from Maven Central, just add the following snippet to yo
 		...
 -------------------------------------------
  
-== Options
+=== Options
  
 [source,xml]
 -------------------------------------------
@@ -104,8 +67,9 @@ The plugin is available from Maven Central, just add the following snippet to yo
 		<skip>false</skip>
 		<!-- autoDetectDirUpInFilesystem is documented below-->
 		<autoDetectDirUpInFilesystem>true</autoDetectDirUpInFilesystem>
-		<autoDetectOSNatives>false</autoDetectOSNatives> <!-- if 'true' then you don't need the 'osFilters' list -->
-														<!-- we advise you set 'autoDetectOSNatives' to true and forget about osFilters -->
+		<!-- if autoDetectOSNatives is 'true' then you don't need the 'osFilters' list -->
+		<!-- we advise you set 'autoDetectOSNatives' to true and forget about osFilters -->
+		<autoDetectOSNatives>false</autoDetectOSNatives> 
 															
 		<!-- <nativesTargetDir>${session.executionRootDirectory}/target/natives</nativesTargetDir> -->
 		<!-- <separateDirs>true</separateDirs> -->
@@ -125,13 +89,9 @@ The plugin is available from Maven Central, just add the following snippet to yo
 </plugin>
 -------------------------------------------
 
-== Single module Maven project
+=== Multi module Maven project
 
-TODO
-
-== Multi module Maven project
-
-=== the old way
+==== the old way
 
 By default, as you can see commented above (parameter 'nativesTargetDir'), the default directory will be "${session.executionRootDirectory}/target/natives".
 
@@ -141,18 +101,13 @@ This allows you to have a single location where are stored all your native libs,
 
 If you want to target a specific child module, you can use the --projects parameter: mvn install --projects my-child-module
 
-=== the new way
+==== the new way
 
 But in the real world you sometimes run child-modules directly from their own directory.
 Then you would loose time unzipping the native dependencies each time in a different child.
 So we introduced the 'autoDetectDirUpInFilesystem' parameter. It will (try to) autodetect the root of your maven tree and always unzip in the target/native directory alongside your parent pom. Even when you run Maven from a child module.
 
 WARNING: implementation is quite naive and handles only tree file structure like this:
-
-=== in any case
-
-variable ${nativesTargetDir} is created in the Maven reference the location. Usefull in pom. It's usefull to configure the exec Maven plugin for exemple.
-
 
 [source,xml]
 -------------------------------------------
@@ -171,8 +126,28 @@ parent-module
               |- pom.xml   
 -------------------------------------------
 
+==== in any case
+
+Variable ${nativesTargetDir} is created in the Maven properties pool and reference the location where natives are unpacked.
+It's usefull to configure the exec Maven plugin to configure PATH or LD_LIBRARY_PATH for exemple.
+
+
+== Eclipse plugin (Eclipse M2E Extension)
+
+WARNING: this Eclipse extension is not actively used not developped.
+It is kept as a base for possible improvements because it could be usefull if improved.
+
+In order to ease the development from within your Eclipse IDE, we have a plugin to automatically add the path to the "natives" directory to "Native library location" of the project (hence -Djava.library.path).
+
+This plugin is an M2E extension that acts on Maven projects using the "nativedependencies-maven-plugin".
  
-= How to use the Eclipse M2E extension
+image:./doc/eclipsePluginResult.png[using the nativedependencies-maven-plugin m2e extension in Eclipse]
+
+However, it currently does not set the LD_LIBRARY_PATH (on Linux) nor the PATH (on Windows) so native code trying to load it's own native dependencies will not work automagically.
+In this case you'll have to set the variable before launching Eclipse.
+
+ 
+=== How to use the Eclipse M2E extension
 
 Point Eclipse to the following update site:
 
@@ -186,6 +161,32 @@ You can ask questions on http://stackoverflow.com[StackOverflow] with the offici
 The http://maven.40175.n5.nabble.com/Maven-Users-f40176.html[Maven Users mailing list] may also be a good start.
 
 Or you can always https://github.com/fmarot/nativedependencies-maven/issues[open an issue] directly on Github. 
+
+= About the project
+
+This is a fork of the previously existing https://code.google.com/p/mavennatives/[Maven Native Dependencies] project which was at version 0.0.7.
+
+The maven plugin has then been renamed to "nativedependencies-maven-plugin" to follow Apache Maven conventions and groupId changed to "com.teamtter.mavennatives".
+
+Big thanks to the original writers of Maven Native Dependencies.
+
+Reasons for forking original project:
+
+* add finer grain control over what natives dependencies will be unpacked.
+* familiarize myself with the dev of Maven plugins.
+* improve eclipse plugin (NOT done at the moment)
+* finally find a way to prevent each and every project using native libs to have to manually (god I hate this word!) configure the -Djava.library.path and LD_LIBRARY_PATH
+
+Current features added to original plugin:
+
+* generate a variable containing location of the directory where natives are unpacked ( use ${nativesTargetDir} in you pom ).
+* use GitHub instead of the dead Google Code 
+* more modern code using annotations
+* parameter to be able to skip the plugin execution (overridable through a variable)
+* add parameters to auto-detect platform and get only platform specific libs
+* transparently handle misc compression format (zip, tar, tgz, 7zip...) and single file not compressed deps (.dll, .so, .dylib...)
+* keep a cache of the signature for each compressed artifact to avoid uncompressing it again if it has not changed. #performance
+
 
 = Compiling the code
 
