@@ -156,7 +156,11 @@ public class CopyNativesMojo extends AbstractMojo {
 				        Model possibleParentModel = possibleParentReader.read(new FileReader(possibleParentPom));
 				        String possibleParentGroupId = possibleParentModel.getGroupId();
 				        String possibleParentArtifactId = possibleParentModel.getArtifactId();
-				        if (possibleParentGroupId.equals(parentGroupId) && possibleParentArtifactId.equals(parentArtifactId)) {
+				        
+				        boolean artifactIdOK = parentArtifactId.equals(possibleParentArtifactId);
+				        boolean groupIdOK = possibleParentGroupId == null || parentGroupId.equals(possibleParentGroupId);	// may be null because inherited from parent pom
+				        
+						if (artifactIdOK && groupIdOK ) {
 				        	currentPom = possibleParentPom;
 				        } else {
 				        	log.info("{} is not parent of {}", possibleParentPom, currentPom);
