@@ -1,3 +1,6 @@
+env:
+  matrix:
+    secure: zT4R/TX2c6uz4MWoOr930dMuF8LD7PkIssFdELPnn7fTYTwCY/C2ZUdbr1U54WNDo2+H2itxh2uq3T0YxbNeLqdCQbGx4/vvw3+JJ4Y4L8xkSpdGKLuoB7A6WJExRPZ1WBkNaoLkOth7TUZ9jgum9AgvYkErBxowWqjsHa5Oc8RXN8GTjtocXRsgTbjWQO2ewHbKlSt1lL23FaDV/PYSnzOzHkpBgGvC2eRW+keOSwHNv/QqEIe/8nvdEKzfF/DLXu4QDbAoZKaIN4GSTeASw+5Em+Zr76v177g81PIuHbriNNgdprsK3w8i/PsjEKpu3jp7zP5Eaog+4POGqpOlcF72awGJGDsmfcEAffmMHg3joIjgFfGtc2Autwn909O2940MpK7AO3Dbf39rRvjBqdcE07z5gLswyaMz4U38+A33pom3oOeoyvROnrlF8hPWth614FBOxzYqARGNx6J7+WVwsIIuCnHxusPpsZaAVE/rYXnCFixpofZPszXPkv2c+YF9Xw2fVN/7YQ9VdJbfouGhp0zjnnw8rpL5ES2/KWBMW9E30zgiCp7Tu8Ek8UUeHPE70cThTdAxi/4mEo1ELLngVWa7ZZoudkBx4Th11yjLnn4uQqojqNPAt/vb3R51x/qbifMEL+oYZYuhnR0JOGM4TCo56sn6J72QsZ3KOI8=
 language: java
 jdk:
 - oraclejdk8
@@ -6,16 +9,8 @@ cache:
   directories:
   - "$HOME/.m2"
 before_install:
-  - SONATYPE_PASSWORD=echo $ENC_SONATYPE_PASSWORD | base64 --decode
-  - echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
-  - echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust  
-script: 
-  mvn clean deploy -f ./nativedependencies-maven-plugin/pom.xml --settings .travis/settings.xml -DskipTests=true -Pgpgsign -B -U
-#deploy:
-#  provider: releases
-#  api_key:
-#    secure: yLpwozACXOXO/zpzXPr5OOcwkwdiP2TYScefSgOZ0y56K+VF1eUfikfWmvKCG5JHjzPpT+GZykgtNyM2IAWDhJhccDBWSU0P3FRkK/bXkQXmZZP0ehx0d36pAJgu0QOnnku23uH23bocEbY5jIS5Bqus8UdcqJFHnf18NrgMp3Ku5QzkHZ7SJyaWsQ9PNATyIwAR+khEECdbqTNo5cXE61EF126XugnwE1A829/KzcS/a0CPK+rXq03JU459ttlGaWu11sKvwysDkl12hEWHAclhhACgJKIlO2ENPd8eEGUQx8K8ufNNqOkaNhsNPAV3g1Jwv2R/CgzMk3cljKarSbu1aCa3OPXJJDvKu572BeWjC5WZkpi6z0i1bARFY2OJ/S6gw5NZ2KH/CxO5bX6eIox4e25fzyzagRr/Zw5od7194+AnXVERU38rWxD0RUEwfzEeUWE+P3c1kktXmCspBX7qNwkjR9RdBT0UH5iVp+h7QHyK6Ks6+H+dQV2Zu090pCykpRAo/o8X0+aOp/XmbQYiebXwOLEpDDIIZyvIPcbyv15YDS/5T1wxyp+g1so+TYAnePDeS1AcRw0CZrUu3vUTrQel2KQ+6ayMohBQ+uR++n79ULEa71WrBw9kvZpRH43NPB//niwLvbetrGsiuS0mH2Ha8qx4WGDProdeIoY=
-#  file: aaa
-#  on:
-#    repo: fmarot/nativedependencies-maven
-#    branch: travistests
+#- SONATYPE_PASSWORD=echo $ENC_SONATYPE_PASSWORD | base64 --decode
+- echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
+- echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust
+script: mvn clean deploy -f ./nativedependencies-maven-plugin/pom.xml --settings .travis/settings.xml
+  -DskipTests=true -Pgpgsign -B -U
