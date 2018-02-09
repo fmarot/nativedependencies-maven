@@ -1,38 +1,20 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
 sudo: false
 cache:
   directories:
-  - $HOME/.m2
-install:
-  -
-    on:
-    	repo: fmarot/nativedependencies-maven
-    	branch: master
-    	jdk: oraclejdk8
-    mvn -f ./nativedependencies-maven-plugin/pom.xml --settings .travis/settings.xml install -DskipTests=false -Dgpg.skip -Dmaven.javadoc.skip=true -B -V
+  - "$HOME/.m2"
 before_install:
-  - if [ ! -z "$GPG_SECRET_KEYS" ]; then echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import; fi
-  - if [ ! -z "$GPG_OWNERTRUST" ]; then echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust; fi
-
-# Each master commit, should deploy to snapshots
-# Each tagged commit, should deploy to releases
-
-deploy:
-  -
-    provider: script
-    script: .travis/deploy.sh
-    skip_cleanup: false
-    on:
-    	repo: fmarot/nativedependencies-maven
-    	branch: master
-    	jdk: oraclejdk8
-  -
-    provider: script
-    script: .travis/deploy.sh
-    skip_cleanup: false
-    on:
-      repo: ExampleOrg/my-library
-      tags: true
-      jdk: oraclejdk8
+  - echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
+  - echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust  
+script: 
+  mvn clean deploy -f ./nativedependencies-maven-plugin/pom.xml --settings .travis/settings.xml -DskipTests=false -B -U
+#deploy:
+#  provider: releases
+#  api_key:
+#    secure: yLpwozACXOXO/zpzXPr5OOcwkwdiP2TYScefSgOZ0y56K+VF1eUfikfWmvKCG5JHjzPpT+GZykgtNyM2IAWDhJhccDBWSU0P3FRkK/bXkQXmZZP0ehx0d36pAJgu0QOnnku23uH23bocEbY5jIS5Bqus8UdcqJFHnf18NrgMp3Ku5QzkHZ7SJyaWsQ9PNATyIwAR+khEECdbqTNo5cXE61EF126XugnwE1A829/KzcS/a0CPK+rXq03JU459ttlGaWu11sKvwysDkl12hEWHAclhhACgJKIlO2ENPd8eEGUQx8K8ufNNqOkaNhsNPAV3g1Jwv2R/CgzMk3cljKarSbu1aCa3OPXJJDvKu572BeWjC5WZkpi6z0i1bARFY2OJ/S6gw5NZ2KH/CxO5bX6eIox4e25fzyzagRr/Zw5od7194+AnXVERU38rWxD0RUEwfzEeUWE+P3c1kktXmCspBX7qNwkjR9RdBT0UH5iVp+h7QHyK6Ks6+H+dQV2Zu090pCykpRAo/o8X0+aOp/XmbQYiebXwOLEpDDIIZyvIPcbyv15YDS/5T1wxyp+g1so+TYAnePDeS1AcRw0CZrUu3vUTrQel2KQ+6ayMohBQ+uR++n79ULEa71WrBw9kvZpRH43NPB//niwLvbetrGsiuS0mH2Ha8qx4WGDProdeIoY=
+#  file: aaa
+#  on:
+#    repo: fmarot/nativedependencies-maven
+#    branch: travistests
