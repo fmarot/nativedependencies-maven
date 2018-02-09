@@ -6,11 +6,11 @@ cache:
   directories:
   - "$HOME/.m2"
 before_install:
-  - SONATYPE_PASSWORD=`echo $ENC_SONATYPE_PASSWORD`
+  - SONATYPE_PASSWORD=echo $ENC_SONATYPE_PASSWORD | base64 --decode
   - echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
   - echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust  
 script: 
-  mvn clean deploy -f ./nativedependencies-maven-plugin/pom.xml -DSONATYPE_PASSWORD=$SONATYPE_PASSWORD --settings .travis/settings.xml -DskipTests=true -Pgpgsign -B -U
+  mvn clean deploy -f ./nativedependencies-maven-plugin/pom.xml --settings .travis/settings.xml -DskipTests=true -Pgpgsign -B -U
 #deploy:
 #  provider: releases
 #  api_key:
