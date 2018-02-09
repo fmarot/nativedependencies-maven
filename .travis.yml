@@ -1,6 +1,6 @@
 env:
-  matrix:
-    secure: zT4R/TX2c6uz4MWoOr930dMuF8LD7PkIssFdELPnn7fTYTwCY/C2ZUdbr1U54WNDo2+H2itxh2uq3T0YxbNeLqdCQbGx4/vvw3+JJ4Y4L8xkSpdGKLuoB7A6WJExRPZ1WBkNaoLkOth7TUZ9jgum9AgvYkErBxowWqjsHa5Oc8RXN8GTjtocXRsgTbjWQO2ewHbKlSt1lL23FaDV/PYSnzOzHkpBgGvC2eRW+keOSwHNv/QqEIe/8nvdEKzfF/DLXu4QDbAoZKaIN4GSTeASw+5Em+Zr76v177g81PIuHbriNNgdprsK3w8i/PsjEKpu3jp7zP5Eaog+4POGqpOlcF72awGJGDsmfcEAffmMHg3joIjgFfGtc2Autwn909O2940MpK7AO3Dbf39rRvjBqdcE07z5gLswyaMz4U38+A33pom3oOeoyvROnrlF8hPWth614FBOxzYqARGNx6J7+WVwsIIuCnHxusPpsZaAVE/rYXnCFixpofZPszXPkv2c+YF9Xw2fVN/7YQ9VdJbfouGhp0zjnnw8rpL5ES2/KWBMW9E30zgiCp7Tu8Ek8UUeHPE70cThTdAxi/4mEo1ELLngVWa7ZZoudkBx4Th11yjLnn4uQqojqNPAt/vb3R51x/qbifMEL+oYZYuhnR0JOGM4TCo56sn6J72QsZ3KOI8=
+  global:
+    secure: zDwcLFqjmZdbVMyK1TQroo7iqN5ryTrmt8OJ7I4/GtoaMLbjVdzgK15o8kmMB5LZ7GdaGJOHdqOLKsuQ2hldVZJtriG5g/kMeTSvHuY6zKbOT5ix8OxcsYG7IU9m52Xii9j/fs9ALZZTIfv/qG+LytY0W0uVEmLJyP5DwqmaE1/l30EI3l4RmiZG8+d9utMlf92Ltz/XuJacRIKyr4te/gYYdFiMPyddGqAfbE8x+1y1mcT2f3gzaE/W1oveA7/whc3aBfAKTjqyJT2Q7GVfX2rgKJnRFdTwaP2lCvBMpTd+BEjRZi9NvtsT3HRjdAG6NrOMh19MnIOhnEOl6HJj0RSWh0OWalGKHxLaPJLjZ21GY0bARgdQfANC2JGZ5QB5GIa+zOSZHd09jMEKEtYL9xS6h+pd9H14YaaT/arRqaM1eNZP/4UV5e5qe2snqDSzWcNZ/NgUS5BJG29H79CjbKLsYEOe2qYDP7CmQIHqkXG6h9tLL5aFLl192QrH8BU9qGKOvx5Nq9MEGXxgw8dT3fhJvh6iAv4A8GE6wLy0MGBuYpwsxFhpEQCVy75yfVZUtWDt9nXWaIlSoll2pJJJwU6fuCgk8zQ9J3uQGkcBFxLWfYA8RnLfKQbpB00r8gjuf1kCE/eif6cRs4zq15Y0RMk3wcBCjESyHt/uyB5SpgU=
 language: java
 jdk:
 - oraclejdk8
@@ -9,8 +9,6 @@ cache:
   directories:
   - "$HOME/.m2"
 before_install:
-#- SONATYPE_PASSWORD=echo $ENC_SONATYPE_PASSWORD | base64 --decode
 - echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
 - echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust
-script: mvn clean deploy -f ./nativedependencies-maven-plugin/pom.xml --settings .travis/settings.xml
-  -DskipTests=true -Pgpgsign -B -U
+script: mvn clean deploy -f ./nativedependencies-maven-plugin/pom.xml --settings .travis/settings.xml -DskipTests=true -Pgpgsign -B -U
