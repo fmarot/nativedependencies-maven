@@ -5,27 +5,3 @@ sudo: false
 cache:
   directories:
   - $HOME/.m2
-install:
-  - mvn -f ./nativedependencies-maven-plugin/pom.xml --settings .travis/settings.xml install -DskipTests=false -Dgpg.skip -Dmaven.javadoc.skip=true -B -V
-before_install:
-  - if [ ! -z "$GPG_SECRET_KEYS" ]; then echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import; fi
-  - if [ ! -z "$GPG_OWNERTRUST" ]; then echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust; fi
-# Each master commit, should deploy to snapshots
-# Each tagged commit, should deploy to releases
-deploy:
-  -
-    provider: script
-    script: .travis/deploy.sh
-    skip_cleanup: false
-    on:
-      repo: fmarot/nativedependencies-maven
-      branch: master
-      jdk: oraclejdk8
-  -
-    provider: script
-    script: .travis/deploy.sh
-    skip_cleanup: false
-    on:
-      repo: fmarot/nativedependencies-maven
-      tags: true
-      jdk: oraclejdk8
