@@ -13,6 +13,7 @@
 	<url>https://github.com/fmarot/mavennatives</url>
 
 	<properties>
+		<SONATYPE_PASSWORD>PLEASE SET ON COMMAND LINE</SONATYPE_PASSWORD>
 		<skipTests>false</skipTests>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
