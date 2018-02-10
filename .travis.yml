@@ -1,6 +1,3 @@
-env:
-  global:
-    secure: af6eg1Ikcvt4pjJb0H4OkZlFA1NJCthY2JWmRg3k50DxY97Tk83FhnMm4x1/ZnlOsePYoS3dd41z68V6aOQjnKYFMh5O4rG6Y5VsXk1zKaks8TRstYlgGG63x7qAGHDImc1WgA5KZ32e8GEmB2k732Vm1zNkGHzU5Sj0o1/gULPJ3+XBmJBaR7iOxwTIETY67vCNJLxX7CIV/Djim9OvPZV4Nz3tbzMaK28L1KPaGJ25i829I/faSEUGukGBeXpOHOxrf9SxmbFvC0lLKiAhyhujSfqAlPpsVK/18DRTvMGxr/v6FQ42hyWaugFrkETEMY57eEJZyRE4I0/iOunerPNH6mo8mx28P51XYgX/iHx/GmMVp5URddf27feBEwI1hzlsB9Ug+inwVl/C5uDhG1gIcj+M9+oi9oasfvwllgLFJU3R83sqDM7FOisg6QL+ApKVt0jB0Yeq17p73ooffgzyY1IDaNSBJ5Ti/z3smB8EA4Nd/2+dcsKMgAi5I/xPWKD+bcP8OB5QJHKbrXjSj36CNa0OR7DP+V2BMNZKtYtafdZnZF9+5i/SAWUCcHvNEUdt7Z2GZ6z+n2JnJTSVVyT1Z7z9HVoTCwvhCQ+6iL0LClZR1CRRip8jyL5knfGX7+NJ1yMfReUeL1UZD4GkQ79DtecoAAqmHE4UgoOzJio=
 language: java
 jdk:
 - oraclejdk8
@@ -11,6 +8,4 @@ cache:
 before_install:
   - echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
   - echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust
-  - echo "toto ${SONATYPE_PASSWORD:7:4}--"
-script: echo ${SONATYPE_PASSWORD:7:4}
-#script: mvn clean deploy -f ./nativedependencies-maven-plugin/pom.xml --settings .travis/settings.xml -DskipTests=true -Pgpgsign -B -U
+script: mvn clean deploy -f ./nativedependencies-maven-plugin/pom.xml --settings .travis/settings.xml -DskipTests=true -Pgpgsign -B -U

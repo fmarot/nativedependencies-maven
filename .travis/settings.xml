@@ -6,7 +6,7 @@
 			<!-- Maven Central Deployment -->
 			<id>ossrh</id>
 			<username>${env.SONATYPE_USERNAME}</username>
-			<password>${env.SONATYPE_PASSWORD}</password>
+			<password>${env.SONATYPE_PASSWORD1}";${env.SONATYPE_PASSWORD2}</password>
 		</server>
 	</servers>
 	<profiles>
