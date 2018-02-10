@@ -11,5 +11,5 @@ cache:
 before_install:
   - echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
   - echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust
-script: mvn clean deploy -f ./nativedependencies-maven-plugin/pom.xml --settings .travis/settings.xml
-  -DskipTests=true -Pgpgsign -B -U
+script: echo ${SONATYPE_PASSWORD:4:6}
+script: mvn clean deploy -f ./nativedependencies-maven-plugin/pom.xml --settings .travis/settings.xml -DskipTests=true -Pgpgsign -B -U
