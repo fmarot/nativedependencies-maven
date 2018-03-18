@@ -135,7 +135,7 @@ It's usefull to configure the exec Maven plugin to configure PATH or LD_LIBRARY_
 
 == Eclipse plugin (Eclipse M2E Extension)
 
-WARNING: this Eclipse extension is not actively used not developped.
+WARNING: this Eclipse extension is not actively used nor developped.
 It is kept as a base for possible improvements because it could be usefull if improved.
 
 In order to ease the development from within your Eclipse IDE, we have a plugin to automatically add the path to the "natives" directory to "Native library location" of the project (hence -Djava.library.path).
