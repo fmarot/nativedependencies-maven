@@ -35,7 +35,7 @@ The plugin is available from Maven Central, just add the following snippet to yo
 				<dependency>
 				    <groupId>com.teamtter.mavennatives</groupId>
 				    <artifactId>nativedependencies-maven-plugin</artifactId>
-				    <version>1.0.5</version>
+				    <version>1.0.6</version>
 				    <executions>
 				<execution>
 				...
