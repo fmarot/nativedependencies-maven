@@ -157,8 +157,6 @@ Point Eclipse to the following update site:
 
 = Getting help
 
-You can ask questions on http://stackoverflow.com[StackOverflow] with the official tag http://stackoverflow.com/questions/tagged/nativedependencies-maven[#nativedependencies-maven]
-
 The http://maven.40175.n5.nabble.com/Maven-Users-f40176.html[Maven Users mailing list] may also be a good start.
 
 Or you can always https://github.com/fmarot/nativedependencies-maven/issues[open an issue] directly on Github. 
