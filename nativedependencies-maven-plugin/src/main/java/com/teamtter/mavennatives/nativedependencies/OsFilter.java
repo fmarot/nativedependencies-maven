@@ -13,11 +13,12 @@ public class OsFilter {
 	static final String OS = System.getProperty("os.name").toLowerCase();
 	static final String OS_ARCH = System.getProperty("os.arch").toLowerCase();
 
+	/** Optional, if missing current OS will not be checked */
 	private String osName;
 	/** Optional, WARNING: for 32bit, should be "x86", not "32" !!! */
 	private String osArch;
 	private String suffix;
-
+	
 	public OsFilter() {
 	}
 
@@ -29,10 +30,14 @@ public class OsFilter {
 		suffix = suffix != null ? suffix.toLowerCase() : "";
 
 		boolean filterMatches = false;
+		
 		if (StringUtils.isNotBlank(osName) && OS.contains(osName)) {
 			if (StringUtils.isBlank(osArch) || filterToOsArchMatches()) {
 				filterMatches = effectiveSuffix.contains(this.suffix);
 			}
+		} else {
+			log.debug("filter {} has no osName, will filter only based on the dependency's classifier suffix", this);
+			filterMatches = effectiveSuffix.contains(this.suffix);
 		}
 
 		log.debug(this.toString() + " accepts suffix '" + effectiveSuffix + "': " + filterMatches);
