@@ -31,7 +31,7 @@
 
 		<commons.compress.version>1.12</commons.compress.version>
 		<tukaani.xz.version>1.5</tukaani.xz.version>
-		<jackson.version>2.6.0</jackson.version>
+		<jackson.version>2.9.10.1</jackson.version>
 	</properties>
 
 
