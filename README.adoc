@@ -7,6 +7,10 @@ toc::[]
 
 = What is nativedependencies-maven ?
 
+== WARNING
+
+Even if this plugin may be useful, you may have a look at the official dependency plugin which is much more maintained and becomes more flexible over time (eg https://issues.apache.org/jira/browse/MDEP-628 & https://blogs.apache.org/maven/entry/apache-maven-dependency-plugin-version2)
+
 == Maven plugin (nativedependencies-maven-plugin)
 
 This Maven plugin will unpack the native dependencies (usually .so files on Linux, DLLs on Windows) into a single folder.
