@@ -29,7 +29,7 @@
 		<javadoc.plugin.version>3.0.0</javadoc.plugin.version>
 		<invoker.plugin.version>3.0.1</invoker.plugin.version>
 
-		<commons.compress.version>1.12</commons.compress.version>
+		<commons.compress.version>1.19</commons.compress.version>
 		<tukaani.xz.version>1.5</tukaani.xz.version>
 		<jackson.version>2.6.0</jackson.version>
 	</properties>
