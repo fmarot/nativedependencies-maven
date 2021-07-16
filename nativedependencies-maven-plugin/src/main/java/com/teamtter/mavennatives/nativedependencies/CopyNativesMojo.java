@@ -46,7 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /** Unpacks native dependencies */
 @Mojo(name = "copy" /** the goal */
-, threadSafe = false /** until proven otherwise, false */
+		, threadSafe = true /** the RaceConditionPreventer should prevent many problems. All problems ??? => To be verified */
 , defaultPhase = LifecyclePhase.GENERATE_TEST_RESOURCES, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
 @Slf4j
 public class CopyNativesMojo extends AbstractMojo {
@@ -208,6 +208,7 @@ public class CopyNativesMojo extends AbstractMojo {
 	}
 
 	private void copyNativeDependencies() throws MojoFailureException {
+
 		boolean atLeastOneartifactCopied = false;
 		UnpackedArtifactsInfo unpackedArtifactsInfo = loadAlreadyUnpackedArtifactsInfo();
 		try {
@@ -272,6 +273,11 @@ public class CopyNativesMojo extends AbstractMojo {
 		unpackedArtifactsInfo.flagAsUnpacked(artifact.getFile());
 	}
 
+	/** Warning: this method prevents unpacking artifacts resulting from a previous execution of Maven
+	 * or another module in the same execution if sequential, but when Maven parralelism is used (-T 1C for example)
+	 * then another layer of protection is used: the RaceConditionPreventer.
+	 * This is because 2 modules could read the same version of the json file missing an artifact and both
+	 * try to unzip it. */
 	private boolean artifactAlreadyUnpacked(UnpackedArtifactsInfo unpackedArtifactsInfo, Artifact artifact) {
 		File currentArtifactFile = artifact.getFile();
 		boolean contains = false;

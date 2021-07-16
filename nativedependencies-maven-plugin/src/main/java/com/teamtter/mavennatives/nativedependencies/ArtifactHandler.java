@@ -29,10 +29,13 @@ import org.codehaus.plexus.component.annotations.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
+/** Note: in a multi-module Maven project, this @Component is a singleton: different instances of mojo
+ * are being injected with the SAME instance of {@link ArtifactHandler} */
 @Component(role = IArtifactHandler.class)
-@Slf4j // Starting with Maven 3.1.0, SLF4J Logger can be used directly too, without
-		// Plexus
+@Slf4j // Starting with Maven 3.1.0, SLF4J Logger can be used directly too, without Plexus
 public class ArtifactHandler implements IArtifactHandler {
+
+	private static final RaceConditionPreventer raceConditionPreventer = new RaceConditionPreventer();
 
 	private static List<String> zipLikeExtensions = Arrays.asList("jar", "zip", "gz");
 
@@ -47,7 +50,13 @@ public class ArtifactHandler implements IArtifactHandler {
 	@Override
 	public void moveOrUnpackArtifactTo(File unpackingDir, Artifact artifact) {
 		File artifactFile = artifact.getFile();
-		moveOrUnpackFileTo(unpackingDir, artifactFile);
+
+		// we do not want to unzip the same artifact in the same directory multiple times at once (in the
+		// case of multi-module Maven projects) nor do we want one execution to try to delete the uncompressed Tar
+		// file while another may be extracting it so we try to protect the execution and be thread safe.
+		raceConditionPreventer.preventRaceCondition(unpackingDir,
+				artifactFile,
+				() -> moveOrUnpackFileTo(unpackingDir, artifactFile));
 	}
 
 	public static void moveOrUnpackFileTo(File unpackingDir, File artifactFile) {
