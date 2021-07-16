@@ -18,13 +18,12 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.version>3.3.3</maven.version>
 
-		<compiler.source>1.7</compiler.source>
-		<compiler.target>1.7</compiler.target>
+		<java.source.target.version>11</java.source.target.version>
 
-		<compiler.plugin.version>3.7.0</compiler.plugin.version>
-		<resources.plugin.version>3.0.2</resources.plugin.version>
-		<plugin.plugin.version>3.5.1</plugin.plugin.version>
-		<plexus.component.metadata.version>1.7.1</plexus.component.metadata.version>
+		<compiler.plugin.version>3.8.1</compiler.plugin.version>
+		<resources.plugin.version>3.1.0</resources.plugin.version>
+		<plugin.plugin.version>3.6.1</plugin.plugin.version>
+		<plexus.component.metadata.version>2.1.0</plexus.component.metadata.version>
 		<source.plugin.version>3.0.1</source.plugin.version>
 		<javadoc.plugin.version>3.0.0</javadoc.plugin.version>
 		<invoker.plugin.version>3.0.1</invoker.plugin.version>
@@ -78,8 +77,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${compiler.plugin.version}</version>
 				<configuration>
-					<source>${compiler.source}</source>
-					<target>${compiler.target}</target>
+					<source>${java.source.target.version}</source>
+					<target>${java.source.target.version}</target>
 				</configuration>
 			</plugin>
 
@@ -95,10 +94,12 @@
 				<version>${plugin.plugin.version}</version>
 				<executions>
 					<execution>
+						<?m2e ignore?>
 						<id>default-descriptor</id>
 						<phase>process-classes</phase>
 					</execution>
 					<execution>
+						<?m2e ignore?>
 						<!-- if you want to generate help goal -->
 						<id>help-goal</id>
 						<goals>
@@ -326,7 +327,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.16.8</version>
+			<version>1.18.12</version>
 		</dependency>
 
 		<!-- Test libs -->
