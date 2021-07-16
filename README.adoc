@@ -139,18 +139,9 @@ It's usefull to configure the exec Maven plugin to configure PATH or LD_LIBRARY_
 
 == Eclipse plugin (Eclipse M2E Extension)
 
-WARNING: this Eclipse extension is not actively used nor developped.
-It is kept as a base for possible improvements because it could be usefull if improved.
+WARNING: there was once an Eclipse extension but not actively used nor developped. It has been removed on 2021/07/16
 
-In order to ease the development from within your Eclipse IDE, we have a plugin to automatically add the path to the "natives" directory to "Native library location" of the project (hence -Djava.library.path).
-
-This plugin is an M2E extension that acts on Maven projects using the "nativedependencies-maven-plugin".
- 
-image:./doc/eclipsePluginResult.png[using the nativedependencies-maven-plugin m2e extension in Eclipse]
-
-However, it currently does not set the LD_LIBRARY_PATH (on Linux) nor the PATH (on Windows) so native code trying to load it's own native dependencies will not work automagically.
-In this case you'll have to set the variable before launching Eclipse.
-
+In the future we could restore it, the goal would be to automatically unzip dependencies directly from the IDE and add the folder to the PATH when running Eclipse launchers.
  
 === How to use the Eclipse M2E extension
 
