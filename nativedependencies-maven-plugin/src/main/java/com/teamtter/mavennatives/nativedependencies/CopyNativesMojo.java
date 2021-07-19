@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -98,6 +99,13 @@ public class CopyNativesMojo extends AbstractMojo {
 	@Setter
 	private List<OsFilter> osFilters = new ArrayList<>();
 
+	/** comma separated list of accepted "type" values (see https://stackoverflow.com/a/44686454/259988)
+	 * If {@link #autoDetectOSNatives} is true, then it will automatically be filled with dll for windows, so for Linux and dylib for mac.
+	 * If {@link #autoDetectOSNatives} is true, you should not use this parameter. */
+	@Parameter
+	@Setter
+	private List<String> byTypeFilter;
+
 	@Component
 	@Setter
 	private IArtifactHandler artifactHandler;
@@ -119,7 +127,7 @@ public class CopyNativesMojo extends AbstractMojo {
 		if (skip) {
 			log.info("Skipping execution due to 'skip' == true");
 		} else {
-			initOsFiltersIfNeeded();
+			overrideFilters();
 			
 			overrideNativesTargetDirIfNeeded();
 			mavenProject.getProperties().put("nativesTargetDir", nativesTargetDir.toString());
@@ -179,14 +187,24 @@ public class CopyNativesMojo extends AbstractMojo {
 		return currentPom;
 	}
 
-	private void initOsFiltersIfNeeded() {
+	/** overrides OSFilters and additionalByTypeFilter especially if {@link #autoDetectOSNatives} is true */
+	private void overrideFilters() {
 		if (autoDetectOSNatives) {
-			if (osFilters.size() != 0) {
-				log.warn("Some OS filters have been set but will be overriden by auto-OS-detection. Please define filters OR set autoDetectOSNatives = true");
-			}
-			OsFilter thisComputer = new OsFilter(OsFilter.OS, null, getbasicOsTrigramm(OsFilter.OS));
-			osFilters.add(thisComputer);
 			log.debug("autoDetectOSNatives = true");
+			if (osFilters.size() != 0) {
+				log.warn("Some OS filters have been set but will be overriden by auto-OS-detection (see autoDetectOSNatives parameter). Please define filters OR set autoDetectOSNatives = true");
+			}
+			if (byTypeFilter.size() != 0) {
+				log.warn("additionalByTypeFilter parameter filled manually but will be overriden by auto-OS-detection (see autoDetectOSNatives parameter).");
+			}
+			// create automatic OSFilter
+			osFilters.clear();
+			OsFilter thisComputer = new OsFilter(OsFilter.OS, null, getBasicTrigrammForCurrentOS());
+			osFilters.add(thisComputer);
+			// create automatic type filter
+			byTypeFilter.clear();
+			byTypeFilter.addAll(getTypesForCurrentOS());
+
 		} else if (osFilters.size() == 0) {
 			log.debug("AcceptEverythingOsFilter will be used");
 			osFilters.add(new AcceptEverythingOsFilter()); // we will handle ALL native deps
@@ -195,7 +213,8 @@ public class CopyNativesMojo extends AbstractMojo {
 		}
 	}
 
-	private String getbasicOsTrigramm(String os) {
+	private String getBasicTrigrammForCurrentOS() {
+		String os = OsFilter.OS;
 		if (os.contains("win")) {
 			return "win";
 		} else if (os.contains("lin")) {
@@ -207,6 +226,19 @@ public class CopyNativesMojo extends AbstractMojo {
 		return "";
 	}
 
+	private List<String> getTypesForCurrentOS() {
+		String os = OsFilter.OS;
+		if (os.contains("win")) {
+			return Arrays.asList("dll");
+		} else if (os.contains("lin")) {
+			return Arrays.asList("so");
+		} else if (os.contains("mac")) {
+			return Arrays.asList("dylib");
+		}
+		log.warn("unable to auto-detect OS...");
+		return Arrays.asList();
+	}
+
 	private void copyNativeDependencies() throws MojoFailureException {
 
 		boolean atLeastOneartifactCopied = false;
@@ -214,12 +246,11 @@ public class CopyNativesMojo extends AbstractMojo {
 		try {
 			Set<Artifact> artifacts = mavenProject.getArtifacts(); // warning: depending on the phase, come may be missing, see MavenProject javadoc
 			for (Artifact artifact : artifacts) {
-				String classifier = artifact.getClassifier();
 				if (artifactAlreadyUnpacked(unpackedArtifactsInfo, artifact)) {
 					log.debug("{} is already unpacked", artifactToString(artifact));
-				} else if (classifierMatchesConfig(classifier)) {
+				} else if (artifactIsToBeHandled(artifact)) {
 					log.debug("{} => ok", artifactToString(artifact));
-					handleDependancyCopyingOrUnpacking(artifact, classifier, unpackedArtifactsInfo);
+					handleDependancyCopyingOrUnpacking(artifact, artifact.getClassifier(), unpackedArtifactsInfo);
 					atLeastOneartifactCopied = true;
 				} else {
 					log.debug("{} => ko, native will be filtered out", artifactToString(artifact));
@@ -233,9 +264,20 @@ public class CopyNativesMojo extends AbstractMojo {
 			throw new MojoFailureException("Unable to copy natives", e);
 		} finally {
 			if (atLeastOneartifactCopied) {
+				// FIXME: this may not really be thread safe when using Maven parallelism.
 				writeAlreadyUnpackedArtifactsInfo(unpackedArtifactsInfo);
 			}
 		}
+	}
+
+	private boolean artifactIsToBeHandled(Artifact artifact) {
+		boolean handleClassifier = artifactClassifierMatchesConfig(artifact.getClassifier());
+		boolean handleType = artifactTypeMatchesConfig(artifact.getType());
+		return handleClassifier || handleType;
+	}
+
+	private boolean artifactTypeMatchesConfig(String type) {
+		return byTypeFilter.contains(type);
 	}
 
 	private UnpackedArtifactsInfo loadAlreadyUnpackedArtifactsInfo() {
@@ -292,7 +334,7 @@ public class CopyNativesMojo extends AbstractMojo {
 		return String.format("G:%s - A:%s - C:%s", groupId, artifactId, classifier);
 	}
 
-	private boolean classifierMatchesConfig(String classifier) {
+	private boolean artifactClassifierMatchesConfig(String classifier) {
 		if (classifier == null) {
 			return false;
 		}

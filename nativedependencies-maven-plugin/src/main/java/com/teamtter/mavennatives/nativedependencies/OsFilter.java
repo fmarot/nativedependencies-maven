@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @AllArgsConstructor
 public class OsFilter {
+	/** The current operating system */
 	static final String OS = System.getProperty("os.name").toLowerCase();
 	static final String OS_ARCH = System.getProperty("os.arch").toLowerCase();
 
