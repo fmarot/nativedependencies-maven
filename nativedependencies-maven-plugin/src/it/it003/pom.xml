@@ -24,8 +24,8 @@
 							<goal>copy</goal>
 						</goals>
 						<configuration>
-							<!-- in this test we want both DLL and SO -->
-							<byTypeFilter>dll,so</byTypeFilter>
+							<!-- in this test we want DLL, SO & jnilib -->
+							<byTypeFilter>dll,so,jnilib</byTypeFilter>
 						</configuration>
 					</execution>
 				</executions>
@@ -49,6 +49,14 @@
 			<version>4.5.1-dcm</version>
 			<classifier>linux-x86-64</classifier>
 			<type>so</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.weasis.thirdparty.org.opencv</groupId>
+			<artifactId>libopencv_java</artifactId>
+			<version>4.5.1-dcm</version>
+			<classifier>macosx-x86-64</classifier>
+			<type>jnilib</type>
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>

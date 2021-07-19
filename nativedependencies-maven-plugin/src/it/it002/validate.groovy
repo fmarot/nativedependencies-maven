@@ -45,10 +45,10 @@ assert assertExistsDirectory( natives )
 
 
 if ( System.properties['os.name'].toLowerCase().contains('windows')) {
-	File opencv_java_dll = new File( natives, "opencv_java-4.5.1-dcm-windows-x86-64.dll" )
+	File opencv_java_dll = new File( natives, "opencv_java.dll" )
   assert assertExistsFile( opencv_java_dll )
 } else if ( System.properties['os.name'].toLowerCase().contains('linux')) {
-	File opencv_java_so = new File( natives, "opencv_java-4.5.1-dcm-linux-x86-64.so" )
+	File opencv_java_so = new File( natives, "opencv_java.so" )
   assert assertExistsFile( opencv_java_so )
 } 
 

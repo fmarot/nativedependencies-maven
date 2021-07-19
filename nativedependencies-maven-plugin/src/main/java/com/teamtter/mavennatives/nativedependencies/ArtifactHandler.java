@@ -56,15 +56,16 @@ public class ArtifactHandler implements IArtifactHandler {
 		// file while another may be extracting it so we try to protect the execution and be thread safe.
 		raceConditionPreventer.preventRaceCondition(unpackingDir,
 				artifactFile,
-				() -> moveOrUnpackFileTo(unpackingDir, artifactFile));
+				() -> moveOrUnpackFileTo(unpackingDir, artifact));
 	}
 
-	public static void moveOrUnpackFileTo(File unpackingDir, File artifactFile) {
-		String fileName = artifactFile.getName();
-		String extension = FilenameUtils.getExtension(fileName);
+	public static void moveOrUnpackFileTo(File unpackingDir, Artifact artifact) {
+		File artifactFile = artifact.getFile();
+		String completeFileName = artifactFile.getName();
+		String extension = FilenameUtils.getExtension(completeFileName);
 
 		try {
-			if (fileName.contains(".tar.") || tarGzExensions.contains(extension)) {
+			if (completeFileName.contains(".tar.") || tarGzExensions.contains(extension)) {
 				log.info("Artifact {} will be uncompressed as tar-gz-like to {}", artifactFile, unpackingDir);
 				String basename = FilenameUtils.getBaseName(artifactFile.getName());
 				File uncompressedTarFile = new File(unpackingDir, basename);
@@ -79,7 +80,11 @@ public class ArtifactHandler implements IArtifactHandler {
 				uncompress7zArchive(artifactFile, unpackingDir);
 			} else {
 				log.info("Artifact {} can not be unpacked, will be moved as is to {}", artifactFile, unpackingDir);
-				File targetFile = new File(unpackingDir, fileName);
+				
+				// strip version, classifier and type from the fileName so that System.loadLibrary("myLibrary") works by default
+				String basicFilename = artifact.getArtifactId() + "." + extension;
+				
+				File targetFile = new File(unpackingDir, basicFilename);
 				FileUtils.copyFile(artifactFile, targetFile);
 			}
 		} catch (Exception e) {
@@ -186,9 +191,4 @@ public class ArtifactHandler implements IArtifactHandler {
 		}
 	}
 
-	public static void main(String[] args) {
-		String destDir = "/media/vg1-data/Downloads/mvntest/out/";
-		String sourceFile = "/media/vg1-data/Downloads/mvntest/archive.tar.gz";
-		moveOrUnpackFileTo(new File(destDir), new File(sourceFile));
-	}
 }

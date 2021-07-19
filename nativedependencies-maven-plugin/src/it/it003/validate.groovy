@@ -44,12 +44,14 @@ File natives = new File( target, "natives" )
 assert assertExistsDirectory( natives )
 
 
-File opencv_java_dll = new File( natives, "opencv_java-4.5.1-dcm-windows-x86-64.dll" )
+File opencv_java_dll = new File( natives, "opencv_java.dll" )
 assert assertExistsFile( opencv_java_dll )
 
-File opencv_java_so = new File( natives, "libopencv_java-4.5.1-dcm-linux-x86-64.so" )
+File opencv_java_so = new File( natives, "libopencv_java.so" )
 assert assertExistsFile( opencv_java_so )
 
+File opencv_java_jnilib = new File( natives, "libopencv_java.jnilib" )
+assert assertExistsFile( opencv_java_jnilib )
 
 
 return true

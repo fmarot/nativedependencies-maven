@@ -229,11 +229,11 @@ public class CopyNativesMojo extends AbstractMojo {
 	private List<String> getTypesForCurrentOS() {
 		String os = OsFilter.OS;
 		if (os.contains("win")) {
-			return Arrays.asList("dll");
+			return OSUtils.WINDOWS_LIBS_EXTENSIONS;
 		} else if (os.contains("lin")) {
-			return Arrays.asList("so");
+			return OSUtils.LINUX_LIBS_EXTENSIONS;
 		} else if (os.contains("mac")) {
-			return Arrays.asList("dylib");
+			return OSUtils.MAC_LIBS_EXTENSIONS;
 		}
 		log.warn("unable to auto-detect OS...");
 		return Arrays.asList();
