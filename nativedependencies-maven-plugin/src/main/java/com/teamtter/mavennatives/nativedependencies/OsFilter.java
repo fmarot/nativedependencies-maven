@@ -37,7 +37,7 @@ public class OsFilter {
 				filterMatches = effectiveSuffix.contains(this.suffix);
 			}
 		} else {
-			log.debug("filter {} has no osName, will filter only based on the dependency's classifier suffix", this);
+			log.debug("filter {} has no osName or current OS is wrong OS, will filter only based on the dependency's classifier suffix", this);
 			filterMatches = effectiveSuffix.contains(this.suffix);
 		}
 

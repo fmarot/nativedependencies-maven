@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper;
+
 def assertExistsDirectory( file )
 {
   if ( !file.exists() || ! file.isDirectory() )
@@ -24,14 +26,11 @@ assert assertExistsDirectory( target )
 File natives = new File( target, "natives" )
 assert assertExistsDirectory( natives )
 
+int numberOfArtifactsUnpacked = new JsonSlurper().parse(new File(natives, "alreadyUnpackedArtifactsInfo.json")).pathToLastModified.size()
+println "numberOfArtifactsUnpacked=${numberOfArtifactsUnpacked}"
+// Only the 2 linux artifacts must have been unpacked
+assert numberOfArtifactsUnpacked == 2
 
-if ( System.properties['os.name'].toLowerCase().contains('windows')) {
-	File opencv_java_dll = new File( natives, "opencv_java.dll" )
-  assert assertExistsFile( opencv_java_dll )
-} else if ( System.properties['os.name'].toLowerCase().contains('linux')) {
-	File opencv_java_so = new File( natives, "opencv_java.so" )
-  assert assertExistsFile( opencv_java_so )
-} 
 
 
 return true

@@ -273,14 +273,13 @@ public class CopyNativesMojo extends AbstractMojo {
 	private boolean artifactIsToBeHandled(Artifact artifact) {
 		boolean handleClassifier = artifactClassifierMatchesConfig(artifact.getClassifier());
 		boolean handleType = artifactTypeMatchesConfig(artifact.getType());
-		return handleClassifier || handleType;
+		boolean handleArtifact = handleClassifier || handleType;
+		log.info("handleClassifier={} - handleType={} => artifact {} will be handled: {}", handleClassifier, handleType, artifact, handleArtifact);
+		return handleArtifact;
 	}
 
 	private boolean artifactTypeMatchesConfig(String type) {
-
 		boolean contains = byTypeFilter.contains(type);
-		log.info("type = {}, contains = {}", type, contains);
-
 		return contains;
 	}
 
@@ -340,6 +339,7 @@ public class CopyNativesMojo extends AbstractMojo {
 
 	private boolean artifactClassifierMatchesConfig(String classifier) {
 		if (classifier == null) {
+			log.debug("null classifiers not handled...");
 			return false;
 		}
 

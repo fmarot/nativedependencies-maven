@@ -8,7 +8,7 @@
 	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<description>Tests that provided native deps are used</description>
+	<description>Tests that defines no OSFilter so "AcceptEverythingOsFilter" will be used (accepts all classifiers but nulls)</description>
 
 	<build>
 		<plugins>
@@ -24,13 +24,6 @@
 							<goal>copy</goal>
 						</goals>
 						<configuration>
-<!-- 							<osFilters> -->
-<!-- 								<osFilter> -->
-<!-- 									<osName>linux</osName> -->
-									<!-- <osArch>64</osArch> -->
-<!-- 									<suffix>linux</suffix> -->
-<!-- 								</osFilter> -->
-<!-- 							</osFilters> -->
 
 						</configuration>
 					</execution>

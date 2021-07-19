@@ -8,7 +8,7 @@
 	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<description>autoDetectOSNatives is true so depending on the OS opencv_java.dll or libopencv_java.so will be copied</description>
+	<description>Only unpack 2 linux artifacts with an OSFilter</description>
 
 	<build>
 		<plugins>
@@ -24,7 +24,13 @@
 							<goal>copy</goal>
 						</goals>
 						<configuration>
-							<autoDetectOSNatives>true</autoDetectOSNatives>
+							<osFilters>
+								<osFilter>
+<!-- 									<osName>linux</osName> -->
+<!-- 									<osArch>64</osArch> -->
+									<suffix>linux</suffix>
+								</osFilter>
+							</osFilters>
 						</configuration>
 					</execution>
 				</executions>
@@ -35,20 +41,26 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.weasis.thirdparty.org.opencv</groupId>
-			<artifactId>opencv_java</artifactId>
-			<version>4.5.1-dcm</version>
-			<classifier>windows-x86-64</classifier>
-			<type>dll</type>
-			<scope>runtime</scope>
+			<groupId>org.lwjgl.lwjgl</groupId>
+			<artifactId>lwjgl-platform</artifactId>
+			<version>2.8.2</version>
+			<classifier>natives-linux</classifier>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.weasis.thirdparty.org.opencv</groupId>
-			<artifactId>libopencv_java</artifactId>
-			<version>4.5.1-dcm</version>
-			<classifier>linux-x86-64</classifier>
-			<type>so</type>
-			<scope>runtime</scope>
+			<groupId>org.lwjgl.lwjgl</groupId>
+			<artifactId>lwjgl-platform</artifactId>
+			<version>2.8.2</version>
+			<classifier>natives-windows</classifier>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>test.groupId</groupId>
+			<artifactId>targz_lib_with_symlinks</artifactId>
+			<version>1.0.0</version>
+			<classifier>natives-linux</classifier>
+			<scope>system</scope>
+			<systemPath>${basedir}/archive.tar.gz</systemPath>
 		</dependency>
 	</dependencies>
 

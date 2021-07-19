@@ -8,7 +8,7 @@
 	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<description>Tests that provided native deps are used</description>
+	<description>in this test we want DLL, SO and jnilib to be copied (we do not use 'autoDetectOSNatives' parameter)</description>
 
 	<build>
 		<plugins>
