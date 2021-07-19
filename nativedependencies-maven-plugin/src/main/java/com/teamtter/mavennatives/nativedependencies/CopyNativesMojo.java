@@ -219,11 +219,8 @@ public class CopyNativesMojo extends AbstractMojo {
 					log.debug("{} is already unpacked", artifactToString(artifact));
 				} else if (classifierMatchesConfig(classifier)) {
 					log.debug("{} => ok", artifactToString(artifact));
-					int i = 0;
 					handleDependancyCopyingOrUnpacking(artifact, classifier, unpackedArtifactsInfo);
 					atLeastOneartifactCopied = true;
-					i++;
-					
 				} else {
 					log.debug("{} => ko, native will be filtered out", artifactToString(artifact));
 				}
