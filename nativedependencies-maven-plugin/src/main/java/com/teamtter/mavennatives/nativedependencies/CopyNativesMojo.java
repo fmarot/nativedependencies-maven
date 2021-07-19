@@ -104,7 +104,7 @@ public class CopyNativesMojo extends AbstractMojo {
 	 * If {@link #autoDetectOSNatives} is true, you should not use this parameter. */
 	@Parameter
 	@Setter
-	private List<String> byTypeFilter;
+	private List<String> byTypeFilter = new ArrayList<>();
 
 	@Component
 	@Setter
@@ -277,7 +277,11 @@ public class CopyNativesMojo extends AbstractMojo {
 	}
 
 	private boolean artifactTypeMatchesConfig(String type) {
-		return byTypeFilter.contains(type);
+
+		boolean contains = byTypeFilter.contains(type);
+		log.info("type = {}, contains = {}", type, contains);
+
+		return contains;
 	}
 
 	private UnpackedArtifactsInfo loadAlreadyUnpackedArtifactsInfo() {

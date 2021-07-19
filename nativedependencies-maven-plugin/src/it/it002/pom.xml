@@ -1,0 +1,55 @@
+<!-- Test project which creates and signs a jar artifact -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.teamtter.mavennatives.it001</groupId>
+	<artifactId>nativedependencies-it001</artifactId>
+	<version>1.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<description>Tests that provided native deps are used</description>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.teamtter.mavennatives</groupId>
+				<artifactId>nativedependencies-maven-plugin</artifactId>
+				<version>@project.version@</version>
+				<executions>
+					<execution>
+						<id>unpacknatives</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<autoDetectOSNatives>true</autoDetectOSNatives>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.weasis.thirdparty.org.opencv</groupId>
+			<artifactId>opencv_java</artifactId>
+			<version>4.5.1-dcm</version>
+			<classifier>windows-x86-64</classifier>
+			<type>dll</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.weasis.thirdparty.org.opencv</groupId>
+			<artifactId>libopencv_java</artifactId>
+			<version>4.5.1-dcm</version>
+			<classifier>linux-x86-64</classifier>
+			<type>so</type>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+
+</project>

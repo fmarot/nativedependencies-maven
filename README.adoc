@@ -1,4 +1,4 @@
-nativedependencies maven plugin
+byTypeFilternativedependencies maven plugin
 ===============================
 
 :toc: macro
@@ -78,6 +78,7 @@ The plugin is available from Maven Central, just add the following snippet to yo
 		<!-- if autoDetectOSNatives is 'true' then you don't need the 'osFilters' list -->
 		<!-- we advise you set 'autoDetectOSNatives' to true and forget about osFilters -->
 		<autoDetectOSNatives>false</autoDetectOSNatives> 
+		<byTypeFilter>so,dll</byTypeFilter>	<!-- we want to copy files whose type is dll an so -->
 															
 		<!-- <nativesTargetDir>${session.executionRootDirectory}/target/natives</nativesTargetDir> -->
 		<!-- <separateDirs>true</separateDirs> -->
