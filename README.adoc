@@ -1,5 +1,5 @@
 byTypeFilternativedependencies maven plugin
-===============================
+===========================================
 
 :toc: macro
 
@@ -25,6 +25,14 @@ If those artifacts are .zip, .tgz, (.7z are not fully supported) or any other re
 By default, in case of a multi module project, we will unpack all natives dependencies to the same dir 
 (thus saving space and unzip time while allowing all interdependent projects to benefit from the presence of native libs)
 
+== Exemples of libraries
+
+Those libraries may be handled by this plugin:
+
+* libopencv_java : https://github.com/nroduit/mvn-repo/tree/master/org/weasis/thirdparty/org/opencv/libopencv_java/4.5.1-dcm
+* jogl DLLs : https://repo1.maven.org/maven2/org/jogamp/jogl/jogl-all/2.3.2/
+
+TODO: add configuration exemple for each one
 
 == How to use
 
