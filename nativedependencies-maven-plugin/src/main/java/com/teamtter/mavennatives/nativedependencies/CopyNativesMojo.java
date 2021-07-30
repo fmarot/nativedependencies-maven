@@ -48,7 +48,7 @@ import lombok.extern.slf4j.Slf4j;
 /** Unpacks native dependencies */
 @Mojo(name = "copy" /** the goal */
 		, threadSafe = true /** the RaceConditionPreventer should prevent many problems. All problems ??? => To be verified */
-, defaultPhase = LifecyclePhase.GENERATE_TEST_RESOURCES, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
+		, defaultPhase = LifecyclePhase.GENERATE_TEST_RESOURCES, requiresDependencyResolution = ResolutionScope.TEST, requiresProject = true)
 @Slf4j
 public class CopyNativesMojo extends AbstractMojo {
 
@@ -145,7 +145,8 @@ public class CopyNativesMojo extends AbstractMojo {
 	}
 
 	private File lookupUpperParentPom() {
-		File currentPom = new File(mavenProject.getBasedir(), "pom.xml");
+		File currentPom = mavenProject.getFile();
+		log.info("currentPom = {}", currentPom);
 		try {
 	        boolean upperPomFound = false;
 	        while (!upperPomFound) {
