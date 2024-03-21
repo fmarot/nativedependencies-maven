@@ -1,5 +1,5 @@
-byTypeFilternativedependencies maven plugin
-===========================================
+nativedependencies maven plugin
+===============================
 
 :toc: macro
 
